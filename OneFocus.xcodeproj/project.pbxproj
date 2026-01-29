@@ -1,0 +1,392 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8036A49CCBA04B38A35DF4C8 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7430FF0E85C34D0D938A5E2E /* Colors.swift */; };
+		A2533F79D87044839E369398 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E283A16044E947AC90660675 /* Haptics.swift */; };
+		48907BDA91A94FA9828FE6B6 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A9EE2B7C72433BB324CE94 /* Typography.swift */; };
+		576881EFA2734DCEA5B5E7BD /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54FEE4159444766B8C544DB /* HomeView.swift */; };
+		68A66F873E3C4FDFB7107219 /* HabitTypeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478B7C8934C844658AF29344 /* HabitTypeCard.swift */; };
+		5BE1EE1563F643DB9D8E87F4 /* ScienceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E3927B08564E349AD0AA05 /* ScienceCard.swift */; };
+		AC1021B3F8064D1D915E2053 /* OnboardingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B63C26ECA8B4FCDAEE60C3C /* OnboardingContainerView.swift */; };
+		5B26980719974E5CB22329C0 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45A24F2F45848F6A753243D /* OnboardingViewModel.swift */; };
+		886A61DC0F81474C89022D60 /* HabitNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6646ACC29744F499733B6F6 /* HabitNameView.swift */; };
+		2DEB12D1114748FFB7B96821 /* HabitTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174E4635B1DF4B089E082DC6 /* HabitTypeView.swift */; };
+		73A33BFD5C184F4DA776CE1F /* ReadyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE868B830D44057AF0C223B /* ReadyView.swift */; };
+		0C0E1803AF714C79ADAC19F8 /* TriggerRepeatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA077752FEC420B92572711 /* TriggerRepeatingView.swift */; };
+		2E95C45D3637413787526E06 /* TriggerSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC4874BFA4D4822860E60D5 /* TriggerSetupView.swift */; };
+		8FDBA8D7FD324422B6A863D9 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C18AADC597334A03AF1BECA1 /* WelcomeView.swift */; };
+		E4BA4D260BB54F99971DF373 /* HabitType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6103538A5A3C4E38A90B98F8 /* HabitType.swift */; };
+		65E6DCACF56B449DAA441E8D /* TriggerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5564B019304097B3B529B9 /* TriggerType.swift */; };
+		3463AD23334A4BADB9DDE905 /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B04BD98A96E47A48A879F63 /* Habit.swift */; };
+		809274FB3F954E89B0D58DAB /* Journey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A81431C0A35644CDA9560C04 /* Journey.swift */; };
+		9FADA5462B6C420FBE8D21BF /* MoodEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264A8DEB91874A1D8C83D1B2 /* MoodEntry.swift */; };
+		1261E80F410048DF9BDC723F /* RepeatingLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF8197F0CA402F94FB6332 /* RepeatingLog.swift */; };
+		14D0E34FFB7649ADBAEF0CE7 /* OneFocusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D0A2B1A6FC47669C1E5699 /* OneFocusApp.swift */; };
+		82D386F0C79948BBB1686A47 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AF6B9F5134EE1ABF9EECA /* DataService.swift */; };
+		8B2E3008D5DA4896AB5DEE7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BC35D72DDD44B6CB398A0D8 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		53A6D48B08DC479F8978E622 /* OneFocus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneFocus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7430FF0E85C34D0D938A5E2E /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Colors.swift"; path = "OneFocus/Core/Design/Colors.swift"; sourceTree = "<group>"; };
+		E283A16044E947AC90660675 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Haptics.swift"; path = "OneFocus/Core/Design/Haptics.swift"; sourceTree = "<group>"; };
+		19A9EE2B7C72433BB324CE94 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Typography.swift"; path = "OneFocus/Core/Design/Typography.swift"; sourceTree = "<group>"; };
+		E54FEE4159444766B8C544DB /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HomeView.swift"; path = "OneFocus/Features/Home/Views/HomeView.swift"; sourceTree = "<group>"; };
+		478B7C8934C844658AF29344 /* HabitTypeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HabitTypeCard.swift"; path = "OneFocus/Features/Onboarding/Components/HabitTypeCard.swift"; sourceTree = "<group>"; };
+		36E3927B08564E349AD0AA05 /* ScienceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ScienceCard.swift"; path = "OneFocus/Features/Onboarding/Components/ScienceCard.swift"; sourceTree = "<group>"; };
+		9B63C26ECA8B4FCDAEE60C3C /* OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OnboardingContainerView.swift"; path = "OneFocus/Features/Onboarding/OnboardingContainerView.swift"; sourceTree = "<group>"; };
+		D45A24F2F45848F6A753243D /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OnboardingViewModel.swift"; path = "OneFocus/Features/Onboarding/OnboardingViewModel.swift"; sourceTree = "<group>"; };
+		D6646ACC29744F499733B6F6 /* HabitNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HabitNameView.swift"; path = "OneFocus/Features/Onboarding/Views/HabitNameView.swift"; sourceTree = "<group>"; };
+		174E4635B1DF4B089E082DC6 /* HabitTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HabitTypeView.swift"; path = "OneFocus/Features/Onboarding/Views/HabitTypeView.swift"; sourceTree = "<group>"; };
+		5AE868B830D44057AF0C223B /* ReadyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ReadyView.swift"; path = "OneFocus/Features/Onboarding/Views/ReadyView.swift"; sourceTree = "<group>"; };
+		0CA077752FEC420B92572711 /* TriggerRepeatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TriggerRepeatingView.swift"; path = "OneFocus/Features/Onboarding/Views/TriggerRepeatingView.swift"; sourceTree = "<group>"; };
+		3DC4874BFA4D4822860E60D5 /* TriggerSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TriggerSetupView.swift"; path = "OneFocus/Features/Onboarding/Views/TriggerSetupView.swift"; sourceTree = "<group>"; };
+		C18AADC597334A03AF1BECA1 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "WelcomeView.swift"; path = "OneFocus/Features/Onboarding/Views/WelcomeView.swift"; sourceTree = "<group>"; };
+		6103538A5A3C4E38A90B98F8 /* HabitType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HabitType.swift"; path = "OneFocus/Models/Enums/HabitType.swift"; sourceTree = "<group>"; };
+		3F5564B019304097B3B529B9 /* TriggerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TriggerType.swift"; path = "OneFocus/Models/Enums/TriggerType.swift"; sourceTree = "<group>"; };
+		5B04BD98A96E47A48A879F63 /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Habit.swift"; path = "OneFocus/Models/Habit.swift"; sourceTree = "<group>"; };
+		A81431C0A35644CDA9560C04 /* Journey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Journey.swift"; path = "OneFocus/Models/Journey.swift"; sourceTree = "<group>"; };
+		264A8DEB91874A1D8C83D1B2 /* MoodEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MoodEntry.swift"; path = "OneFocus/Models/MoodEntry.swift"; sourceTree = "<group>"; };
+		7DEF8197F0CA402F94FB6332 /* RepeatingLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RepeatingLog.swift"; path = "OneFocus/Models/RepeatingLog.swift"; sourceTree = "<group>"; };
+		22D0A2B1A6FC47669C1E5699 /* OneFocusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OneFocusApp.swift"; path = "OneFocus/OneFocusApp.swift"; sourceTree = "<group>"; };
+		279AF6B9F5134EE1ABF9EECA /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DataService.swift"; path = "OneFocus/Services/DataService.swift"; sourceTree = "<group>"; };
+		1B69F68EEB2E4CB88D019154 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OneFocus/Info.plist"; sourceTree = "<group>"; };
+		8BC35D72DDD44B6CB398A0D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "OneFocus/Assets.xcassets"; sourceTree = "<group>"; };
+		9DD4F05560654151B1921DAC /* OneFocus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OneFocus/OneFocus.entitlements"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		76D813EC94694027A9F14A1D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7B4CAAF7845848C6B836D068 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				8A6ABD19C66D49CBA2DBAEB1 /* OneFocus */,
+				A20A76C72851444DAE206079 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8A6ABD19C66D49CBA2DBAEB1 /* OneFocus */ = {
+			isa = PBXGroup;
+			children = (
+				7430FF0E85C34D0D938A5E2E /* Colors.swift */,
+				E283A16044E947AC90660675 /* Haptics.swift */,
+				19A9EE2B7C72433BB324CE94 /* Typography.swift */,
+				E54FEE4159444766B8C544DB /* HomeView.swift */,
+				478B7C8934C844658AF29344 /* HabitTypeCard.swift */,
+				36E3927B08564E349AD0AA05 /* ScienceCard.swift */,
+				9B63C26ECA8B4FCDAEE60C3C /* OnboardingContainerView.swift */,
+				D45A24F2F45848F6A753243D /* OnboardingViewModel.swift */,
+				D6646ACC29744F499733B6F6 /* HabitNameView.swift */,
+				174E4635B1DF4B089E082DC6 /* HabitTypeView.swift */,
+				5AE868B830D44057AF0C223B /* ReadyView.swift */,
+				0CA077752FEC420B92572711 /* TriggerRepeatingView.swift */,
+				3DC4874BFA4D4822860E60D5 /* TriggerSetupView.swift */,
+				C18AADC597334A03AF1BECA1 /* WelcomeView.swift */,
+				6103538A5A3C4E38A90B98F8 /* HabitType.swift */,
+				3F5564B019304097B3B529B9 /* TriggerType.swift */,
+				5B04BD98A96E47A48A879F63 /* Habit.swift */,
+				A81431C0A35644CDA9560C04 /* Journey.swift */,
+				264A8DEB91874A1D8C83D1B2 /* MoodEntry.swift */,
+				7DEF8197F0CA402F94FB6332 /* RepeatingLog.swift */,
+				22D0A2B1A6FC47669C1E5699 /* OneFocusApp.swift */,
+				279AF6B9F5134EE1ABF9EECA /* DataService.swift */,
+				1B69F68EEB2E4CB88D019154 /* Info.plist */,
+				8BC35D72DDD44B6CB398A0D8 /* Assets.xcassets */,
+				9DD4F05560654151B1921DAC /* OneFocus.entitlements */,
+			);
+			name = OneFocus;
+			sourceTree = "<group>";
+		};
+		A20A76C72851444DAE206079 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				53A6D48B08DC479F8978E622 /* OneFocus.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7A9D75DCBE3440BC9FE0E6C2 /* OneFocus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4515835E713C4301AA34E841 /* Build configuration list for PBXNativeTarget "OneFocus" */;
+			buildPhases = (
+				599BA472DBA54B8AAD6AE573 /* Sources */,
+				76D813EC94694027A9F14A1D /* Frameworks */,
+				E2A17D0B9CF74F44879F5926 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OneFocus;
+			productName = OneFocus;
+			productReference = 53A6D48B08DC479F8978E622 /* OneFocus.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		266E80C9DA8C4D5E97A78CFA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					7A9D75DCBE3440BC9FE0E6C2 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 63385E1C43CF4A5AA0F11F3D /* Build configuration list for PBXProject "OneFocus" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7B4CAAF7845848C6B836D068 /* Root */;
+			productRefGroup = A20A76C72851444DAE206079 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7A9D75DCBE3440BC9FE0E6C2 /* OneFocus */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E2A17D0B9CF74F44879F5926 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B2E3008D5DA4896AB5DEE7B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		599BA472DBA54B8AAD6AE573 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8036A49CCBA04B38A35DF4C8 /* Colors.swift in Sources */,
+				A2533F79D87044839E369398 /* Haptics.swift in Sources */,
+				48907BDA91A94FA9828FE6B6 /* Typography.swift in Sources */,
+				576881EFA2734DCEA5B5E7BD /* HomeView.swift in Sources */,
+				68A66F873E3C4FDFB7107219 /* HabitTypeCard.swift in Sources */,
+				5BE1EE1563F643DB9D8E87F4 /* ScienceCard.swift in Sources */,
+				AC1021B3F8064D1D915E2053 /* OnboardingContainerView.swift in Sources */,
+				5B26980719974E5CB22329C0 /* OnboardingViewModel.swift in Sources */,
+				886A61DC0F81474C89022D60 /* HabitNameView.swift in Sources */,
+				2DEB12D1114748FFB7B96821 /* HabitTypeView.swift in Sources */,
+				73A33BFD5C184F4DA776CE1F /* ReadyView.swift in Sources */,
+				0C0E1803AF714C79ADAC19F8 /* TriggerRepeatingView.swift in Sources */,
+				2E95C45D3637413787526E06 /* TriggerSetupView.swift in Sources */,
+				8FDBA8D7FD324422B6A863D9 /* WelcomeView.swift in Sources */,
+				E4BA4D260BB54F99971DF373 /* HabitType.swift in Sources */,
+				65E6DCACF56B449DAA441E8D /* TriggerType.swift in Sources */,
+				3463AD23334A4BADB9DDE905 /* Habit.swift in Sources */,
+				809274FB3F954E89B0D58DAB /* Journey.swift in Sources */,
+				9FADA5462B6C420FBE8D21BF /* MoodEntry.swift in Sources */,
+				1261E80F410048DF9BDC723F /* RepeatingLog.swift in Sources */,
+				14D0E34FFB7649ADBAEF0CE7 /* OneFocusApp.swift in Sources */,
+				82D386F0C79948BBB1686A47 /* DataService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		FCAE40D6A3BB4C1388B325F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E104A841BEB44AC89409E75F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		9FCB563C3EB242FFB50B27DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OneFocus/OneFocus.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OneFocus/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.onefocus.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B72C8DFAA81D4DF48A6E8694 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = OneFocus/OneFocus.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = OneFocus/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.onefocus.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		63385E1C43CF4A5AA0F11F3D /* Build configuration list for PBXProject "OneFocus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCAE40D6A3BB4C1388B325F9 /* Debug */,
+				E104A841BEB44AC89409E75F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4515835E713C4301AA34E841 /* Build configuration list for PBXNativeTarget "OneFocus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9FCB563C3EB242FFB50B27DA /* Debug */,
+				B72C8DFAA81D4DF48A6E8694 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 266E80C9DA8C4D5E97A78CFA /* Project object */;
+}
