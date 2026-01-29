@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>OneFocus - iOS Prototype v2</title>
+    <style>
+        /* ============ iOS DESIGN SYSTEM ============ */
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@200;300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            /* iOS System Colors - Dark Mode */
+            --ios-blue: #0A84FF;
+            --ios-green: #30D158;
+            --ios-indigo: #5E5CE6;
+            --ios-orange: #FF9F0A;
+            --ios-pink: #FF375F;
+            --ios-purple: #BF5AF2;
+            --ios-red: #FF453A;
+            --ios-teal: #64D2FF;
+            --ios-yellow: #FFD60A;
+
+            /* Backgrounds */
+            --bg-primary: #000000;
+            --bg-secondary: #1C1C1E;
+            --bg-tertiary: #2C2C2E;
+            --bg-elevated: #2C2C2E;
+
+            /* Text */
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(235, 235, 245, 0.6);
+            --text-tertiary: rgba(235, 235, 245, 0.3);
+
+            /* Separators */
+            --separator: rgba(84, 84, 88, 0.65);
+
+            /* App Accent - Vibrant Purple */
+            --accent: #BF5AF2;
+            --accent-secondary: #5E5CE6;
+            --accent-dim: rgba(191, 90, 242, 0.15);
+            --accent-glow: rgba(191, 90, 242, 0.4);
+
+            /* Journey Colors */
+            --journey-start: #BF5AF2;
+            --journey-mid: #5E5CE6;
+            --journey-end: #30D158;
+
+            /* Typography */
+            --large-title: 34px;
+            --title-1: 28px;
+            --title-2: 22px;
+            --title-3: 20px;
+            --headline: 17px;
+            --body: 17px;
+            --callout: 16px;
+            --subheadline: 15px;
+            --footnote: 13px;
+            --caption-1: 12px;
+            --caption-2: 11px;
+        }
+
+        body {
+            font-family: -apple-system, 'SF Pro Display', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .ios-device {
+            max-width: 393px;
+            margin: 0 auto;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 54px;
+            padding: 14px 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--caption-1);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 100;
+        }
+
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 200;
+        }
+
+        /* ============ VIEWS ============ */
+        .view {
+            display: none;
+            flex-direction: column;
+            min-height: calc(100vh - 54px);
+            min-height: calc(100dvh - 54px);
+            padding-bottom: 40px;
+            overflow-y: auto;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        /* ============ ONBOARDING ============ */
+        .onboarding-view {
+            padding: 20px;
+            text-align: center;
+            justify-content: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(191, 90, 242, 0.05) 100%);
+        }
+
+        .app-icon {
+            width: 88px;
+            height: 88px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            margin: 0 auto 28px;
+            box-shadow: 0 8px 32px var(--accent-glow);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .onboarding-title {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .onboarding-subtitle {
+            font-size: var(--body);
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+        }
+
+        /* Science Cards - More Visual */
+        .science-cards {
+            margin-bottom: 32px;
+        }
+
+        .science-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .science-card .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .science-card:nth-child(1) .icon { background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); }
+        .science-card:nth-child(2) .icon { background: linear-gradient(135deg, var(--ios-yellow), var(--ios-orange)); }
+        .science-card:nth-child(3) .icon { background: linear-gradient(135deg, var(--ios-green), var(--ios-teal)); }
+
+        .science-card .content {
+            flex: 1;
+        }
+
+        .science-card .title {
+            font-size: var(--subheadline);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .science-card .description {
+            font-size: var(--footnote);
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .science-card .stat {
+            font-size: var(--title-2);
+            font-weight: 700;
+            color: var(--accent);
+            margin-top: 6px;
+        }
+
+        /* iOS Buttons */
+        .ios-btn {
+            width: 100%;
+            padding: 17px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: var(--body);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ios-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .ios-btn:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+
+        .ios-btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--accent);
+        }
+
+        /* ============ SETUP SCREENS ============ */
+        .nav-bar {
+            padding: 0 8px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent);
+            font-size: var(--body);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .setup-header {
+            padding: 0 20px 24px;
+            text-align: center;
+        }
+
+        .setup-step {
+            font-size: var(--caption-1);
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .setup-title {
+            font-size: var(--title-1);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .setup-subtitle {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+        }
+
+        /* Habit Type Grid - Improved */
+        .habit-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 0 20px;
+            margin-bottom: 24px;
+        }
+
+        .habit-type-card {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .habit-type-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent-dim), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .habit-type-card.selected::before {
+            opacity: 1;
+        }
+
+        .habit-type-card.selected {
+            border-color: var(--accent);
+            transform: scale(1.02);
+        }
+
+        .habit-type-card .icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .habit-type-card .name {
+            font-size: var(--headline);
+            font-weight: 600;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .habit-type-card .desc {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Text Fields */
+        .field-group {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .field-label {
+            font-size: var(--footnote);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
+        .ios-text-field {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--separator);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: var(--body);
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .ios-text-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+
+        .ios-text-field::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        /* Implementation Intention Builder - Improved */
+        .intention-builder {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 24px 20px;
+            margin: 0 20px 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .intention-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .intention-label .badge {
+            font-size: var(--caption-2);
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .intention-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .intention-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .intention-prefix {
+            font-size: var(--body);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .intention-input {
+            flex: 1;
+            background: var(--bg-primary);
+            border: 1px solid var(--separator);
+            border-radius: 10px;
+            padding: 14px;
+            font-size: var(--body);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .intention-input:focus {
+            border-color: var(--accent);
+        }
+
+        .intention-habit {
+            font-size: var(--title-3);
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* Pro Tip */
+        .pro-tip {
+            background: linear-gradient(135deg, rgba(48, 209, 88, 0.1), rgba(100, 210, 255, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin: 0 20px 24px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .pro-tip .icon {
+            font-size: 24px;
+        }
+
+        .pro-tip .text {
+            font-size: var(--footnote);
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .pro-tip strong {
+            color: var(--ios-green);
+        }
+
+        /* ============ HOME VIEW ============ */
+        .home-view {
+            padding-bottom: 100px;
+        }
+
+        .home-header {
+            padding: 8px 20px 20px;
+        }
+
+        .greeting {
+            font-size: var(--large-title);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .date-display {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+        }
+
+        /* Journey Visualization - Animated Path */
+        .journey-container {
+            margin: 0 20px 20px;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .journey-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(191, 90, 242, 0.08) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .journey-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .journey-day-display {
+            text-align: left;
+        }
+
+        .journey-day-number {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--ios-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .journey-day-label {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .journey-phase-badge {
+            background: var(--accent-dim);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: var(--caption-1);
+            font-weight: 500;
+        }
+
+        /* Animated Path */
+        .journey-path {
+            position: relative;
+            height: 80px;
+            margin-bottom: 16px;
+        }
+
+        .journey-path svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .journey-path-bg {
+            fill: none;
+            stroke: var(--bg-tertiary);
+            stroke-width: 6;
+            stroke-linecap: round;
+        }
+
+        .journey-path-fill {
+            fill: none;
+            stroke: url(#journeyGradient);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+        .journey-marker {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+        }
+
+        .journey-marker::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            opacity: 0.5;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .journey-milestones {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .milestone {
+            text-align: center;
+            opacity: 0.4;
+            transition: all 0.3s;
+        }
+
+        .milestone.reached {
+            opacity: 1;
+        }
+
+        .milestone.current {
+            opacity: 1;
+        }
+
+        .milestone .icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .milestone.reached .icon {
+            color: var(--ios-green);
+        }
+
+        .milestone.current .icon {
+            color: var(--accent);
+        }
+
+        .milestone .label {
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+        }
+
+        .milestone.reached .label,
+        .milestone.current .label {
+            color: var(--text-secondary);
+        }
+
+        /* Grace Days */
+        .grace-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid var(--separator);
+            margin-top: 16px;
+        }
+
+        .grace-label {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+        }
+
+        .grace-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .grace-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--ios-yellow);
+            box-shadow: 0 0 8px rgba(255, 214, 10, 0.4);
+            transition: all 0.3s;
+        }
+
+        .grace-dot.used {
+            background: var(--bg-tertiary);
+            box-shadow: none;
+        }
+
+        /* Habit Card - Personalized */
+        .habit-card {
+            margin: 0 20px 20px;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .habit-card-accent {
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+        }
+
+        .habit-card.completed .habit-card-accent {
+            background: linear-gradient(90deg, var(--ios-green), var(--ios-teal));
+        }
+
+        .habit-card-content {
+            padding: 24px;
+        }
+
+        .habit-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: var(--caption-2);
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .habit-name-display {
+            font-size: var(--title-1);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .habit-trigger-display {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .habit-trigger-display span {
+            color: var(--text-primary);
+        }
+
+        /* Metric Card */
+        .habit-metric {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .metric-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-dim);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .metric-info .label {
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-info .value {
+            font-size: var(--title-2);
+            font-weight: 600;
+        }
+
+        .metric-right {
+            text-align: right;
+        }
+
+        .metric-right .label {
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+        }
+
+        .metric-right .value {
+            font-size: var(--headline);
+            color: var(--accent);
+        }
+
+        /* Personalized Action Button */
+        .habit-action-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            font-size: var(--headline);
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .habit-action-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .habit-action-btn:active {
+            transform: scale(0.98);
+        }
+
+        .habit-action-btn.completed {
+            background: rgba(48, 209, 88, 0.15);
+            color: var(--ios-green);
+        }
+
+        .habit-action-btn.completed::before {
+            display: none;
+        }
+
+        /* ============ ANALYTICS SECTION ============ */
+        .analytics-section {
+            margin: 0 20px 20px;
+        }
+
+        .section-title {
+            font-size: var(--footnote);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: var(--title-1);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--ios-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card .label {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Weekly Heatmap */
+        .weekly-heatmap {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 18px;
+        }
+
+        .heatmap-title {
+            font-size: var(--footnote);
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .heatmap-days {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .heatmap-day {
+            text-align: center;
+        }
+
+        .heatmap-day .label {
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+        }
+
+        .heatmap-day .dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            margin: 0 auto;
+            transition: all 0.3s;
+        }
+
+        .heatmap-day .dot.completed {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .heatmap-day .dot.today {
+            border: 2px solid var(--accent);
+        }
+
+        /* ============ FOCUS VIEW ============ */
+        .focus-view {
+            background: var(--bg-primary);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .focus-mode-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-dim);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: var(--caption-1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+
+        .focus-mode-badge.resistance {
+            background: rgba(48, 209, 88, 0.15);
+            color: var(--ios-green);
+        }
+
+        .focus-habit-name {
+            font-size: var(--title-1);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .focus-trigger {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+        }
+
+        /* Circular Progress */
+        .timer-container {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            margin: 0 auto 16px;
+        }
+
+        .timer-ring {
+            transform: rotate(-90deg);
+        }
+
+        .timer-ring-bg {
+            fill: none;
+            stroke: var(--bg-secondary);
+            stroke-width: 12;
+        }
+
+        .timer-ring-fill {
+            fill: none;
+            stroke: url(#timerGradient);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 628;
+            stroke-dashoffset: 628;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .timer-ring-fill.resistance {
+            stroke: var(--ios-green);
+        }
+
+        .timer-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-display {
+            font-size: 56px;
+            font-weight: 200;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -2px;
+        }
+
+        .timer-display.resistance {
+            color: var(--ios-green);
+        }
+
+        .timer-label {
+            font-size: var(--caption-1);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Target Progress */
+        .target-progress {
+            margin-bottom: 48px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .target-bar {
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .target-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--ios-teal));
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .target-text {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+        }
+
+        .target-text span {
+            color: var(--accent);
+        }
+
+        /* Focus Actions */
+        .focus-actions {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .focus-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: var(--body);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .focus-btn-cancel {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .focus-btn-done {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: #fff;
+        }
+
+        .focus-btn-success {
+            background: var(--ios-green);
+            color: #fff;
+        }
+
+        .focus-btn-danger {
+            background: transparent;
+            border: 1px solid var(--ios-red);
+            color: var(--ios-red);
+        }
+
+        /* ============ COMPLETE VIEW ============ */
+        .complete-view {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(48, 209, 88, 0.05) 100%);
+        }
+
+        .complete-animation {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: celebrate 0.6s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .complete-title {
+            font-size: var(--title-1);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .complete-message {
+            font-size: var(--body);
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 280px;
+            line-height: 1.5;
+        }
+
+        /* Stats Display */
+        .complete-stats {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 32px;
+        }
+
+        .complete-stat {
+            text-align: center;
+        }
+
+        .complete-stat .value {
+            font-size: 40px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--ios-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .complete-stat .label {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Share Preview */
+        .share-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 24px;
+        }
+
+        .share-preview {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .share-preview::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .share-day {
+            font-size: var(--caption-1);
+            color: rgba(255,255,255,0.8);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .share-habit {
+            font-size: var(--title-2);
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .share-tag {
+            font-size: var(--footnote);
+            color: rgba(255,255,255,0.7);
+        }
+
+        .share-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            color: var(--accent);
+            font-size: var(--subheadline);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* ============ UTILITIES ============ */
+        .hidden {
+            display: none !important;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        .btn-container {
+            padding: 0 20px;
+            margin-top: auto;
+        }
+
+        /* Home Indicator */
+        .home-indicator {
+            position: fixed;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: var(--text-primary);
+            border-radius: 3px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="ios-device">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="dynamic-island"></div>
+            <div class="icons">📶 🔋</div>
+        </div>
+
+        <!-- ============ ONBOARDING ============ -->
+        <div id="onboardingView" class="view active onboarding-view">
+            <div class="spacer"></div>
+
+            <div class="app-icon">◉</div>
+            <h1 class="onboarding-title">OneFocus</h1>
+            <p class="onboarding-subtitle">One habit. 66 days. Real change.</p>
+
+            <div class="science-cards">
+                <div class="science-card">
+                    <div class="icon">🧠</div>
+                    <div class="content">
+                        <div class="title">The Real Timeline</div>
+                        <div class="description">Habits take 66 days to form, not 21. We guide you through the actual science.</div>
+                        <div class="stat">66 days</div>
+                    </div>
+                </div>
+                <div class="science-card">
+                    <div class="icon">💛</div>
+                    <div class="content">
+                        <div class="title">Grace, Not Guilt</div>
+                        <div class="description">Miss a day? It's okay. Research shows it won't break your progress.</div>
+                        <div class="stat">3 grace days</div>
+                    </div>
+                </div>
+                <div class="science-card">
+                    <div class="icon">🎯</div>
+                    <div class="content">
+                        <div class="title">Trigger-Based</div>
+                        <div class="description">"After I ___" planning increases success dramatically.</div>
+                        <div class="stat">+65% success</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <div class="btn-container">
+                <button class="ios-btn" id="startBtn">Begin My Journey</button>
+            </div>
+        </div>
+
+        <!-- ============ SETUP: TYPE ============ -->
+        <div id="setupTypeView" class="view">
+            <div class="nav-bar">
+                <button class="back-btn" id="backToOnboarding">‹ Back</button>
+            </div>
+
+            <div class="setup-header">
+                <div class="setup-step">Step 1 of 2</div>
+                <h2 class="setup-title">What's your habit?</h2>
+                <p class="setup-subtitle">Different habits need different tracking</p>
+            </div>
+
+            <div class="habit-type-grid">
+                <div class="habit-type-card selected" data-type="binary">
+                    <div class="icon">✓</div>
+                    <div class="name">Do It</div>
+                    <div class="desc">Yes or no daily</div>
+                </div>
+                <div class="habit-type-card" data-type="timed">
+                    <div class="icon">⏱</div>
+                    <div class="name">Timed</div>
+                    <div class="desc">For X minutes</div>
+                </div>
+                <div class="habit-type-card" data-type="increment">
+                    <div class="icon">📈</div>
+                    <div class="name">Build Up</div>
+                    <div class="desc">Increase over time</div>
+                </div>
+                <div class="habit-type-card" data-type="reduction">
+                    <div class="icon">📉</div>
+                    <div class="name">Cut Down</div>
+                    <div class="desc">Reduce a behavior</div>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Name your habit</div>
+                <input type="text" class="ios-text-field" id="habitNameInput" placeholder="e.g., Meditate, Run, Read...">
+            </div>
+
+            <div class="field-group hidden" id="metricSection">
+                <div class="field-label" id="metricLabel">Duration</div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button class="ios-btn-secondary" style="width: 48px; padding: 12px; border-radius: 12px;" id="decreaseBtn">−</button>
+                    <div style="flex: 1; text-align: center;">
+                        <span id="metricValueDisplay" style="font-size: 32px; font-weight: 600;">5</span>
+                        <span style="color: var(--text-secondary);"> min</span>
+                    </div>
+                    <button class="ios-btn-secondary" style="width: 48px; padding: 12px; border-radius: 12px;" id="increaseBtn">+</button>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <div class="btn-container">
+                <button class="ios-btn" id="toStep2">Continue</button>
+            </div>
+        </div>
+
+        <!-- ============ SETUP: TRIGGER ============ -->
+        <div id="setupTriggerView" class="view">
+            <div class="nav-bar">
+                <button class="back-btn" id="backToStep1">‹ Back</button>
+            </div>
+
+            <div class="setup-header">
+                <div class="setup-step">Step 2 of 2</div>
+                <h2 class="setup-title">Set your trigger</h2>
+                <p class="setup-subtitle">Link it to something you already do</p>
+            </div>
+
+            <div class="intention-builder">
+                <div class="intention-label">
+                    <span class="badge">Implementation Intention</span>
+                </div>
+                <div class="intention-row">
+                    <span class="intention-prefix">After I</span>
+                    <input type="text" class="intention-input" id="triggerInput" placeholder="pour my coffee...">
+                </div>
+                <div class="intention-row">
+                    <span class="intention-prefix">I will</span>
+                    <span class="intention-habit" id="intentionHabitDisplay">meditate</span>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                <span class="icon">💡</span>
+                <span class="text"><strong>Pro tip:</strong> Link to an existing routine. "After I pour my coffee" works better than "at 7am" because the action itself becomes your reminder.</span>
+            </div>
+
+            <div class="spacer"></div>
+
+            <div class="btn-container">
+                <button class="ios-btn" id="commitBtn">Start My 66-Day Journey</button>
+            </div>
+        </div>
+
+        <!-- ============ HOME VIEW ============ -->
+        <div id="homeView" class="view home-view">
+            <div class="home-header">
+                <h1 class="greeting" id="greeting">Good morning</h1>
+                <p class="date-display" id="dateDisplay">Sunday, January 26</p>
+            </div>
+
+            <!-- Journey Visualization -->
+            <div class="journey-container">
+                <div class="journey-header">
+                    <div class="journey-day-display">
+                        <div class="journey-day-number" id="dayNumber">1</div>
+                        <div class="journey-day-label">of 66 days</div>
+                    </div>
+                    <div class="journey-phase-badge" id="phaseBadge">Building Foundation</div>
+                </div>
+
+                <div class="journey-path">
+                    <svg viewBox="0 0 300 60" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="journeyGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#BF5AF2"/>
+                                <stop offset="50%" style="stop-color:#5E5CE6"/>
+                                <stop offset="100%" style="stop-color:#30D158"/>
+                            </linearGradient>
+                        </defs>
+                        <path class="journey-path-bg" d="M10,50 Q75,10 150,30 T290,20"/>
+                        <path class="journey-path-fill" id="journeyPathFill" d="M10,50 Q75,10 150,30 T290,20"/>
+                    </svg>
+                    <div class="journey-marker" id="journeyMarker"></div>
+                </div>
+
+                <div class="journey-milestones">
+                    <div class="milestone reached" id="milestone1">
+                        <div class="icon">🌱</div>
+                        <div class="label">Start</div>
+                    </div>
+                    <div class="milestone" id="milestone21">
+                        <div class="icon">🌿</div>
+                        <div class="label">Day 21</div>
+                    </div>
+                    <div class="milestone" id="milestone42">
+                        <div class="icon">🌳</div>
+                        <div class="label">Day 42</div>
+                    </div>
+                    <div class="milestone" id="milestone66">
+                        <div class="icon">✨</div>
+                        <div class="label">Day 66</div>
+                    </div>
+                </div>
+
+                <div class="grace-section">
+                    <span class="grace-label">Grace days remaining</span>
+                    <div class="grace-dots">
+                        <div class="grace-dot" id="grace1"></div>
+                        <div class="grace-dot" id="grace2"></div>
+                        <div class="grace-dot" id="grace3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Habit Card -->
+            <div class="habit-card" id="habitCard">
+                <div class="habit-card-accent"></div>
+                <div class="habit-card-content">
+                    <div class="habit-type-badge" id="habitTypeBadge">
+                        <span>✓</span>
+                        <span>Daily Habit</span>
+                    </div>
+                    <div class="habit-name-display" id="habitNameDisplay">Meditate</div>
+                    <div class="habit-trigger-display">After I <span id="triggerDisplay">pour my coffee</span></div>
+
+                    <div class="habit-metric hidden" id="habitMetric">
+                        <div class="metric-left">
+                            <div class="metric-icon" id="metricIcon">⏱</div>
+                            <div class="metric-info">
+                                <div class="label">Today's Goal</div>
+                                <div class="value" id="todayGoal">5 min</div>
+                            </div>
+                        </div>
+                        <div class="metric-right" id="tomorrowSection">
+                            <div class="label">Tomorrow</div>
+                            <div class="value" id="tomorrowGoal">6 min</div>
+                        </div>
+                    </div>
+
+                    <button class="habit-action-btn" id="habitActionBtn">
+                        <span id="actionBtnText">Start Meditating</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="analytics-section">
+                <div class="section-title">Your Progress</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="value" id="totalTimeValue">0m</div>
+                        <div class="label">Time Invested</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="streakValue">0</div>
+                        <div class="label">Current Streak</div>
+                    </div>
+                </div>
+
+                <div class="weekly-heatmap">
+                    <div class="heatmap-title">This Week</div>
+                    <div class="heatmap-days" id="heatmapDays">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ FOCUS VIEW ============ -->
+        <div id="focusView" class="view focus-view">
+            <div class="focus-mode-badge" id="focusModeBadge">
+                <span>⏱</span>
+                <span id="focusModeText">Focus Session</span>
+            </div>
+
+            <h2 class="focus-habit-name" id="focusHabitName">Meditate</h2>
+            <p class="focus-trigger" id="focusTrigger">After I pour my coffee</p>
+
+            <div class="timer-container">
+                <svg class="timer-ring" width="240" height="240" viewBox="0 0 240 240">
+                    <defs>
+                        <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#BF5AF2"/>
+                            <stop offset="100%" style="stop-color:#5E5CE6"/>
+                        </linearGradient>
+                    </defs>
+                    <circle class="timer-ring-bg" cx="120" cy="120" r="100"/>
+                    <circle class="timer-ring-fill" id="timerRingFill" cx="120" cy="120" r="100"/>
+                </svg>
+                <div class="timer-center">
+                    <div class="timer-display" id="timerDisplay">00:00</div>
+                    <div class="timer-label" id="timerLabel">Time Focused</div>
+                </div>
+            </div>
+
+            <div class="target-progress" id="targetProgress">
+                <div class="target-bar">
+                    <div class="target-fill" id="targetFill"></div>
+                </div>
+                <div class="target-text">
+                    <span id="currentMins">0</span> / <span id="targetMins">5</span> min
+                </div>
+            </div>
+
+            <div class="focus-actions" id="focusActions">
+                <button class="focus-btn focus-btn-cancel" id="cancelBtn">Cancel</button>
+                <button class="focus-btn focus-btn-done" id="doneBtn">Done ✓</button>
+            </div>
+
+            <div class="focus-actions hidden" id="resistanceActions">
+                <button class="focus-btn focus-btn-danger" id="gaveInBtn">I gave in</button>
+                <button class="focus-btn focus-btn-success" id="resistedBtn">Still strong 💪</button>
+            </div>
+        </div>
+
+        <!-- ============ COMPLETE VIEW ============ -->
+        <div id="completeView" class="view complete-view">
+            <div class="complete-animation" id="completeEmoji">✨</div>
+            <h2 class="complete-title" id="completeTitle">You did it!</h2>
+            <p class="complete-message" id="completeMessage">Day 1 complete. You showed up for yourself today.</p>
+
+            <div class="complete-stats">
+                <div class="complete-stat">
+                    <div class="value" id="statDays">1</div>
+                    <div class="label">Days</div>
+                </div>
+                <div class="complete-stat">
+                    <div class="value" id="statTime">5m</div>
+                    <div class="label">Today</div>
+                </div>
+            </div>
+
+            <div class="share-card">
+                <div class="share-preview">
+                    <div class="share-day">Day <span id="shareDay">1</span> of 66</div>
+                    <div class="share-habit" id="shareHabit">Meditate</div>
+                    <div class="share-tag">Building my habit ◉</div>
+                </div>
+                <button class="share-btn" id="shareBtn">
+                    <span>↗</span>
+                    Share Progress
+                </button>
+            </div>
+
+            <div class="btn-container" style="width: 100%; max-width: 300px;">
+                <button class="ios-btn" id="continueBtn">Continue</button>
+            </div>
+        </div>
+
+        <div class="home-indicator"></div>
+    </div>
+
+    <script>
+        // ============ STATE ============
+        const defaultState = {
+            onboarded: false,
+            habit: {
+                name: '',
+                type: 'binary',
+                trigger: '',
+                startValue: 5,
+                changeValue: 1,
+                currentValue: 5
+            },
+            journey: {
+                startDate: null,
+                currentDay: 0,
+                completedDays: [],
+                graceDaysUsed: 0,
+                totalFocusTime: 0
+            },
+            lastActiveDate: null
+        };
+
+        let state = JSON.parse(JSON.stringify(defaultState));
+        let focusTimer = null;
+        let focusSeconds = 0;
+        let metricValue = 5;
+
+        // ============ PERSISTENCE ============
+        function loadState() {
+            const saved = localStorage.getItem('oneFocusIOSv2');
+            if (saved) {
+                state = { ...defaultState, ...JSON.parse(saved) };
+                state.habit = { ...defaultState.habit, ...state.habit };
+                state.journey = { ...defaultState.journey, ...state.journey };
+            }
+            checkNewDay();
+        }
+
+        function saveState() {
+            localStorage.setItem('oneFocusIOSv2', JSON.stringify(state));
+        }
+
+        function checkNewDay() {
+            if (!state.journey.startDate) return;
+            const startDate = new Date(state.journey.startDate);
+            const today = new Date();
+            const diffTime = today - startDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            state.journey.currentDay = Math.min(diffDays, 66);
+
+            if (state.habit.type === 'increment') {
+                state.habit.currentValue = state.habit.startValue + (state.journey.currentDay - 1) * state.habit.changeValue;
+            } else if (state.habit.type === 'reduction') {
+                state.habit.currentValue = Math.max(1, state.habit.startValue - (state.journey.currentDay - 1) * state.habit.changeValue);
+            }
+            saveState();
+        }
+
+        // ============ VIEWS ============
+        const views = {
+            onboarding: document.getElementById('onboardingView'),
+            setupType: document.getElementById('setupTypeView'),
+            setupTrigger: document.getElementById('setupTriggerView'),
+            home: document.getElementById('homeView'),
+            focus: document.getElementById('focusView'),
+            complete: document.getElementById('completeView')
+        };
+
+        function showView(name) {
+            Object.values(views).forEach(v => v.classList.remove('active'));
+            views[name].classList.add('active');
+        }
+
+        // ============ RENDER ============
+        function render() {
+            if (!state.onboarded) {
+                showView('onboarding');
+                return;
+            }
+            if (!state.habit.name) {
+                showView('setupType');
+                return;
+            }
+            showView('home');
+            renderHome();
+        }
+
+        function renderHome() {
+            const day = state.journey.currentDay;
+            const today = new Date().toDateString();
+            const completedToday = state.journey.completedDays.includes(today);
+
+            // Greeting
+            const hour = new Date().getHours();
+            let greeting = 'Good morning';
+            if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
+            else if (hour >= 17) greeting = 'Good evening';
+            document.getElementById('greeting').textContent = greeting;
+
+            // Date
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', options);
+
+            // Journey Day
+            document.getElementById('dayNumber').textContent = day;
+
+            // Phase
+            let phase = 'Building Foundation';
+            if (day > 42) phase = 'Cementing Habit';
+            else if (day > 21) phase = 'Strengthening';
+            document.getElementById('phaseBadge').textContent = phase;
+
+            // Journey Path Animation
+            const progress = (day / 66);
+            const pathLength = 320;
+            const offset = pathLength - (progress * pathLength);
+            document.getElementById('journeyPathFill').style.strokeDashoffset = offset;
+
+            // Marker position
+            const marker = document.getElementById('journeyMarker');
+            const leftPos = 10 + (progress * 280);
+            const topPos = 50 - Math.sin(progress * Math.PI) * 30;
+            marker.style.left = `${leftPos}px`;
+            marker.style.top = `${topPos}px`;
+
+            // Milestones
+            document.getElementById('milestone1').classList.toggle('reached', day >= 1);
+            document.getElementById('milestone21').classList.toggle('reached', day >= 21);
+            document.getElementById('milestone21').classList.toggle('current', day >= 1 && day < 21);
+            document.getElementById('milestone42').classList.toggle('reached', day >= 42);
+            document.getElementById('milestone42').classList.toggle('current', day >= 21 && day < 42);
+            document.getElementById('milestone66').classList.toggle('reached', day >= 66);
+            document.getElementById('milestone66').classList.toggle('current', day >= 42 && day < 66);
+
+            // Grace days
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`grace${i}`).classList.toggle('used', i <= state.journey.graceDaysUsed);
+            }
+
+            // Habit Card
+            const habitCard = document.getElementById('habitCard');
+            document.getElementById('habitNameDisplay').textContent = state.habit.name;
+            document.getElementById('triggerDisplay').textContent = state.habit.trigger;
+
+            // Type badge
+            const typeIcons = { binary: '✓', timed: '⏱', increment: '📈', reduction: '📉' };
+            const typeLabels = { binary: 'Daily', timed: 'Timed', increment: 'Building', reduction: 'Reducing' };
+            document.getElementById('habitTypeBadge').innerHTML = `
+                <span>${typeIcons[state.habit.type]}</span>
+                <span>${typeLabels[state.habit.type]} Habit</span>
+            `;
+
+            // Metric display
+            const metricEl = document.getElementById('habitMetric');
+            const tomorrowSection = document.getElementById('tomorrowSection');
+
+            if (state.habit.type === 'binary') {
+                metricEl.classList.add('hidden');
+            } else {
+                metricEl.classList.remove('hidden');
+                document.getElementById('metricIcon').textContent = typeIcons[state.habit.type];
+
+                if (state.habit.type === 'timed') {
+                    document.getElementById('todayGoal').textContent = `${state.habit.startValue} min`;
+                    tomorrowSection.classList.add('hidden');
+                } else {
+                    document.getElementById('todayGoal').textContent = `${state.habit.currentValue} min`;
+                    tomorrowSection.classList.remove('hidden');
+                    const tomorrow = state.habit.type === 'reduction'
+                        ? Math.max(1, state.habit.currentValue - state.habit.changeValue)
+                        : state.habit.currentValue + state.habit.changeValue;
+                    document.getElementById('tomorrowGoal').textContent = `${tomorrow} min`;
+                }
+            }
+
+            // Personalized button
+            const actionBtn = document.getElementById('habitActionBtn');
+            const actionBtnText = document.getElementById('actionBtnText');
+
+            if (completedToday) {
+                actionBtnText.textContent = `You ${getVerbPast(state.habit.name)} today ✓`;
+                actionBtn.classList.add('completed');
+                habitCard.classList.add('completed');
+            } else {
+                const verb = getVerbPresent(state.habit.name);
+                if (state.habit.type === 'binary') {
+                    actionBtnText.textContent = `${verb} Now`;
+                } else if (state.habit.type === 'reduction') {
+                    actionBtnText.textContent = `Start Resisting`;
+                } else {
+                    actionBtnText.textContent = `Start ${state.habit.name}`;
+                }
+                actionBtn.classList.remove('completed');
+                habitCard.classList.remove('completed');
+            }
+
+            // Analytics
+            const totalMins = Math.floor(state.journey.totalFocusTime / 60);
+            document.getElementById('totalTimeValue').textContent = totalMins >= 60 ? `${Math.floor(totalMins/60)}h ${totalMins%60}m` : `${totalMins}m`;
+
+            // Calculate streak
+            let streak = 0;
+            const sortedDays = [...state.journey.completedDays].sort((a, b) => new Date(b) - new Date(a));
+            const todayStr = new Date().toDateString();
+            for (let i = 0; i < sortedDays.length; i++) {
+                const checkDate = new Date();
+                checkDate.setDate(checkDate.getDate() - i);
+                if (sortedDays.includes(checkDate.toDateString())) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            document.getElementById('streakValue').textContent = streak;
+
+            // Weekly heatmap
+            renderHeatmap();
+        }
+
+        function getVerbPresent(habitName) {
+            const name = habitName.toLowerCase();
+            if (name.includes('meditat')) return 'Meditate';
+            if (name.includes('run')) return 'Run';
+            if (name.includes('read')) return 'Read';
+            if (name.includes('exercis')) return 'Exercise';
+            if (name.includes('write')) return 'Write';
+            if (name.includes('walk')) return 'Walk';
+            return habitName;
+        }
+
+        function getVerbPast(habitName) {
+            const name = habitName.toLowerCase();
+            if (name.includes('meditat')) return 'meditated';
+            if (name.includes('run')) return 'ran';
+            if (name.includes('read')) return 'read';
+            if (name.includes('exercis')) return 'exercised';
+            if (name.includes('write')) return 'wrote';
+            if (name.includes('walk')) return 'walked';
+            return 'completed ' + habitName.toLowerCase();
+        }
+
+        function renderHeatmap() {
+            const container = document.getElementById('heatmapDays');
+            container.innerHTML = '';
+            const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() - dayOfWeek + i);
+                const dateStr = date.toDateString();
+                const isCompleted = state.journey.completedDays.includes(dateStr);
+                const isToday = dateStr === today.toDateString();
+
+                const dayEl = document.createElement('div');
+                dayEl.className = 'heatmap-day';
+                dayEl.innerHTML = `
+                    <div class="label">${days[i]}</div>
+                    <div class="dot ${isCompleted ? 'completed' : ''} ${isToday ? 'today' : ''}"></div>
+                `;
+                container.appendChild(dayEl);
+            }
+        }
+
+        // ============ SETUP FLOW ============
+        let selectedType = 'binary';
+
+        document.querySelectorAll('.habit-type-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.habit-type-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedType = card.dataset.type;
+
+                // Show/hide metric section
+                const metricSection = document.getElementById('metricSection');
+                if (selectedType === 'binary') {
+                    metricSection.classList.add('hidden');
+                } else {
+                    metricSection.classList.remove('hidden');
+                    if (selectedType === 'timed') {
+                        document.getElementById('metricLabel').textContent = 'Session Length';
+                    } else if (selectedType === 'increment') {
+                        document.getElementById('metricLabel').textContent = 'Starting Duration';
+                    } else {
+                        document.getElementById('metricLabel').textContent = 'Current Duration';
+                    }
+                }
+            });
+        });
+
+        document.getElementById('decreaseBtn').addEventListener('click', () => {
+            if (metricValue > 1) {
+                metricValue--;
+                document.getElementById('metricValueDisplay').textContent = metricValue;
+            }
+        });
+
+        document.getElementById('increaseBtn').addEventListener('click', () => {
+            metricValue++;
+            document.getElementById('metricValueDisplay').textContent = metricValue;
+        });
+
+        // Navigation
+        document.getElementById('startBtn').addEventListener('click', () => {
+            state.onboarded = true;
+            saveState();
+            showView('setupType');
+        });
+
+        document.getElementById('backToOnboarding').addEventListener('click', () => showView('onboarding'));
+
+        document.getElementById('toStep2').addEventListener('click', () => {
+            const name = document.getElementById('habitNameInput').value.trim();
+            if (!name) return alert('Please name your habit');
+
+            state.habit.name = name;
+            state.habit.type = selectedType;
+            state.habit.startValue = metricValue;
+            state.habit.currentValue = metricValue;
+
+            document.getElementById('intentionHabitDisplay').textContent = name.toLowerCase();
+            showView('setupTrigger');
+        });
+
+        document.getElementById('backToStep1').addEventListener('click', () => showView('setupType'));
+
+        document.getElementById('commitBtn').addEventListener('click', () => {
+            const trigger = document.getElementById('triggerInput').value.trim();
+            if (!trigger) return alert('Please set your trigger');
+
+            state.habit.trigger = trigger;
+            state.journey.startDate = new Date().toDateString();
+            state.journey.currentDay = 1;
+            state.lastActiveDate = new Date().toDateString();
+            saveState();
+            render();
+        });
+
+        // ============ HOME ACTIONS ============
+        document.getElementById('habitActionBtn').addEventListener('click', () => {
+            const today = new Date().toDateString();
+            if (state.journey.completedDays.includes(today)) return;
+
+            if (state.habit.type === 'binary') {
+                completeHabit(0);
+            } else {
+                startFocus();
+            }
+        });
+
+        // ============ FOCUS MODE ============
+        function startFocus() {
+            focusSeconds = 0;
+            const isReduction = state.habit.type === 'reduction';
+
+            document.getElementById('focusHabitName').textContent = state.habit.name;
+            document.getElementById('focusTrigger').textContent = `After I ${state.habit.trigger}`;
+
+            const modeBadge = document.getElementById('focusModeBadge');
+            const modeText = document.getElementById('focusModeText');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const timerLabel = document.getElementById('timerLabel');
+            const timerRing = document.getElementById('timerRingFill');
+            const targetProgress = document.getElementById('targetProgress');
+            const focusActions = document.getElementById('focusActions');
+            const resistanceActions = document.getElementById('resistanceActions');
+
+            if (isReduction) {
+                modeBadge.classList.add('resistance');
+                modeText.textContent = 'Resistance Mode';
+                timerDisplay.classList.add('resistance');
+                timerLabel.textContent = 'Time Resisted';
+                timerRing.classList.add('resistance');
+                focusActions.classList.add('hidden');
+                resistanceActions.classList.remove('hidden');
+            } else {
+                modeBadge.classList.remove('resistance');
+                modeText.textContent = state.habit.type === 'timed' ? 'Timed Session' : 'Building Up';
+                timerDisplay.classList.remove('resistance');
+                timerLabel.textContent = 'Time Focused';
+                timerRing.classList.remove('resistance');
+                focusActions.classList.remove('hidden');
+                resistanceActions.classList.add('hidden');
+            }
+
+            // Target display
+            const targetMins = state.habit.type === 'timed' ? state.habit.startValue : state.habit.currentValue;
+            document.getElementById('targetMins').textContent = targetMins;
+
+            if (state.habit.type === 'binary') {
+                targetProgress.classList.add('hidden');
+            } else {
+                targetProgress.classList.remove('hidden');
+            }
+
+            updateFocusDisplay();
+            showView('focus');
+
+            focusTimer = setInterval(() => {
+                focusSeconds++;
+                updateFocusDisplay();
+            }, 1000);
+        }
+
+        function updateFocusDisplay() {
+            const mins = Math.floor(focusSeconds / 60);
+            const secs = focusSeconds % 60;
+            document.getElementById('timerDisplay').textContent =
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+            // Ring progress
+            const targetMins = state.habit.type === 'timed' ? state.habit.startValue : state.habit.currentValue;
+            const progress = Math.min(focusSeconds / 60 / targetMins, 1);
+            const circumference = 2 * Math.PI * 100;
+            const offset = circumference - (progress * circumference);
+            document.getElementById('timerRingFill').style.strokeDashoffset = offset;
+
+            // Target bar
+            document.getElementById('targetFill').style.width = `${progress * 100}%`;
+            document.getElementById('currentMins').textContent = mins;
+        }
+
+        function stopFocus() {
+            if (focusTimer) {
+                clearInterval(focusTimer);
+                focusTimer = null;
+            }
+        }
+
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            stopFocus();
+            showView('home');
+        });
+
+        document.getElementById('doneBtn').addEventListener('click', () => {
+            stopFocus();
+            completeHabit(focusSeconds);
+        });
+
+        document.getElementById('resistedBtn').addEventListener('click', () => {
+            stopFocus();
+            completeHabit(focusSeconds);
+        });
+
+        document.getElementById('gaveInBtn').addEventListener('click', () => {
+            stopFocus();
+            completeHabit(focusSeconds);
+        });
+
+        function completeHabit(seconds) {
+            const today = new Date().toDateString();
+            if (!state.journey.completedDays.includes(today)) {
+                state.journey.completedDays.push(today);
+            }
+            state.journey.totalFocusTime += seconds;
+            state.lastActiveDate = today;
+            saveState();
+            showComplete(seconds);
+        }
+
+        function showComplete(seconds) {
+            const day = state.journey.currentDay;
+            const mins = Math.floor(seconds / 60);
+
+            // Dynamic emoji based on milestone
+            let emoji = '✨';
+            if (day === 1) emoji = '🎉';
+            else if (day === 7) emoji = '🔥';
+            else if (day === 21) emoji = '🌿';
+            else if (day === 42) emoji = '🌳';
+            else if (day === 66) emoji = '🏆';
+            document.getElementById('completeEmoji').textContent = emoji;
+
+            document.getElementById('completeTitle').textContent = day === 1 ? 'You did it!' : `Day ${day} done!`;
+
+            const messages = [
+                "You showed up for yourself today.",
+                "One more day in the books.",
+                "Progress over perfection.",
+                "Your future self thanks you.",
+                "Building something amazing.",
+                "Consistency is your superpower."
+            ];
+            const message = day === 1 ? "Day 1 complete. The journey begins." :
+                            day === 21 ? "Foundation built. You're stronger than most." :
+                            day === 42 ? "Two-thirds done. It's becoming automatic." :
+                            day === 66 ? "66 days. You've transformed a habit into identity." :
+                            messages[Math.floor(Math.random() * messages.length)];
+            document.getElementById('completeMessage').textContent = message;
+
+            document.getElementById('statDays').textContent = state.journey.completedDays.length;
+            document.getElementById('statTime').textContent = mins > 0 ? `${mins}m` : '✓';
+            document.getElementById('shareDay').textContent = day;
+            document.getElementById('shareHabit').textContent = state.habit.name;
+
+            showView('complete');
+        }
+
+        document.getElementById('continueBtn').addEventListener('click', () => render());
+
+        document.getElementById('shareBtn').addEventListener('click', () => {
+            const text = `Day ${state.journey.currentDay} of 66: ${state.habit.name} ✓\n\nBuilding my habit with OneFocus ◉`;
+            if (navigator.share) {
+                navigator.share({ text });
+            } else {
+                navigator.clipboard.writeText(text);
+                alert('Copied to clipboard!');
+            }
+        });
+
+        // ============ RESET ============
+        function resetApp() {
+            if (confirm('Reset all data?')) {
+                localStorage.removeItem('oneFocusIOSv2');
+                state = JSON.parse(JSON.stringify(defaultState));
+                metricValue = 5;
+                document.getElementById('metricValueDisplay').textContent = '5';
+                document.getElementById('habitNameInput').value = '';
+                document.getElementById('triggerInput').value = '';
+                render();
+            }
+        }
+
+        const resetBtn = document.createElement('button');
+        resetBtn.textContent = '🔄';
+        resetBtn.style.cssText = 'position:fixed;bottom:50px;right:20px;width:44px;height:44px;border-radius:22px;background:var(--bg-secondary);border:1px solid var(--separator);color:var(--text-secondary);font-size:18px;cursor:pointer;z-index:1000;';
+        resetBtn.addEventListener('click', resetApp);
+        document.body.appendChild(resetBtn);
+
+        // ============ INIT ============
+        loadState();
+        render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneFocus - iOS Widget Prototypes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ios-blue: #0A84FF;
+            --ios-green: #30D158;
+            --ios-purple: #BF5AF2;
+            --ios-indigo: #5E5CE6;
+            --ios-yellow: #FFD60A;
+            --ios-orange: #FF9F0A;
+            --ios-teal: #64D2FF;
+
+            --bg-primary: #000000;
+            --bg-secondary: #1C1C1E;
+            --bg-tertiary: #2C2C2E;
+
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(235, 235, 245, 0.6);
+            --text-tertiary: rgba(235, 235, 245, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, 'SF Pro Display', sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 34px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--ios-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-size: 17px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 40px 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .badge {
+            font-size: 12px;
+            padding: 4px 10px;
+            background: var(--ios-purple);
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .widget-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        /* ============ SMALL WIDGET (2x2) ============ */
+        .widget-small {
+            width: 170px;
+            height: 170px;
+            background: linear-gradient(145deg, rgba(28, 28, 30, 0.95) 0%, rgba(28, 28, 30, 0.85) 100%);
+            border-radius: 24px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .widget-small::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(191, 90, 242, 0.1) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .widget-small .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .widget-small .app-name {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .widget-small .icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--ios-purple), var(--ios-indigo));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .widget-small .day-display {
+            font-size: 48px;
+            font-weight: 200;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--ios-purple) 0%, var(--ios-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .widget-small .day-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .widget-small .habit-name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-top: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .widget-small .status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .widget-small .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--ios-purple);
+        }
+
+        .widget-small .status-dot.done {
+            background: var(--ios-green);
+        }
+
+        .widget-small .status-text {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* ============ MEDIUM WIDGET (4x2) ============ */
+        .widget-medium {
+            width: 360px;
+            height: 170px;
+            background: linear-gradient(145deg, rgba(28, 28, 30, 0.95) 0%, rgba(28, 28, 30, 0.85) 100%);
+            border-radius: 24px;
+            padding: 16px 20px;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .widget-medium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(191, 90, 242, 0.08) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .widget-medium .left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .widget-medium .header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .widget-medium .icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--ios-purple), var(--ios-indigo));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .widget-medium .app-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .widget-medium .habit-name {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .widget-medium .trigger {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: auto;
+        }
+
+        .widget-medium .trigger span {
+            color: var(--text-primary);
+        }
+
+        .widget-medium .action-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--ios-purple);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 8px;
+            width: fit-content;
+        }
+
+        .widget-medium .action-hint.completed {
+            background: rgba(48, 209, 88, 0.15);
+            color: var(--ios-green);
+        }
+
+        .widget-medium .right {
+            width: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .widget-medium .progress-ring {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .widget-medium .progress-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .widget-medium .progress-ring-bg {
+            fill: none;
+            stroke: var(--bg-tertiary);
+            stroke-width: 6;
+        }
+
+        .widget-medium .progress-ring-fill {
+            fill: none;
+            stroke: url(#widgetGradient);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 201;
+            stroke-dashoffset: 161;
+        }
+
+        .widget-medium .progress-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .widget-medium .day-number {
+            font-size: 28px;
+            font-weight: 300;
+            background: linear-gradient(135deg, var(--ios-purple) 0%, var(--ios-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .widget-medium .day-label {
+            font-size: 10px;
+            color: var(--text-tertiary);
+        }
+
+        /* ============ LOCK SCREEN WIDGETS ============ */
+        .lockscreen-section {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+            border-radius: 20px;
+            padding: 30px 20px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lockscreen-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="g" cx="50%" cy="0%"><stop offset="0%" stop-color="%23BF5AF2" stop-opacity="0.1"/><stop offset="100%" stop-color="transparent"/></radialGradient></defs><rect fill="url(%23g)" width="100" height="100"/></svg>');
+            background-size: cover;
+            pointer-events: none;
+        }
+
+        .lockscreen-header {
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lockscreen-time {
+            font-size: 80px;
+            font-weight: 200;
+            letter-spacing: -4px;
+            margin-bottom: 4px;
+        }
+
+        .lockscreen-date {
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .lockscreen-widgets {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Inline Widget */
+        .widget-inline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 8px 14px;
+            backdrop-filter: blur(10px);
+        }
+
+        .widget-inline .icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--ios-purple), var(--ios-indigo));
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .widget-inline .text {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Circular Widget */
+        .widget-circular {
+            width: 76px;
+            height: 76px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .widget-circular::before {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            background: linear-gradient(135deg, var(--ios-purple) 0%, var(--ios-green) 100%) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .widget-circular .day {
+            font-size: 24px;
+            font-weight: 300;
+        }
+
+        .widget-circular .label {
+            font-size: 9px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Rectangular Widget */
+        .widget-rectangular {
+            width: 170px;
+            height: 76px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 12px 14px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .widget-rectangular .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .widget-rectangular .habit {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .widget-rectangular .status {
+            font-size: 14px;
+        }
+
+        .widget-rectangular .bottom {
+            display: flex;
+            gap: 3px;
+        }
+
+        .widget-rectangular .dot {
+            width: 14px;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .widget-rectangular .dot.filled {
+            background: linear-gradient(90deg, var(--ios-purple), var(--ios-indigo));
+        }
+
+        /* ============ LIVE ACTIVITY ============ */
+        .live-activity {
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto 20px;
+            background: linear-gradient(145deg, rgba(28, 28, 30, 0.98) 0%, rgba(28, 28, 30, 0.95) 100%);
+            border-radius: 28px;
+            padding: 16px 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .live-activity::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(191, 90, 242, 0.1) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .live-activity .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .live-activity .left-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .live-activity .icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--ios-purple), var(--ios-indigo));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .live-activity .app-info .name {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .live-activity .app-info .status {
+            font-size: 12px;
+            color: var(--ios-green);
+        }
+
+        .live-activity .timer-badge {
+            background: var(--ios-green);
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 17px;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .live-activity .content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .live-activity .habit-info .habit-name {
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .live-activity .habit-info .trigger {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .live-activity .progress-visual {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .live-activity .progress-bar {
+            width: 80px;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .live-activity .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ios-purple), var(--ios-green));
+            width: 60%;
+            transition: width 0.3s;
+        }
+
+        .live-activity .progress-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ============ DYNAMIC ISLAND ============ */
+        .dynamic-island-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .phone-frame {
+            display: inline-block;
+            background: #000;
+            border-radius: 50px;
+            padding: 40px 20px 20px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            border-radius: 30px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .dynamic-island.compact {
+            width: 126px;
+            height: 37px;
+            padding: 0 14px;
+            justify-content: space-between;
+        }
+
+        .dynamic-island.expanded {
+            width: 300px;
+            height: 100px;
+            padding: 14px 18px;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: space-between;
+        }
+
+        .dynamic-island.minimal {
+            width: 126px;
+            height: 37px;
+        }
+
+        .di-compact-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .di-compact-content .left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .di-compact-content .icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--ios-purple), var(--ios-indigo));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .di-compact-content .timer {
+            font-size: 15px;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            color: var(--ios-green);
+        }
+
+        .di-expanded-content {
+            width: 100%;
+        }
+
+        .di-expanded-content .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .di-expanded-content .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .di-expanded-content .icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--ios-purple), var(--ios-indigo));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .di-expanded-content .name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .di-expanded-content .timer {
+            font-size: 22px;
+            font-weight: 300;
+            font-variant-numeric: tabular-nums;
+            color: var(--ios-green);
+        }
+
+        .di-expanded-content .progress {
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .di-expanded-content .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ios-purple), var(--ios-green));
+            width: 65%;
+        }
+
+        .phone-screen {
+            width: 280px;
+            height: 100px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            font-size: 13px;
+        }
+
+        /* Widget labels */
+        .widget-label {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 12px;
+        }
+
+        .variant-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .variant {
+            text-align: center;
+        }
+
+        .description {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            padding: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>iOS Widget Prototypes</h1>
+        <p class="subtitle">Home Screen, Lock Screen & Live Activities</p>
+
+        <!-- HOME SCREEN WIDGETS -->
+        <h2 class="section-title">
+            Home Screen Widgets
+            <span class="badge">WidgetKit</span>
+        </h2>
+        <p class="description">These widgets provide at-a-glance information and serve as passive reminders. Tapping launches the app to the focus view.</p>
+
+        <div class="widget-group">
+            <div class="variant">
+                <div class="widget-small">
+                    <div class="header">
+                        <span class="app-name">OneFocus</span>
+                        <div class="icon">◉</div>
+                    </div>
+                    <div class="day-display">12</div>
+                    <div class="day-label">of 66 days</div>
+                    <div class="habit-name">Meditate</div>
+                    <div class="status">
+                        <div class="status-dot"></div>
+                        <span class="status-text">Not done today</span>
+                    </div>
+                </div>
+                <div class="widget-label">Small - Pending</div>
+            </div>
+
+            <div class="variant">
+                <div class="widget-small">
+                    <div class="header">
+                        <span class="app-name">OneFocus</span>
+                        <div class="icon">◉</div>
+                    </div>
+                    <div class="day-display">12</div>
+                    <div class="day-label">of 66 days</div>
+                    <div class="habit-name">Meditate</div>
+                    <div class="status">
+                        <div class="status-dot done"></div>
+                        <span class="status-text">Done today ✓</span>
+                    </div>
+                </div>
+                <div class="widget-label">Small - Completed</div>
+            </div>
+        </div>
+
+        <div class="widget-group">
+            <svg width="0" height="0">
+                <defs>
+                    <linearGradient id="widgetGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#BF5AF2"/>
+                        <stop offset="100%" style="stop-color:#30D158"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <div class="variant">
+                <div class="widget-medium">
+                    <div class="left">
+                        <div class="header">
+                            <div class="icon">◉</div>
+                            <span class="app-name">OneFocus</span>
+                        </div>
+                        <div class="habit-name">Meditate</div>
+                        <div class="trigger">After I <span>pour my coffee</span></div>
+                        <div class="action-hint">⏱ Start Focus</div>
+                    </div>
+                    <div class="right">
+                        <div class="progress-ring">
+                            <svg width="80" height="80" viewBox="0 0 80 80">
+                                <circle class="progress-ring-bg" cx="40" cy="40" r="32"/>
+                                <circle class="progress-ring-fill" cx="40" cy="40" r="32"/>
+                            </svg>
+                            <div class="progress-center">
+                                <div class="day-number">12</div>
+                                <div class="day-label">of 66</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-label">Medium - Pending</div>
+            </div>
+        </div>
+
+        <div class="widget-group">
+            <div class="variant">
+                <div class="widget-medium">
+                    <div class="left">
+                        <div class="header">
+                            <div class="icon">◉</div>
+                            <span class="app-name">OneFocus</span>
+                        </div>
+                        <div class="habit-name">Meditate</div>
+                        <div class="trigger">After I <span>pour my coffee</span></div>
+                        <div class="action-hint completed">✓ Completed</div>
+                    </div>
+                    <div class="right">
+                        <div class="progress-ring">
+                            <svg width="80" height="80" viewBox="0 0 80 80">
+                                <circle class="progress-ring-bg" cx="40" cy="40" r="32"/>
+                                <circle class="progress-ring-fill" cx="40" cy="40" r="32"/>
+                            </svg>
+                            <div class="progress-center">
+                                <div class="day-number">12</div>
+                                <div class="day-label">of 66</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-label">Medium - Completed</div>
+            </div>
+        </div>
+
+        <!-- LOCK SCREEN WIDGETS -->
+        <h2 class="section-title">
+            Lock Screen Widgets
+            <span class="badge">iOS 16+</span>
+        </h2>
+        <p class="description">Lock screen widgets provide quick visibility without unlocking. Perfect for trigger-based reminders.</p>
+
+        <div class="lockscreen-section">
+            <div class="lockscreen-header">
+                <div class="lockscreen-time">9:41</div>
+                <div class="lockscreen-date">Sunday, January 26</div>
+            </div>
+            <div class="lockscreen-widgets">
+                <div class="widget-inline">
+                    <div class="icon">◉</div>
+                    <span class="text">Meditate • Day 12</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="variant-row">
+            <div class="variant">
+                <div class="widget-circular">
+                    <div class="day">12</div>
+                    <div class="label">Day</div>
+                </div>
+                <div class="widget-label">Circular</div>
+            </div>
+
+            <div class="variant">
+                <div class="widget-rectangular">
+                    <div class="top">
+                        <span class="habit">Meditate</span>
+                        <span class="status">⏱</span>
+                    </div>
+                    <div class="bottom">
+                        <div class="dot filled"></div>
+                        <div class="dot filled"></div>
+                        <div class="dot filled"></div>
+                        <div class="dot filled"></div>
+                        <div class="dot filled"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+                <div class="widget-label">Rectangular</div>
+            </div>
+        </div>
+
+        <!-- LIVE ACTIVITIES -->
+        <h2 class="section-title">
+            Live Activities
+            <span class="badge">ActivityKit</span>
+        </h2>
+        <p class="description">Live Activities appear during focus sessions, showing real-time progress on the lock screen and in the Dynamic Island.</p>
+
+        <div class="live-activity">
+            <div class="header">
+                <div class="left-header">
+                    <div class="icon">◉</div>
+                    <div class="app-info">
+                        <div class="name">OneFocus</div>
+                        <div class="status">Focus Session Active</div>
+                    </div>
+                </div>
+                <div class="timer-badge">03:24</div>
+            </div>
+            <div class="content">
+                <div class="habit-info">
+                    <div class="habit-name">Meditate</div>
+                    <div class="trigger">After I pour my coffee</div>
+                </div>
+                <div class="progress-visual">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <span class="progress-text">3 / 5 min</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DYNAMIC ISLAND -->
+        <h2 class="section-title">
+            Dynamic Island
+            <span class="badge">iPhone 14 Pro+</span>
+        </h2>
+        <p class="description">The Dynamic Island shows compact progress during focus sessions, expanding on long-press to show full details.</p>
+
+        <div class="dynamic-island-section">
+            <div class="variant-row" style="margin-bottom: 30px;">
+                <div class="variant">
+                    <div class="phone-frame">
+                        <div class="dynamic-island compact">
+                            <div class="di-compact-content">
+                                <div class="left">
+                                    <div class="icon">◉</div>
+                                </div>
+                                <span class="timer">3:24</span>
+                            </div>
+                        </div>
+                        <div class="phone-screen">
+                            Home screen content...
+                        </div>
+                    </div>
+                    <div class="widget-label">Compact View</div>
+                </div>
+            </div>
+
+            <div class="variant-row">
+                <div class="variant">
+                    <div class="phone-frame">
+                        <div class="dynamic-island expanded">
+                            <div class="di-expanded-content">
+                                <div class="header">
+                                    <div class="left">
+                                        <div class="icon">◉</div>
+                                        <span class="name">Meditate</span>
+                                    </div>
+                                    <span class="timer">03:24</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="phone-screen">
+                            Home screen content...
+                        </div>
+                    </div>
+                    <div class="widget-label">Expanded View (Long Press)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

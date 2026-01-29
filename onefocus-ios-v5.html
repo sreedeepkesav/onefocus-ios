@@ -1,0 +1,2609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>OneFocus - iOS Prototype v5 (Optional Triggers for Repeating)</title>
+    <style>
+        /* ============ iOS DESIGN SYSTEM ============ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --ios-blue: #0A84FF;
+            --ios-green: #30D158;
+            --ios-indigo: #5E5CE6;
+            --ios-orange: #FF9F0A;
+            --ios-pink: #FF375F;
+            --ios-purple: #BF5AF2;
+            --ios-red: #FF453A;
+            --ios-teal: #64D2FF;
+            --ios-yellow: #FFD60A;
+
+            --bg-primary: #000000;
+            --bg-secondary: #1C1C1E;
+            --bg-tertiary: #2C2C2E;
+
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(235, 235, 245, 0.6);
+            --text-tertiary: rgba(235, 235, 245, 0.3);
+
+            --separator: rgba(84, 84, 88, 0.65);
+
+            --accent: #BF5AF2;
+            --accent-secondary: #5E5CE6;
+            --accent-dim: rgba(191, 90, 242, 0.15);
+            --accent-glow: rgba(191, 90, 242, 0.4);
+
+            --mood-1: #FF453A;
+            --mood-2: #FF9F0A;
+            --mood-3: #FFD60A;
+            --mood-4: #30D158;
+            --mood-5: #64D2FF;
+
+            --large-title: 34px;
+            --title-1: 28px;
+            --title-2: 22px;
+            --title-3: 20px;
+            --headline: 17px;
+            --body: 17px;
+            --subheadline: 15px;
+            --footnote: 13px;
+            --caption-1: 12px;
+            --caption-2: 11px;
+        }
+
+        body {
+            font-family: -apple-system, 'SF Pro Display', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .ios-device {
+            max-width: 393px;
+            margin: 0 auto;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-bar {
+            height: 54px;
+            padding: 14px 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--caption-1);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 100;
+        }
+
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 200;
+        }
+
+        .view {
+            display: none;
+            flex-direction: column;
+            min-height: calc(100vh - 54px);
+            min-height: calc(100dvh - 54px);
+            padding-bottom: 40px;
+            overflow-y: auto;
+        }
+
+        .view.active { display: flex; }
+
+        .ios-btn {
+            width: 100%;
+            padding: 17px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: var(--body);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ios-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .ios-btn:active { transform: scale(0.98); opacity: 0.9; }
+
+        .ios-btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--accent);
+        }
+
+        .ios-btn-secondary::after { display: none; }
+
+        .nav-bar {
+            padding: 0 8px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent);
+            font-size: var(--body);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .spacer { flex: 1; }
+        .hidden { display: none !important; }
+        .btn-container { padding: 0 20px; margin-top: auto; }
+
+        /* ============ ONBOARDING ============ */
+        .onboarding-view {
+            padding: 20px;
+            text-align: center;
+            justify-content: center;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(191, 90, 242, 0.05) 100%);
+        }
+
+        .app-icon {
+            width: 88px;
+            height: 88px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            margin: 0 auto 28px;
+            box-shadow: 0 8px 32px var(--accent-glow);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .onboarding-title {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .onboarding-subtitle {
+            font-size: var(--body);
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+        }
+
+        .science-cards { margin-bottom: 32px; }
+
+        .science-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .science-card .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .science-card:nth-child(1) .icon { background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); }
+        .science-card:nth-child(2) .icon { background: linear-gradient(135deg, var(--ios-yellow), var(--ios-orange)); }
+        .science-card:nth-child(3) .icon { background: linear-gradient(135deg, var(--ios-green), var(--ios-teal)); }
+
+        .science-card .content { flex: 1; }
+        .science-card .title { font-size: var(--subheadline); font-weight: 600; margin-bottom: 4px; }
+        .science-card .description { font-size: var(--footnote); color: var(--text-secondary); line-height: 1.4; }
+        .science-card .stat { font-size: var(--title-2); font-weight: 700; color: var(--accent); margin-top: 6px; }
+
+        /* ============ SETUP SCREENS ============ */
+        .setup-header {
+            padding: 0 20px 24px;
+            text-align: center;
+        }
+
+        .setup-step {
+            font-size: var(--caption-1);
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .setup-title {
+            font-size: var(--title-1);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .setup-subtitle {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+        }
+
+        /* Habit Type Grid - Now 5 types */
+        .habit-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 0 20px;
+            margin-bottom: 24px;
+        }
+
+        .habit-type-card {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 20px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .habit-type-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent-dim), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .habit-type-card.selected::before { opacity: 1; }
+        .habit-type-card.selected { border-color: var(--accent); transform: scale(1.02); }
+        .habit-type-card .icon { font-size: 32px; margin-bottom: 10px; position: relative; z-index: 1; }
+        .habit-type-card .name { font-size: var(--subheadline); font-weight: 600; margin-bottom: 4px; position: relative; z-index: 1; }
+        .habit-type-card .desc { font-size: var(--caption-2); color: var(--text-secondary); position: relative; z-index: 1; line-height: 1.3; }
+
+        /* Full-width card for 5th type */
+        .habit-type-card.full-width {
+            grid-column: span 2;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-align: left;
+            padding: 16px 20px;
+        }
+
+        .habit-type-card.full-width .icon { margin-bottom: 0; font-size: 28px; }
+        .habit-type-card.full-width .content { flex: 1; }
+        .habit-type-card.full-width .name { margin-bottom: 2px; }
+
+        /* Text Fields */
+        .field-group {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .field-label {
+            font-size: var(--footnote);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
+        .ios-text-field {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--separator);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: var(--body);
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .ios-text-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+
+        .ios-text-field::placeholder { color: var(--text-tertiary); }
+
+        /* Metric Controls */
+        .metric-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .metric-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--bg-tertiary);
+            border: none;
+            color: var(--accent);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .metric-display { flex: 1; text-align: center; }
+        .metric-display .value { font-size: 32px; font-weight: 600; }
+        .metric-display .unit { color: var(--text-secondary); }
+
+        /* Intention Builder */
+        .intention-builder {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 24px 20px;
+            margin: 0 20px 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .intention-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .intention-label .badge {
+            font-size: var(--caption-2);
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .intention-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .intention-row:last-child { margin-bottom: 0; }
+        .intention-prefix { font-size: var(--body); color: var(--text-secondary); white-space: nowrap; }
+
+        .intention-input {
+            flex: 1;
+            background: var(--bg-primary);
+            border: 1px solid var(--separator);
+            border-radius: 10px;
+            padding: 14px;
+            font-size: var(--body);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .intention-input:focus { border-color: var(--accent); }
+        .intention-habit { font-size: var(--title-3); font-weight: 600; color: var(--accent); }
+
+        .pro-tip {
+            background: linear-gradient(135deg, rgba(48, 209, 88, 0.1), rgba(100, 210, 255, 0.1));
+            border-radius: 16px;
+            padding: 16px;
+            margin: 0 20px 24px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .pro-tip .icon { font-size: 24px; }
+        .pro-tip .text { font-size: var(--footnote); color: var(--text-secondary); line-height: 1.5; }
+        .pro-tip strong { color: var(--ios-green); }
+
+        /* ============ TRIGGER TYPE SELECTION (for Repeating) ============ */
+        .trigger-type-section {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .trigger-type-option {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .trigger-type-option:hover { background: var(--bg-tertiary); }
+        .trigger-type-option.selected { border-color: var(--accent); background: var(--accent-dim); }
+
+        .trigger-type-option .radio {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--separator);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.3s;
+        }
+
+        .trigger-type-option.selected .radio {
+            border-color: var(--accent);
+            background: var(--accent);
+        }
+
+        .trigger-type-option.selected .radio::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .trigger-type-option .content { flex: 1; }
+        .trigger-type-option .title { font-size: var(--body); font-weight: 600; margin-bottom: 4px; }
+        .trigger-type-option .desc { font-size: var(--footnote); color: var(--text-secondary); line-height: 1.4; }
+        .trigger-type-option .recommended {
+            display: inline-block;
+            font-size: var(--caption-2);
+            color: var(--ios-green);
+            background: rgba(48, 209, 88, 0.15);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .trigger-input-section {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .context-cue-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .context-cue-chip {
+            background: var(--bg-secondary);
+            border: 1px solid var(--separator);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            font-size: var(--footnote);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .context-cue-chip:hover { background: var(--bg-tertiary); }
+        .context-cue-chip.selected {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+            color: var(--accent);
+        }
+
+        .context-cue-chip .emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+
+        /* ============ HOME VIEW ============ */
+        .home-view { padding-bottom: 100px; }
+        .home-header { padding: 8px 20px 20px; }
+
+        .greeting {
+            font-size: var(--large-title);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .date-display {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+        }
+
+        /* Journey Container */
+        .journey-container {
+            margin: 0 20px 20px;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .journey-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(191, 90, 242, 0.08) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .journey-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .journey-day-display { text-align: left; }
+
+        .journey-day-number {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--ios-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .journey-day-label {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .journey-phase-badge {
+            background: var(--accent-dim);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: var(--caption-1);
+            font-weight: 500;
+        }
+
+        .journey-path {
+            position: relative;
+            height: 80px;
+            margin-bottom: 16px;
+        }
+
+        .journey-path svg { width: 100%; height: 100%; }
+        .journey-path-bg { fill: none; stroke: var(--bg-tertiary); stroke-width: 6; stroke-linecap: round; }
+        .journey-path-fill { fill: none; stroke: url(#journeyGradient); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 320; stroke-dashoffset: 320; transition: stroke-dashoffset 1s ease-out; }
+
+        .journey-marker {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+        }
+
+        .journey-marker::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            opacity: 0.5;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 0; }
+        }
+
+        .journey-milestones {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .milestone { text-align: center; opacity: 0.4; transition: all 0.3s; }
+        .milestone.reached, .milestone.current { opacity: 1; }
+        .milestone .icon { font-size: 20px; margin-bottom: 4px; }
+        .milestone.reached .icon { color: var(--ios-green); }
+        .milestone.current .icon { color: var(--accent); }
+        .milestone .label { font-size: var(--caption-2); color: var(--text-tertiary); }
+        .milestone.reached .label, .milestone.current .label { color: var(--text-secondary); }
+
+        .grace-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid var(--separator);
+            margin-top: 16px;
+        }
+
+        .grace-label { font-size: var(--caption-1); color: var(--text-secondary); }
+        .grace-dots { display: flex; gap: 8px; }
+
+        .grace-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--ios-yellow);
+            box-shadow: 0 0 8px rgba(255, 214, 10, 0.4);
+            transition: all 0.3s;
+        }
+
+        .grace-dot.used { background: var(--bg-tertiary); box-shadow: none; }
+
+        /* ============ HABIT CARDS ============ */
+        .habits-section { padding: 0 20px; margin-bottom: 20px; }
+        .section-title { font-size: var(--footnote); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-left: 4px; }
+
+        .habit-card {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .habit-card-accent {
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+        }
+
+        .habit-card.completed .habit-card-accent { background: linear-gradient(90deg, var(--ios-green), var(--ios-teal)); }
+
+        .habit-card-content { padding: 20px; }
+
+        .habit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .habit-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: var(--caption-2);
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .habit-order-badge {
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+            background: var(--bg-tertiary);
+            padding: 4px 10px;
+            border-radius: 10px;
+        }
+
+        .habit-name-display { font-size: var(--title-2); font-weight: 600; margin-bottom: 6px; }
+        .habit-trigger-display { font-size: var(--subheadline); color: var(--text-secondary); margin-bottom: 16px; }
+        .habit-trigger-display span { color: var(--text-primary); }
+
+        /* Mood Insight */
+        .mood-insight {
+            background: linear-gradient(135deg, rgba(100, 210, 255, 0.1), rgba(48, 209, 88, 0.1));
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .mood-insight .emoji { font-size: 24px; }
+        .mood-insight .text { font-size: var(--footnote); color: var(--text-secondary); }
+        .mood-insight .highlight { color: var(--ios-green); font-weight: 600; }
+
+        /* Repeating Habit Counter */
+        .repeating-counter {
+            margin-bottom: 16px;
+        }
+
+        .counter-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .counter-value {
+            font-size: var(--title-1);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--ios-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .counter-target {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+        }
+
+        .counter-bar {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .counter-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--ios-teal));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Habit Action Button */
+        .habit-action-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: var(--headline);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .habit-action-btn:active { transform: scale(0.98); }
+
+        .habit-action-btn.completed {
+            background: rgba(48, 209, 88, 0.15);
+            color: var(--ios-green);
+        }
+
+        /* Quick Log Button for Repeating */
+        .quick-log-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--ios-teal), var(--ios-blue));
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: var(--headline);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .quick-log-btn:active { transform: scale(0.98); }
+
+        .quick-log-btn .plus {
+            font-size: 24px;
+            font-weight: 300;
+        }
+
+        /* Second Habit Unlock Card */
+        .unlock-card {
+            background: var(--bg-secondary);
+            border: 2px dashed var(--separator);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .unlock-card.locked { opacity: 0.6; }
+        .unlock-icon { font-size: 32px; margin-bottom: 12px; }
+        .unlock-title { font-size: var(--headline); font-weight: 600; margin-bottom: 6px; }
+        .unlock-desc { font-size: var(--footnote); color: var(--text-secondary); margin-bottom: 16px; }
+
+        .unlock-progress {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .unlock-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--ios-green));
+            transition: width 0.5s;
+        }
+
+        .unlock-status { font-size: var(--caption-1); color: var(--text-tertiary); }
+
+        /* ============ ANALYTICS ============ */
+        .analytics-section { padding: 0 20px; margin-bottom: 20px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: var(--title-1);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--ios-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card .label { font-size: var(--caption-1); color: var(--text-secondary); margin-top: 4px; }
+
+        .weekly-heatmap {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .heatmap-title { font-size: var(--footnote); color: var(--text-secondary); margin-bottom: 12px; }
+        .heatmap-days { display: flex; justify-content: space-between; }
+        .heatmap-day { text-align: center; }
+        .heatmap-day .label { font-size: var(--caption-2); color: var(--text-tertiary); margin-bottom: 8px; }
+
+        .heatmap-day .dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--bg-tertiary);
+            margin: 0 auto;
+            transition: all 0.3s;
+        }
+
+        .heatmap-day .dot.completed {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .heatmap-day .dot.today { border: 2px solid var(--accent); }
+
+        .mood-chart {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 18px;
+        }
+
+        .mood-chart-title { font-size: var(--footnote); color: var(--text-secondary); margin-bottom: 16px; }
+
+        .mood-comparison {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 16px 0;
+        }
+
+        .mood-stat { text-align: center; }
+
+        .mood-stat .label {
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mood-stat .emoji { font-size: 32px; margin-bottom: 4px; }
+        .mood-stat .value { font-size: var(--headline); font-weight: 600; }
+        .mood-arrow { font-size: 24px; color: var(--ios-green); }
+        .mood-delta { text-align: center; }
+        .mood-delta .value { font-size: var(--title-1); font-weight: 700; color: var(--ios-green); }
+        .mood-delta .label { font-size: var(--caption-2); color: var(--text-secondary); }
+
+        /* ============ MOOD CHECK-IN ============ */
+        .mood-checkin-view {
+            padding: 40px 20px;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .mood-checkin-title {
+            font-size: var(--title-1);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .mood-checkin-subtitle {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .mood-options {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .mood-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mood-option:hover { transform: scale(1.1); }
+
+        .mood-option.selected {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+            transform: scale(1.15);
+        }
+
+        .mood-labels {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin-bottom: 40px;
+        }
+
+        .mood-labels span {
+            font-size: var(--caption-1);
+            color: var(--text-tertiary);
+        }
+
+        /* ============ FOCUS VIEW ============ */
+        .focus-view {
+            background: var(--bg-primary);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .focus-mode-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-dim);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: var(--caption-1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+
+        .focus-mode-badge.resistance {
+            background: rgba(48, 209, 88, 0.15);
+            color: var(--ios-green);
+        }
+
+        .focus-habit-name { font-size: var(--title-1); font-weight: 600; margin-bottom: 8px; }
+        .focus-trigger { font-size: var(--subheadline); color: var(--text-secondary); margin-bottom: 48px; }
+
+        .timer-container {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            margin: 0 auto 16px;
+        }
+
+        .timer-ring { transform: rotate(-90deg); }
+        .timer-ring-bg { fill: none; stroke: var(--bg-secondary); stroke-width: 12; }
+        .timer-ring-fill { fill: none; stroke: url(#timerGradient); stroke-width: 12; stroke-linecap: round; stroke-dasharray: 628; stroke-dashoffset: 628; transition: stroke-dashoffset 0.5s ease; }
+        .timer-ring-fill.resistance { stroke: var(--ios-green); }
+
+        .timer-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timer-display { font-size: 56px; font-weight: 200; font-variant-numeric: tabular-nums; letter-spacing: -2px; }
+        .timer-display.resistance { color: var(--ios-green); }
+        .timer-label { font-size: var(--caption-1); color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; }
+
+        .target-progress {
+            margin-bottom: 48px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .target-bar {
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .target-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--ios-teal));
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .target-text { font-size: var(--caption-1); color: var(--text-secondary); }
+        .target-text span { color: var(--accent); }
+
+        .focus-actions {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .focus-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: var(--body);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .focus-btn-cancel { background: var(--bg-secondary); color: var(--text-primary); }
+        .focus-btn-done { background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); color: #fff; }
+        .focus-btn-success { background: var(--ios-green); color: #fff; }
+        .focus-btn-danger { background: transparent; border: 1px solid var(--ios-red); color: var(--ios-red); }
+
+        /* ============ COMPLETE VIEW ============ */
+        .complete-view {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(48, 209, 88, 0.05) 100%);
+        }
+
+        .complete-animation {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: celebrate 0.6s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .complete-title { font-size: var(--title-1); font-weight: 700; margin-bottom: 8px; }
+        .complete-message { font-size: var(--body); color: var(--text-secondary); margin-bottom: 32px; max-width: 280px; line-height: 1.5; }
+
+        .complete-stats { display: flex; gap: 40px; margin-bottom: 32px; }
+        .complete-stat { text-align: center; }
+
+        .complete-stat .value {
+            font-size: 40px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--ios-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .complete-stat .label { font-size: var(--caption-1); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+
+        .share-card {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 24px;
+        }
+
+        .share-preview {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .share-preview::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .share-day { font-size: var(--caption-1); color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+        .share-habit { font-size: var(--title-2); font-weight: 600; color: #fff; margin-bottom: 4px; }
+        .share-tag { font-size: var(--footnote); color: rgba(255,255,255,0.7); }
+
+        .share-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            color: var(--accent);
+            font-size: var(--subheadline);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .home-indicator {
+            position: fixed;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: var(--text-primary);
+            border-radius: 3px;
+            opacity: 0.2;
+        }
+
+        /* ============ ADD SECOND HABIT VIEW ============ */
+        .add-habit-view { padding: 20px; }
+
+        .parallel-explanation {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .parallel-explanation .icon { font-size: 48px; margin-bottom: 16px; }
+        .parallel-explanation .title { font-size: var(--title-2); font-weight: 600; margin-bottom: 8px; }
+        .parallel-explanation .desc { font-size: var(--subheadline); color: var(--text-secondary); line-height: 1.5; }
+
+        .current-habit-card {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .current-habit-card .number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent-dim);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--caption-1);
+            font-weight: 600;
+        }
+
+        .current-habit-card .text { font-size: var(--subheadline); }
+        .current-habit-card .habit { color: var(--accent); font-weight: 500; }
+
+        /* Conflict Warning */
+        .conflict-warning {
+            background: rgba(255, 69, 58, 0.1);
+            border: 1px solid var(--ios-red);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 20px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .conflict-warning .icon { font-size: 24px; }
+        .conflict-warning .text { font-size: var(--footnote); color: var(--text-secondary); line-height: 1.5; }
+        .conflict-warning strong { color: var(--ios-red); }
+
+        /* New habit type selector for second habit */
+        .habit-type-mini {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .habit-type-mini-btn {
+            padding: 10px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--separator);
+            border-radius: 20px;
+            font-size: var(--footnote);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .habit-type-mini-btn.selected {
+            background: var(--accent-dim);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="ios-device">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="dynamic-island"></div>
+            <div class="icons">📶 🔋</div>
+        </div>
+
+        <!-- ============ ONBOARDING ============ -->
+        <div id="onboardingView" class="view active onboarding-view">
+            <div class="spacer"></div>
+            <div class="app-icon">◉</div>
+            <h1 class="onboarding-title">OneFocus</h1>
+            <p class="onboarding-subtitle">One habit. 66 days. Real change.</p>
+            <div class="science-cards">
+                <div class="science-card">
+                    <div class="icon">🧠</div>
+                    <div class="content">
+                        <div class="title">The Real Timeline</div>
+                        <div class="description">Habits take 66 days to form, not 21. We guide you through the actual science.</div>
+                        <div class="stat">66 days</div>
+                    </div>
+                </div>
+                <div class="science-card">
+                    <div class="icon">💛</div>
+                    <div class="content">
+                        <div class="title">Grace, Not Guilt</div>
+                        <div class="description">Miss a day? It's okay. Research shows it won't break your progress.</div>
+                        <div class="stat">3 grace days</div>
+                    </div>
+                </div>
+                <div class="science-card">
+                    <div class="icon">🎯</div>
+                    <div class="content">
+                        <div class="title">Trigger-Based</div>
+                        <div class="description">"After I ___" planning increases success dramatically.</div>
+                        <div class="stat">+65% success</div>
+                    </div>
+                </div>
+            </div>
+            <div class="spacer"></div>
+            <div class="btn-container">
+                <button class="ios-btn" id="startBtn">Begin My Journey</button>
+            </div>
+        </div>
+
+        <!-- ============ SETUP: TYPE ============ -->
+        <div id="setupTypeView" class="view">
+            <div class="nav-bar">
+                <button class="back-btn" id="backToOnboarding">‹ Back</button>
+            </div>
+            <div class="setup-header">
+                <div class="setup-step">Step 1 of 3</div>
+                <h2 class="setup-title">What's your habit?</h2>
+                <p class="setup-subtitle">Different habits need different tracking</p>
+            </div>
+            <div class="habit-type-grid">
+                <div class="habit-type-card selected" data-type="binary">
+                    <div class="icon">✓</div>
+                    <div class="name">Do It</div>
+                    <div class="desc">Yes or no, once daily</div>
+                </div>
+                <div class="habit-type-card" data-type="timed">
+                    <div class="icon">⏱</div>
+                    <div class="name">Timed</div>
+                    <div class="desc">For X minutes</div>
+                </div>
+                <div class="habit-type-card" data-type="increment">
+                    <div class="icon">📈</div>
+                    <div class="name">Build Up</div>
+                    <div class="desc">Increase over time</div>
+                </div>
+                <div class="habit-type-card" data-type="reduction">
+                    <div class="icon">📉</div>
+                    <div class="name">Cut Down</div>
+                    <div class="desc">Reduce a behavior</div>
+                </div>
+                <div class="habit-type-card full-width" data-type="repeating">
+                    <div class="icon">🔄</div>
+                    <div class="content">
+                        <div class="name">Repeating</div>
+                        <div class="desc">Multiple times daily (water, stretching, gratitude)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="field-group">
+                <div class="field-label">Name your habit</div>
+                <input type="text" class="ios-text-field" id="habitNameInput" placeholder="e.g., Meditate, Drink water, Read...">
+            </div>
+            <div class="field-group hidden" id="metricSection">
+                <div class="field-label" id="metricLabel">Duration</div>
+                <div class="metric-control">
+                    <button class="metric-btn" id="decreaseBtn">−</button>
+                    <div class="metric-display">
+                        <span class="value" id="metricValueDisplay">5</span>
+                        <span class="unit" id="metricUnit"> min</span>
+                    </div>
+                    <button class="metric-btn" id="increaseBtn">+</button>
+                </div>
+            </div>
+            <div class="spacer"></div>
+            <div class="btn-container">
+                <button class="ios-btn" id="toStep2">Continue</button>
+            </div>
+        </div>
+
+        <!-- ============ SETUP: TRIGGER (Standard - for non-repeating habits) ============ -->
+        <div id="setupTriggerView" class="view">
+            <div class="nav-bar">
+                <button class="back-btn" id="backToStep1">‹ Back</button>
+            </div>
+            <div class="setup-header">
+                <div class="setup-step">Step 2 of 3</div>
+                <h2 class="setup-title">Set your trigger</h2>
+                <p class="setup-subtitle">Link it to something you already do</p>
+            </div>
+            <div class="intention-builder">
+                <div class="intention-label">
+                    <span class="badge">Implementation Intention</span>
+                </div>
+                <div class="intention-row">
+                    <span class="intention-prefix">After I</span>
+                    <input type="text" class="intention-input" id="triggerInput" placeholder="pour my coffee...">
+                </div>
+                <div class="intention-row">
+                    <span class="intention-prefix">I will</span>
+                    <span class="intention-habit" id="intentionHabitDisplay">meditate</span>
+                </div>
+            </div>
+            <div class="pro-tip" id="proTipStandard">
+                <span class="icon">💡</span>
+                <span class="text"><strong>Pro tip:</strong> Link to an existing routine. "After I pour my coffee" works better than "at 7am" because the action itself becomes your reminder.</span>
+            </div>
+            <div class="spacer"></div>
+            <div class="btn-container">
+                <button class="ios-btn" id="commitBtn">Start My 66-Day Journey</button>
+            </div>
+        </div>
+
+        <!-- ============ SETUP: TRIGGER (Repeating - optional/contextual) ============ -->
+        <div id="setupTriggerRepeatingView" class="view">
+            <div class="nav-bar">
+                <button class="back-btn" id="backToStep1Repeating">‹ Back</button>
+            </div>
+            <div class="setup-header">
+                <div class="setup-step">Step 2 of 3</div>
+                <h2 class="setup-title">When will you <span id="repeatingHabitName">drink water</span>?</h2>
+                <p class="setup-subtitle">Repeating habits work differently - choose what fits best</p>
+            </div>
+
+            <!-- Trigger Type Options -->
+            <div class="trigger-type-section">
+                <div class="trigger-type-option selected" data-trigger-type="throughout">
+                    <div class="radio"></div>
+                    <div class="content">
+                        <div class="title">Throughout the day <span class="recommended">Recommended</span></div>
+                        <div class="desc">No specific trigger - log whenever you do it. Best for habits like drinking water or taking stretch breaks.</div>
+                    </div>
+                </div>
+
+                <div class="trigger-type-option" data-trigger-type="context">
+                    <div class="radio"></div>
+                    <div class="content">
+                        <div class="title">At specific moments</div>
+                        <div class="desc">Set context cues like "with meals" or "during work hours" to help remember.</div>
+                    </div>
+                </div>
+
+                <div class="trigger-type-option" data-trigger-type="anchor">
+                    <div class="radio"></div>
+                    <div class="content">
+                        <div class="title">After a specific action</div>
+                        <div class="desc">Use the traditional "After I ___" format if there's a clear anchor point.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Context Cue Selection (shown when 'context' is selected) -->
+            <div class="trigger-input-section hidden" id="contextCueSection">
+                <div class="field-label">Choose your context cues</div>
+                <div class="context-cue-grid">
+                    <div class="context-cue-chip" data-cue="With meals">
+                        <span class="emoji">🍽️</span>
+                        With meals
+                    </div>
+                    <div class="context-cue-chip" data-cue="During work">
+                        <span class="emoji">💼</span>
+                        During work
+                    </div>
+                    <div class="context-cue-chip" data-cue="Morning routine">
+                        <span class="emoji">🌅</span>
+                        Morning routine
+                    </div>
+                    <div class="context-cue-chip" data-cue="When tired">
+                        <span class="emoji">😴</span>
+                        When tired
+                    </div>
+                    <div class="context-cue-chip" data-cue="Between tasks">
+                        <span class="emoji">⏸️</span>
+                        Between tasks
+                    </div>
+                    <div class="context-cue-chip" data-cue="Before bed">
+                        <span class="emoji">🌙</span>
+                        Before bed
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anchor Input (shown when 'anchor' is selected) -->
+            <div class="trigger-input-section hidden" id="anchorInputSection">
+                <div class="intention-builder" style="margin: 0;">
+                    <div class="intention-label">
+                        <span class="badge">Implementation Intention</span>
+                    </div>
+                    <div class="intention-row">
+                        <span class="intention-prefix">After I</span>
+                        <input type="text" class="intention-input" id="repeatingTriggerInput" placeholder="finish a meeting...">
+                    </div>
+                    <div class="intention-row">
+                        <span class="intention-prefix">I will</span>
+                        <span class="intention-habit" id="intentionHabitDisplayRepeating">drink water</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pro-tip">
+                <span class="icon">🔬</span>
+                <span class="text"><strong>Research insight:</strong> Repeating habits often work better with flexible cues. Studies show internal cues ("when I feel thirsty") can be as effective as external triggers for multi-daily habits.</span>
+            </div>
+
+            <div class="spacer"></div>
+            <div class="btn-container">
+                <button class="ios-btn" id="commitBtnRepeating">Start My 66-Day Journey</button>
+            </div>
+        </div>
+
+        <!-- ============ HOME VIEW ============ -->
+        <div id="homeView" class="view home-view">
+            <div class="home-header">
+                <h1 class="greeting" id="greeting">Good morning</h1>
+                <p class="date-display" id="dateDisplay">Sunday, January 26</p>
+            </div>
+
+            <!-- Journey Visualization -->
+            <div class="journey-container">
+                <div class="journey-header">
+                    <div class="journey-day-display">
+                        <div class="journey-day-number" id="dayNumber">1</div>
+                        <div class="journey-day-label">of 66 days</div>
+                    </div>
+                    <div class="journey-phase-badge" id="phaseBadge">Building Foundation</div>
+                </div>
+                <div class="journey-path">
+                    <svg viewBox="0 0 300 60" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="journeyGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#BF5AF2"/>
+                                <stop offset="50%" style="stop-color:#5E5CE6"/>
+                                <stop offset="100%" style="stop-color:#30D158"/>
+                            </linearGradient>
+                        </defs>
+                        <path class="journey-path-bg" d="M10,50 Q75,10 150,30 T290,20"/>
+                        <path class="journey-path-fill" id="journeyPathFill" d="M10,50 Q75,10 150,30 T290,20"/>
+                    </svg>
+                    <div class="journey-marker" id="journeyMarker"></div>
+                </div>
+                <div class="journey-milestones">
+                    <div class="milestone reached" id="milestone1"><div class="icon">🌱</div><div class="label">Start</div></div>
+                    <div class="milestone" id="milestone21"><div class="icon">🌿</div><div class="label">Day 21</div></div>
+                    <div class="milestone" id="milestone42"><div class="icon">🌳</div><div class="label">Day 42</div></div>
+                    <div class="milestone" id="milestone66"><div class="icon">✨</div><div class="label">Day 66</div></div>
+                </div>
+                <div class="grace-section">
+                    <span class="grace-label">Grace days remaining</span>
+                    <div class="grace-dots">
+                        <div class="grace-dot" id="grace1"></div>
+                        <div class="grace-dot" id="grace2"></div>
+                        <div class="grace-dot" id="grace3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Habits Section -->
+            <div class="habits-section">
+                <div class="section-title">Today's Habits</div>
+
+                <!-- Primary Habit Card -->
+                <div class="habit-card" id="habitCard1">
+                    <div class="habit-card-accent"></div>
+                    <div class="habit-card-content">
+                        <div class="habit-header">
+                            <div class="habit-type-badge" id="habitTypeBadge1"><span>✓</span><span>Daily</span></div>
+                            <div class="habit-order-badge" id="habitOrder1">1st habit</div>
+                        </div>
+                        <div class="habit-name-display" id="habitNameDisplay1">Meditate</div>
+                        <div class="habit-trigger-display" id="triggerContainer1"><span id="triggerPrefix1">After I </span><span id="triggerDisplay1">pour my coffee</span></div>
+
+                        <!-- Mood Insight (for non-repeating) -->
+                        <div class="mood-insight hidden" id="moodInsight1">
+                            <span class="emoji">📈</span>
+                            <span class="text">This habit improves your mood by <span class="highlight">+1.2 points</span> on average</span>
+                        </div>
+
+                        <!-- Repeating Counter (for repeating type) -->
+                        <div class="repeating-counter hidden" id="repeatingCounter1">
+                            <div class="counter-display">
+                                <span class="counter-value" id="counterValue1">0</span>
+                                <span class="counter-target">/ <span id="counterTarget1">8</span> times</span>
+                            </div>
+                            <div class="counter-bar">
+                                <div class="counter-bar-fill" id="counterFill1" style="width: 0%;"></div>
+                            </div>
+                        </div>
+
+                        <button class="habit-action-btn" id="habitActionBtn1">Start Meditating</button>
+                        <button class="quick-log-btn hidden" id="quickLogBtn1"><span class="plus">+</span> Log</button>
+                    </div>
+                </div>
+
+                <!-- Second Habit Card -->
+                <div class="habit-card hidden" id="habitCard2">
+                    <div class="habit-card-accent"></div>
+                    <div class="habit-card-content">
+                        <div class="habit-header">
+                            <div class="habit-type-badge" id="habitTypeBadge2"><span>📝</span><span>Daily</span></div>
+                            <div class="habit-order-badge">2nd habit</div>
+                        </div>
+                        <div class="habit-name-display" id="habitNameDisplay2">Journal</div>
+                        <div class="habit-trigger-display" id="triggerContainer2"><span id="triggerPrefix2">After I </span><span id="triggerDisplay2">dinner</span></div>
+
+                        <div class="mood-insight hidden" id="moodInsight2">
+                            <span class="emoji">📈</span>
+                            <span class="text">This habit improves your mood by <span class="highlight">+0.8 points</span></span>
+                        </div>
+
+                        <div class="repeating-counter hidden" id="repeatingCounter2">
+                            <div class="counter-display">
+                                <span class="counter-value" id="counterValue2">0</span>
+                                <span class="counter-target">/ <span id="counterTarget2">8</span> times</span>
+                            </div>
+                            <div class="counter-bar">
+                                <div class="counter-bar-fill" id="counterFill2" style="width: 0%;"></div>
+                            </div>
+                        </div>
+
+                        <button class="habit-action-btn" id="habitActionBtn2">Start Journaling</button>
+                        <button class="quick-log-btn hidden" id="quickLogBtn2"><span class="plus">+</span> Log</button>
+                    </div>
+                </div>
+
+                <!-- Unlock Card -->
+                <div class="unlock-card locked" id="unlockCard">
+                    <div class="unlock-icon">➕</div>
+                    <div class="unlock-title">Add Second Habit</div>
+                    <div class="unlock-desc">Complete 21 days to prove you can handle two habits</div>
+                    <div class="unlock-progress">
+                        <div class="unlock-progress-fill" id="unlockFill" style="width: 0%;"></div>
+                    </div>
+                    <div class="unlock-status" id="unlockStatus">0 / 21 days</div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="analytics-section">
+                <div class="section-title">Your Progress</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="value" id="totalTimeValue">0m</div>
+                        <div class="label">Time Invested</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="streakValue">0</div>
+                        <div class="label">Current Streak</div>
+                    </div>
+                </div>
+
+                <div class="weekly-heatmap">
+                    <div class="heatmap-title">This Week</div>
+                    <div class="heatmap-days" id="heatmapDays"></div>
+                </div>
+
+                <div class="mood-chart hidden" id="moodChart">
+                    <div class="mood-chart-title">How This Habit Makes You Feel</div>
+                    <div class="mood-comparison">
+                        <div class="mood-stat">
+                            <div class="label">Before</div>
+                            <div class="emoji" id="avgMoodBefore">😐</div>
+                            <div class="value" id="avgMoodBeforeValue">3.2</div>
+                        </div>
+                        <div class="mood-arrow">→</div>
+                        <div class="mood-stat">
+                            <div class="label">After</div>
+                            <div class="emoji" id="avgMoodAfter">😊</div>
+                            <div class="value" id="avgMoodAfterValue">4.4</div>
+                        </div>
+                        <div class="mood-delta">
+                            <div class="value" id="moodDelta">+1.2</div>
+                            <div class="label">Mood Boost</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ MOOD CHECK-IN (BEFORE) ============ -->
+        <div id="moodBeforeView" class="view mood-checkin-view">
+            <div class="spacer"></div>
+            <h2 class="mood-checkin-title">How are you feeling right now?</h2>
+            <p class="mood-checkin-subtitle">Quick check before you start</p>
+            <div class="mood-options" id="moodBeforeOptions">
+                <div class="mood-option" data-mood="1">😫</div>
+                <div class="mood-option" data-mood="2">😕</div>
+                <div class="mood-option" data-mood="3">😐</div>
+                <div class="mood-option" data-mood="4">🙂</div>
+                <div class="mood-option" data-mood="5">😊</div>
+            </div>
+            <div class="mood-labels">
+                <span>Low energy</span>
+                <span>Great</span>
+            </div>
+            <div class="spacer"></div>
+            <div class="btn-container">
+                <button class="ios-btn" id="continueMoodBefore">Continue</button>
+            </div>
+        </div>
+
+        <!-- ============ FOCUS VIEW ============ -->
+        <div id="focusView" class="view focus-view">
+            <div class="focus-mode-badge" id="focusModeBadge">
+                <span>⏱</span>
+                <span id="focusModeText">Focus Session</span>
+            </div>
+            <h2 class="focus-habit-name" id="focusHabitName">Meditate</h2>
+            <p class="focus-trigger" id="focusTrigger">After I pour my coffee</p>
+            <div class="timer-container">
+                <svg class="timer-ring" width="240" height="240" viewBox="0 0 240 240">
+                    <defs>
+                        <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#BF5AF2"/>
+                            <stop offset="100%" style="stop-color:#5E5CE6"/>
+                        </linearGradient>
+                    </defs>
+                    <circle class="timer-ring-bg" cx="120" cy="120" r="100"/>
+                    <circle class="timer-ring-fill" id="timerRingFill" cx="120" cy="120" r="100"/>
+                </svg>
+                <div class="timer-center">
+                    <div class="timer-display" id="timerDisplay">00:00</div>
+                    <div class="timer-label" id="timerLabel">Time Focused</div>
+                </div>
+            </div>
+            <div class="target-progress" id="targetProgress">
+                <div class="target-bar"><div class="target-fill" id="targetFill"></div></div>
+                <div class="target-text"><span id="currentMins">0</span> / <span id="targetMins">5</span> min</div>
+            </div>
+            <div class="focus-actions" id="focusActions">
+                <button class="focus-btn focus-btn-cancel" id="cancelBtn">Cancel</button>
+                <button class="focus-btn focus-btn-done" id="doneBtn">Done ✓</button>
+            </div>
+            <div class="focus-actions hidden" id="resistanceActions">
+                <button class="focus-btn focus-btn-danger" id="gaveInBtn">I gave in</button>
+                <button class="focus-btn focus-btn-success" id="resistedBtn">Still strong 💪</button>
+            </div>
+        </div>
+
+        <!-- ============ MOOD CHECK-IN (AFTER) ============ -->
+        <div id="moodAfterView" class="view mood-checkin-view">
+            <div class="spacer"></div>
+            <h2 class="mood-checkin-title">How do you feel now?</h2>
+            <p class="mood-checkin-subtitle">After completing <span id="completedHabitName">Meditate</span></p>
+            <div class="mood-options" id="moodAfterOptions">
+                <div class="mood-option" data-mood="1">😫</div>
+                <div class="mood-option" data-mood="2">😕</div>
+                <div class="mood-option" data-mood="3">😐</div>
+                <div class="mood-option" data-mood="4">🙂</div>
+                <div class="mood-option" data-mood="5">😊</div>
+            </div>
+            <div class="mood-labels">
+                <span>Low energy</span>
+                <span>Great</span>
+            </div>
+            <div class="spacer"></div>
+            <div class="btn-container">
+                <button class="ios-btn" id="continueMoodAfter">Continue</button>
+            </div>
+        </div>
+
+        <!-- ============ COMPLETE VIEW ============ -->
+        <div id="completeView" class="view complete-view">
+            <div class="complete-animation" id="completeEmoji">✨</div>
+            <h2 class="complete-title" id="completeTitle">You did it!</h2>
+            <p class="complete-message" id="completeMessage">Day 1 complete. You showed up for yourself today.</p>
+            <div class="complete-stats">
+                <div class="complete-stat">
+                    <div class="value" id="statDays">1</div>
+                    <div class="label">Days</div>
+                </div>
+                <div class="complete-stat">
+                    <div class="value" id="statTime">5m</div>
+                    <div class="label">Today</div>
+                </div>
+            </div>
+            <div class="share-card">
+                <div class="share-preview">
+                    <div class="share-day">Day <span id="shareDay">1</span> of 66</div>
+                    <div class="share-habit" id="shareHabit">Meditate</div>
+                    <div class="share-tag">Building my habit ◉</div>
+                </div>
+                <button class="share-btn" id="shareBtn"><span>↗</span> Share Progress</button>
+            </div>
+            <div class="btn-container" style="width: 100%; max-width: 300px;">
+                <button class="ios-btn" id="continueBtn">Continue</button>
+            </div>
+        </div>
+
+        <!-- ============ ADD SECOND HABIT VIEW ============ -->
+        <div id="addSecondHabitView" class="view add-habit-view">
+            <div class="nav-bar">
+                <button class="back-btn" id="backFromAddHabit">‹ Back</button>
+            </div>
+            <div class="parallel-explanation">
+                <div class="icon">➕</div>
+                <div class="title">Ready for a Second Habit!</div>
+                <div class="desc">You've proven 21 days of consistency. You can now manage two independent habits.</div>
+                <div class="current-habit-card">
+                    <div class="number">1</div>
+                    <div class="text">After I <span id="currentTriggerDisplay">pour my coffee</span>, I will <span class="habit" id="currentHabitDisplay">meditate</span></div>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Habit Type</div>
+                <div class="habit-type-mini" id="secondHabitTypeSelector">
+                    <button class="habit-type-mini-btn selected" data-type="binary">✓ Do It</button>
+                    <button class="habit-type-mini-btn" data-type="timed">⏱ Timed</button>
+                    <button class="habit-type-mini-btn" data-type="repeating">🔄 Repeating</button>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Second habit name</div>
+                <input type="text" class="ios-text-field" id="secondHabitInput" placeholder="e.g., Journal, Read, Stretch...">
+            </div>
+
+            <div class="field-group hidden" id="secondMetricSection">
+                <div class="field-label" id="secondMetricLabel">Daily Target</div>
+                <div class="metric-control">
+                    <button class="metric-btn" id="secondDecreaseBtn">−</button>
+                    <div class="metric-display">
+                        <span class="value" id="secondMetricValueDisplay">5</span>
+                        <span class="unit" id="secondMetricUnit"> min</span>
+                    </div>
+                    <button class="metric-btn" id="secondIncreaseBtn">+</button>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Trigger (when will you do this?)</div>
+                <input type="text" class="ios-text-field" id="secondTriggerInput" placeholder="e.g., after dinner, when I wake up...">
+            </div>
+
+            <div class="conflict-warning hidden" id="conflictWarning">
+                <span class="icon">⚠️</span>
+                <span class="text"><strong>Potential conflict:</strong> This trigger is similar to your first habit's trigger. Having two habits with the same trigger can be overwhelming. Consider a different time of day.</span>
+            </div>
+
+            <div class="spacer"></div>
+            <div class="btn-container">
+                <button class="ios-btn" id="addSecondHabitBtn">Add Second Habit</button>
+            </div>
+        </div>
+
+        <div class="home-indicator"></div>
+    </div>
+
+    <script>
+        // ============ STATE ============
+        const defaultState = {
+            onboarded: false,
+            habit: { name: '', type: 'binary', trigger: '', triggerType: 'anchor', startValue: 5, changeValue: 1, currentValue: 5, dailyTarget: 8 },
+            secondHabit: null,
+            journey: { startDate: null, currentDay: 0, completedDays: [], graceDaysUsed: 0, totalFocusTime: 0 },
+            moods: [],
+            repeatingLogs: {}, // { "2024-01-26_0": 5, "2024-01-26_1": 3 }
+            lastActiveDate: null
+        };
+
+        let state = JSON.parse(JSON.stringify(defaultState));
+        let focusTimer = null;
+        let focusSeconds = 0;
+        let metricValue = 5;
+        let secondMetricValue = 5;
+        let currentMoodBefore = null;
+        let currentHabitIndex = 0;
+        let selectedSecondType = 'binary';
+        let selectedTriggerType = 'throughout'; // for repeating habits: 'throughout', 'context', 'anchor'
+        let selectedContextCues = []; // for context-based triggers
+
+        // ============ PERSISTENCE ============
+        function loadState() {
+            const saved = localStorage.getItem('oneFocusIOSv5');
+            if (saved) {
+                state = { ...defaultState, ...JSON.parse(saved) };
+                state.habit = { ...defaultState.habit, ...state.habit };
+                state.journey = { ...defaultState.journey, ...state.journey };
+                if (!state.moods) state.moods = [];
+                if (!state.repeatingLogs) state.repeatingLogs = {};
+            }
+            checkNewDay();
+        }
+
+        function saveState() {
+            localStorage.setItem('oneFocusIOSv5', JSON.stringify(state));
+        }
+
+        function checkNewDay() {
+            if (!state.journey.startDate) return;
+            const startDate = new Date(state.journey.startDate);
+            const today = new Date();
+            const diffTime = today - startDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            state.journey.currentDay = Math.min(diffDays, 66);
+
+            if (state.habit.type === 'increment') {
+                state.habit.currentValue = state.habit.startValue + (state.journey.currentDay - 1) * state.habit.changeValue;
+            } else if (state.habit.type === 'reduction') {
+                state.habit.currentValue = Math.max(1, state.habit.startValue - (state.journey.currentDay - 1) * state.habit.changeValue);
+            }
+            saveState();
+        }
+
+        // ============ VIEWS ============
+        const views = {
+            onboarding: document.getElementById('onboardingView'),
+            setupType: document.getElementById('setupTypeView'),
+            setupTrigger: document.getElementById('setupTriggerView'),
+            setupTriggerRepeating: document.getElementById('setupTriggerRepeatingView'),
+            home: document.getElementById('homeView'),
+            moodBefore: document.getElementById('moodBeforeView'),
+            focus: document.getElementById('focusView'),
+            moodAfter: document.getElementById('moodAfterView'),
+            complete: document.getElementById('completeView'),
+            addSecondHabit: document.getElementById('addSecondHabitView')
+        };
+
+        function showView(name) {
+            Object.values(views).forEach(v => v.classList.remove('active'));
+            views[name].classList.add('active');
+        }
+
+        // ============ RENDER ============
+        function render() {
+            if (!state.onboarded) return showView('onboarding');
+            if (!state.habit.name) return showView('setupType');
+            showView('home');
+            renderHome();
+        }
+
+        function renderHome() {
+            const day = state.journey.currentDay;
+            const today = new Date().toDateString();
+            const todayKey = today.replace(/\s/g, '_');
+            const hasSecondHabit = state.secondHabit !== null;
+            const canUnlock = day >= 21;
+
+            // Greeting
+            const hour = new Date().getHours();
+            document.getElementById('greeting').textContent = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+            document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+            // Journey
+            document.getElementById('dayNumber').textContent = day;
+            let phase = 'Building Foundation';
+            if (day > 42) phase = 'Cementing Habit';
+            else if (day > 21) phase = 'Strengthening';
+            document.getElementById('phaseBadge').textContent = phase;
+
+            // Path
+            const progress = day / 66;
+            document.getElementById('journeyPathFill').style.strokeDashoffset = 320 - (progress * 320);
+            const marker = document.getElementById('journeyMarker');
+            marker.style.left = `${10 + (progress * 280)}px`;
+            marker.style.top = `${50 - Math.sin(progress * Math.PI) * 30}px`;
+
+            // Milestones
+            document.getElementById('milestone1').classList.toggle('reached', day >= 1);
+            document.getElementById('milestone21').classList.toggle('reached', day >= 21);
+            document.getElementById('milestone21').classList.toggle('current', day >= 1 && day < 21);
+            document.getElementById('milestone42').classList.toggle('reached', day >= 42);
+            document.getElementById('milestone42').classList.toggle('current', day >= 21 && day < 42);
+            document.getElementById('milestone66').classList.toggle('reached', day >= 66);
+            document.getElementById('milestone66').classList.toggle('current', day >= 42 && day < 66);
+
+            // Grace
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`grace${i}`).classList.toggle('used', i <= state.journey.graceDaysUsed);
+            }
+
+            // Render primary habit card
+            renderHabitCard(state.habit, 1, today, todayKey);
+
+            // Second habit
+            if (hasSecondHabit) {
+                document.getElementById('habitCard2').classList.remove('hidden');
+                document.getElementById('unlockCard').classList.add('hidden');
+                renderHabitCard(state.secondHabit, 2, today, todayKey);
+            } else if (canUnlock) {
+                document.getElementById('habitCard2').classList.add('hidden');
+                document.getElementById('unlockCard').classList.remove('hidden');
+                document.getElementById('unlockCard').classList.remove('locked');
+                document.getElementById('unlockStatus').textContent = 'Tap to add';
+                document.getElementById('unlockFill').style.width = '100%';
+            } else {
+                document.getElementById('habitCard2').classList.add('hidden');
+                document.getElementById('unlockCard').classList.remove('hidden');
+                document.getElementById('unlockCard').classList.add('locked');
+                const completedCount = state.journey.completedDays.filter(d => !d.includes('_2')).length;
+                document.getElementById('unlockFill').style.width = `${(completedCount / 21) * 100}%`;
+                document.getElementById('unlockStatus').textContent = `${completedCount} / 21 days`;
+            }
+
+            // Analytics
+            const totalMins = Math.floor(state.journey.totalFocusTime / 60);
+            document.getElementById('totalTimeValue').textContent = totalMins >= 60 ? `${Math.floor(totalMins/60)}h ${totalMins%60}m` : `${totalMins}m`;
+
+            let streak = 0;
+            for (let i = 0; i < 66; i++) {
+                const checkDate = new Date();
+                checkDate.setDate(checkDate.getDate() - i);
+                if (state.journey.completedDays.some(d => d.startsWith(checkDate.toDateString()))) streak++;
+                else break;
+            }
+            document.getElementById('streakValue').textContent = streak;
+
+            renderHeatmap();
+            renderMoodChart();
+        }
+
+        function renderHabitCard(habit, index, today, todayKey) {
+            const isRepeating = habit.type === 'repeating';
+            const typeIcons = { binary: '✓', timed: '⏱', increment: '📈', reduction: '📉', repeating: '🔄' };
+            const typeLabels = { binary: 'Daily', timed: 'Timed', increment: 'Build', reduction: 'Reduce', repeating: 'Repeating' };
+
+            document.getElementById(`habitNameDisplay${index}`).textContent = habit.name;
+            document.getElementById(`habitTypeBadge${index}`).innerHTML = `<span>${typeIcons[habit.type]}</span><span>${typeLabels[habit.type]}</span>`;
+
+            // Handle trigger display based on triggerType
+            const triggerPrefix = document.getElementById(`triggerPrefix${index}`);
+            const triggerDisplay = document.getElementById(`triggerDisplay${index}`);
+            const triggerContainer = document.getElementById(`triggerContainer${index}`);
+
+            if (habit.triggerType === 'throughout') {
+                triggerPrefix.textContent = '';
+                triggerDisplay.textContent = 'Throughout the day';
+                triggerContainer.style.fontStyle = 'italic';
+            } else if (habit.triggerType === 'context') {
+                triggerPrefix.textContent = '';
+                triggerDisplay.textContent = habit.trigger; // e.g., "With meals, During work"
+                triggerContainer.style.fontStyle = 'normal';
+            } else {
+                // anchor type (default)
+                triggerPrefix.textContent = 'After I ';
+                triggerDisplay.textContent = habit.trigger;
+                triggerContainer.style.fontStyle = 'normal';
+            }
+
+            const actionBtn = document.getElementById(`habitActionBtn${index}`);
+            const quickLogBtn = document.getElementById(`quickLogBtn${index}`);
+            const habitCard = document.getElementById(`habitCard${index}`);
+            const moodInsight = document.getElementById(`moodInsight${index}`);
+            const repeatingCounter = document.getElementById(`repeatingCounter${index}`);
+
+            if (isRepeating) {
+                // Repeating habit
+                actionBtn.classList.add('hidden');
+                quickLogBtn.classList.remove('hidden');
+                moodInsight.classList.add('hidden');
+                repeatingCounter.classList.remove('hidden');
+
+                const logKey = `${todayKey}_${index - 1}`;
+                const count = state.repeatingLogs[logKey] || 0;
+                const target = habit.dailyTarget || 8;
+                const completed = count >= target;
+
+                document.getElementById(`counterValue${index}`).textContent = count;
+                document.getElementById(`counterTarget${index}`).textContent = target;
+                document.getElementById(`counterFill${index}`).style.width = `${Math.min((count / target) * 100, 100)}%`;
+
+                quickLogBtn.innerHTML = completed ? '✓ Target Reached' : `<span class="plus">+</span> Log ${habit.name}`;
+                quickLogBtn.classList.toggle('completed', completed);
+                habitCard.classList.toggle('completed', completed);
+
+            } else {
+                // Non-repeating habit
+                actionBtn.classList.remove('hidden');
+                quickLogBtn.classList.add('hidden');
+                repeatingCounter.classList.add('hidden');
+
+                const completionKey = index === 1 ? today : today + '_2';
+                const completedToday = state.journey.completedDays.includes(completionKey);
+
+                if (completedToday) {
+                    actionBtn.textContent = `You ${getVerbPast(habit.name)} today ✓`;
+                    actionBtn.classList.add('completed');
+                    habitCard.classList.add('completed');
+                } else {
+                    actionBtn.textContent = habit.type === 'reduction' ? 'Start Resisting' : `Start ${habit.name}`;
+                    actionBtn.classList.remove('completed');
+                    habitCard.classList.remove('completed');
+                }
+
+                // Mood insight
+                const moodData = calculateMoodDelta(index - 1);
+                if (moodData.count > 0) {
+                    moodInsight.classList.remove('hidden');
+                    moodInsight.querySelector('.highlight').textContent = `+${moodData.delta.toFixed(1)} points`;
+                } else {
+                    moodInsight.classList.add('hidden');
+                }
+            }
+        }
+
+        function getVerbPast(name) {
+            const n = name.toLowerCase();
+            if (n.includes('meditat')) return 'meditated';
+            if (n.includes('run')) return 'ran';
+            if (n.includes('read')) return 'read';
+            if (n.includes('journal')) return 'journaled';
+            if (n.includes('exercis')) return 'exercised';
+            if (n.includes('drink')) return 'drank';
+            if (n.includes('stretch')) return 'stretched';
+            return 'completed ' + n;
+        }
+
+        function calculateMoodDelta(habitIndex) {
+            const habitMoods = state.moods.filter(m => m.habitIndex === habitIndex);
+            if (habitMoods.length === 0) return { delta: 0, count: 0 };
+            const avgBefore = habitMoods.reduce((sum, m) => sum + m.before, 0) / habitMoods.length;
+            const avgAfter = habitMoods.reduce((sum, m) => sum + m.after, 0) / habitMoods.length;
+            return { delta: avgAfter - avgBefore, avgBefore, avgAfter, count: habitMoods.length };
+        }
+
+        function renderHeatmap() {
+            const container = document.getElementById('heatmapDays');
+            container.innerHTML = '';
+            const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            for (let i = 0; i < 7; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() - dayOfWeek + i);
+                const dateStr = date.toDateString();
+                const isCompleted = state.journey.completedDays.some(d => d.startsWith(dateStr));
+                const isToday = dateStr === today.toDateString();
+                const dayEl = document.createElement('div');
+                dayEl.className = 'heatmap-day';
+                dayEl.innerHTML = `<div class="label">${days[i]}</div><div class="dot ${isCompleted ? 'completed' : ''} ${isToday ? 'today' : ''}"></div>`;
+                container.appendChild(dayEl);
+            }
+        }
+
+        function renderMoodChart() {
+            const moodData = calculateMoodDelta(0);
+            if (moodData.count === 0 || state.habit.type === 'repeating') {
+                document.getElementById('moodChart').classList.add('hidden');
+                return;
+            }
+            document.getElementById('moodChart').classList.remove('hidden');
+            const emojis = ['', '😫', '😕', '😐', '🙂', '😊'];
+            document.getElementById('avgMoodBeforeValue').textContent = moodData.avgBefore.toFixed(1);
+            document.getElementById('avgMoodAfterValue').textContent = moodData.avgAfter.toFixed(1);
+            document.getElementById('avgMoodBefore').textContent = emojis[Math.round(moodData.avgBefore)] || '😐';
+            document.getElementById('avgMoodAfter').textContent = emojis[Math.round(moodData.avgAfter)] || '😊';
+            document.getElementById('moodDelta').textContent = `+${moodData.delta.toFixed(1)}`;
+        }
+
+        // ============ SETUP FLOW ============
+        let selectedType = 'binary';
+
+        document.querySelectorAll('.habit-type-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.habit-type-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedType = card.dataset.type;
+
+                const metricSection = document.getElementById('metricSection');
+                const metricLabel = document.getElementById('metricLabel');
+                const metricUnit = document.getElementById('metricUnit');
+
+                if (selectedType === 'binary') {
+                    metricSection.classList.add('hidden');
+                } else if (selectedType === 'repeating') {
+                    metricSection.classList.remove('hidden');
+                    metricLabel.textContent = 'Daily Target';
+                    metricUnit.textContent = ' times';
+                    metricValue = 8;
+                    document.getElementById('metricValueDisplay').textContent = '8';
+                } else {
+                    metricSection.classList.remove('hidden');
+                    metricUnit.textContent = ' min';
+                    if (selectedType === 'timed') metricLabel.textContent = 'Session Length';
+                    else if (selectedType === 'increment') metricLabel.textContent = 'Starting Duration';
+                    else metricLabel.textContent = 'Current Duration';
+                }
+            });
+        });
+
+        document.getElementById('decreaseBtn').addEventListener('click', () => { if (metricValue > 1) document.getElementById('metricValueDisplay').textContent = --metricValue; });
+        document.getElementById('increaseBtn').addEventListener('click', () => { document.getElementById('metricValueDisplay').textContent = ++metricValue; });
+
+        document.getElementById('startBtn').addEventListener('click', () => { state.onboarded = true; saveState(); showView('setupType'); });
+        document.getElementById('backToOnboarding').addEventListener('click', () => showView('onboarding'));
+
+        document.getElementById('toStep2').addEventListener('click', () => {
+            const name = document.getElementById('habitNameInput').value.trim();
+            if (!name) return alert('Please name your habit');
+            state.habit.name = name;
+            state.habit.type = selectedType;
+            if (selectedType === 'repeating') {
+                state.habit.dailyTarget = metricValue;
+                // Show repeating-specific trigger screen
+                document.getElementById('repeatingHabitName').textContent = name.toLowerCase();
+                document.getElementById('intentionHabitDisplayRepeating').textContent = name.toLowerCase();
+                selectedTriggerType = 'throughout'; // Reset to default
+                selectedContextCues = [];
+                // Reset UI
+                document.querySelectorAll('.trigger-type-option').forEach(o => o.classList.remove('selected'));
+                document.querySelector('.trigger-type-option[data-trigger-type="throughout"]').classList.add('selected');
+                document.getElementById('contextCueSection').classList.add('hidden');
+                document.getElementById('anchorInputSection').classList.add('hidden');
+                document.querySelectorAll('.context-cue-chip').forEach(c => c.classList.remove('selected'));
+                showView('setupTriggerRepeating');
+            } else {
+                state.habit.startValue = metricValue;
+                state.habit.currentValue = metricValue;
+                document.getElementById('intentionHabitDisplay').textContent = name.toLowerCase();
+                showView('setupTrigger');
+            }
+        });
+
+        document.getElementById('backToStep1').addEventListener('click', () => showView('setupType'));
+        document.getElementById('backToStep1Repeating').addEventListener('click', () => showView('setupType'));
+
+        // Standard trigger commit (non-repeating habits)
+        document.getElementById('commitBtn').addEventListener('click', () => {
+            const trigger = document.getElementById('triggerInput').value.trim();
+            if (!trigger) return alert('Please set your trigger');
+            state.habit.trigger = trigger;
+            state.habit.triggerType = 'anchor';
+            state.journey.startDate = new Date().toDateString();
+            state.journey.currentDay = 1;
+            saveState();
+            render();
+        });
+
+        // Repeating trigger type selection
+        document.querySelectorAll('.trigger-type-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.trigger-type-option').forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedTriggerType = option.dataset.triggerType;
+
+                // Show/hide relevant sections
+                document.getElementById('contextCueSection').classList.toggle('hidden', selectedTriggerType !== 'context');
+                document.getElementById('anchorInputSection').classList.toggle('hidden', selectedTriggerType !== 'anchor');
+            });
+        });
+
+        // Context cue chip selection (multi-select)
+        document.querySelectorAll('.context-cue-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                chip.classList.toggle('selected');
+                const cue = chip.dataset.cue;
+                if (chip.classList.contains('selected')) {
+                    if (!selectedContextCues.includes(cue)) selectedContextCues.push(cue);
+                } else {
+                    selectedContextCues = selectedContextCues.filter(c => c !== cue);
+                }
+            });
+        });
+
+        // Repeating trigger commit
+        document.getElementById('commitBtnRepeating').addEventListener('click', () => {
+            state.habit.triggerType = selectedTriggerType;
+
+            if (selectedTriggerType === 'throughout') {
+                state.habit.trigger = 'Throughout the day';
+            } else if (selectedTriggerType === 'context') {
+                if (selectedContextCues.length === 0) return alert('Please select at least one context cue');
+                state.habit.trigger = selectedContextCues.join(', ');
+            } else if (selectedTriggerType === 'anchor') {
+                const trigger = document.getElementById('repeatingTriggerInput').value.trim();
+                if (!trigger) return alert('Please set your trigger');
+                state.habit.trigger = trigger;
+            }
+
+            state.journey.startDate = new Date().toDateString();
+            state.journey.currentDay = 1;
+            saveState();
+            render();
+        });
+
+        // ============ HABIT ACTIONS ============
+        document.getElementById('habitActionBtn1').addEventListener('click', () => {
+            const today = new Date().toDateString();
+            if (state.journey.completedDays.includes(today)) return;
+            currentHabitIndex = 0;
+            if (state.habit.type === 'binary') {
+                showView('moodBefore');
+            } else {
+                showView('moodBefore');
+            }
+        });
+
+        document.getElementById('habitActionBtn2').addEventListener('click', () => {
+            const today = new Date().toDateString();
+            if (state.journey.completedDays.includes(today + '_2')) return;
+            currentHabitIndex = 1;
+            showView('moodBefore');
+        });
+
+        // Quick log for repeating habits
+        document.getElementById('quickLogBtn1').addEventListener('click', () => {
+            const todayKey = new Date().toDateString().replace(/\s/g, '_');
+            const logKey = `${todayKey}_0`;
+            state.repeatingLogs[logKey] = (state.repeatingLogs[logKey] || 0) + 1;
+
+            // Mark day as completed if target reached
+            const today = new Date().toDateString();
+            if (state.repeatingLogs[logKey] >= (state.habit.dailyTarget || 8)) {
+                if (!state.journey.completedDays.includes(today)) {
+                    state.journey.completedDays.push(today);
+                }
+            }
+            saveState();
+            renderHome();
+
+            // Visual feedback
+            const btn = document.getElementById('quickLogBtn1');
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => btn.style.transform = '', 150);
+        });
+
+        document.getElementById('quickLogBtn2').addEventListener('click', () => {
+            if (!state.secondHabit || state.secondHabit.type !== 'repeating') return;
+            const todayKey = new Date().toDateString().replace(/\s/g, '_');
+            const logKey = `${todayKey}_1`;
+            state.repeatingLogs[logKey] = (state.repeatingLogs[logKey] || 0) + 1;
+
+            const today = new Date().toDateString();
+            if (state.repeatingLogs[logKey] >= (state.secondHabit.dailyTarget || 8)) {
+                if (!state.journey.completedDays.includes(today + '_2')) {
+                    state.journey.completedDays.push(today + '_2');
+                }
+            }
+            saveState();
+            renderHome();
+        });
+
+        document.getElementById('unlockCard').addEventListener('click', () => {
+            if (state.journey.currentDay >= 21 && !state.secondHabit) {
+                document.getElementById('currentHabitDisplay').textContent = state.habit.name.toLowerCase();
+                document.getElementById('currentTriggerDisplay').textContent = state.habit.trigger;
+                showView('addSecondHabit');
+            }
+        });
+
+        // ============ MOOD BEFORE ============
+        document.querySelectorAll('#moodBeforeOptions .mood-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('#moodBeforeOptions .mood-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                currentMoodBefore = parseInt(opt.dataset.mood);
+            });
+        });
+
+        document.getElementById('continueMoodBefore').addEventListener('click', () => {
+            if (!currentMoodBefore) return alert('Please select how you feel');
+            const habit = currentHabitIndex === 0 ? state.habit : state.secondHabit;
+            if (habit.type === 'binary') {
+                completeHabit(0);
+            } else {
+                startFocus();
+            }
+        });
+
+        // ============ FOCUS ============
+        function startFocus() {
+            focusSeconds = 0;
+            const habit = currentHabitIndex === 0 ? state.habit : state.secondHabit;
+            const isReduction = habit.type === 'reduction';
+
+            document.getElementById('focusHabitName').textContent = habit.name;
+            // Handle trigger display based on type
+            if (habit.triggerType === 'throughout') {
+                document.getElementById('focusTrigger').textContent = 'Throughout the day';
+            } else if (habit.triggerType === 'context') {
+                document.getElementById('focusTrigger').textContent = habit.trigger;
+            } else {
+                document.getElementById('focusTrigger').textContent = `After I ${habit.trigger}`;
+            }
+
+            const badge = document.getElementById('focusModeBadge');
+            const timerDisp = document.getElementById('timerDisplay');
+            const timerRing = document.getElementById('timerRingFill');
+
+            if (isReduction) {
+                badge.classList.add('resistance');
+                document.getElementById('focusModeText').textContent = 'Resistance Mode';
+                timerDisp.classList.add('resistance');
+                timerRing.classList.add('resistance');
+                document.getElementById('timerLabel').textContent = 'Time Resisted';
+                document.getElementById('focusActions').classList.add('hidden');
+                document.getElementById('resistanceActions').classList.remove('hidden');
+            } else {
+                badge.classList.remove('resistance');
+                document.getElementById('focusModeText').textContent = habit.type === 'timed' ? 'Timed Session' : 'Building Up';
+                timerDisp.classList.remove('resistance');
+                timerRing.classList.remove('resistance');
+                document.getElementById('timerLabel').textContent = 'Time Focused';
+                document.getElementById('focusActions').classList.remove('hidden');
+                document.getElementById('resistanceActions').classList.add('hidden');
+            }
+
+            const targetMins = habit.type === 'timed' ? habit.startValue : habit.currentValue;
+            document.getElementById('targetMins').textContent = targetMins;
+            document.getElementById('targetProgress').classList.remove('hidden');
+
+            updateFocusDisplay();
+            showView('focus');
+            focusTimer = setInterval(() => { focusSeconds++; updateFocusDisplay(); }, 1000);
+        }
+
+        function updateFocusDisplay() {
+            const mins = Math.floor(focusSeconds / 60);
+            const secs = focusSeconds % 60;
+            document.getElementById('timerDisplay').textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            const habit = currentHabitIndex === 0 ? state.habit : state.secondHabit;
+            const targetMins = habit.type === 'timed' ? habit.startValue : habit.currentValue;
+            const progress = Math.min(focusSeconds / 60 / targetMins, 1);
+            document.getElementById('timerRingFill').style.strokeDashoffset = 628 - (progress * 628);
+            document.getElementById('targetFill').style.width = `${progress * 100}%`;
+            document.getElementById('currentMins').textContent = mins;
+        }
+
+        function stopFocus() { if (focusTimer) { clearInterval(focusTimer); focusTimer = null; } }
+
+        document.getElementById('cancelBtn').addEventListener('click', () => { stopFocus(); showView('home'); });
+        document.getElementById('doneBtn').addEventListener('click', () => { stopFocus(); showMoodAfter(); });
+        document.getElementById('resistedBtn').addEventListener('click', () => { stopFocus(); showMoodAfter(); });
+        document.getElementById('gaveInBtn').addEventListener('click', () => { stopFocus(); showMoodAfter(); });
+
+        function showMoodAfter() {
+            const habit = currentHabitIndex === 0 ? state.habit : state.secondHabit;
+            document.getElementById('completedHabitName').textContent = habit.name;
+            document.querySelectorAll('#moodAfterOptions .mood-option').forEach(o => o.classList.remove('selected'));
+            showView('moodAfter');
+        }
+
+        // ============ MOOD AFTER ============
+        document.querySelectorAll('#moodAfterOptions .mood-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('#moodAfterOptions .mood-option').forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+            });
+        });
+
+        document.getElementById('continueMoodAfter').addEventListener('click', () => {
+            const selectedAfter = document.querySelector('#moodAfterOptions .mood-option.selected');
+            if (!selectedAfter) return alert('Please select how you feel');
+            const moodAfter = parseInt(selectedAfter.dataset.mood);
+            state.moods.push({ date: new Date().toDateString(), habitIndex: currentHabitIndex, before: currentMoodBefore, after: moodAfter });
+            completeHabit(focusSeconds);
+        });
+
+        function completeHabit(seconds) {
+            const today = new Date().toDateString();
+            const key = currentHabitIndex === 0 ? today : today + '_2';
+            if (!state.journey.completedDays.includes(key)) state.journey.completedDays.push(key);
+            state.journey.totalFocusTime += seconds;
+            state.lastActiveDate = today;
+            saveState();
+            showComplete(seconds);
+        }
+
+        function showComplete(seconds) {
+            const day = state.journey.currentDay;
+            const mins = Math.floor(seconds / 60);
+            const habit = currentHabitIndex === 0 ? state.habit : state.secondHabit;
+
+            let emoji = '✨';
+            if (day === 1) emoji = '🎉';
+            else if (day === 7) emoji = '🔥';
+            else if (day === 21) emoji = '🌿';
+            else if (day === 42) emoji = '🌳';
+            else if (day === 66) emoji = '🏆';
+            document.getElementById('completeEmoji').textContent = emoji;
+
+            document.getElementById('completeTitle').textContent = day === 1 ? 'You did it!' : `Day ${day} done!`;
+
+            const messages = ["You showed up for yourself today.", "One more day in the books.", "Progress over perfection.", "Your future self thanks you."];
+            document.getElementById('completeMessage').textContent = day === 1 ? "Day 1 complete. The journey begins." : messages[Math.floor(Math.random() * messages.length)];
+
+            document.getElementById('statDays').textContent = state.journey.completedDays.filter(d => !d.includes('_2')).length;
+            document.getElementById('statTime').textContent = mins > 0 ? `${mins}m` : '✓';
+            document.getElementById('shareDay').textContent = day;
+            document.getElementById('shareHabit').textContent = habit.name;
+
+            currentMoodBefore = null;
+            showView('complete');
+        }
+
+        document.getElementById('continueBtn').addEventListener('click', render);
+        document.getElementById('shareBtn').addEventListener('click', () => {
+            const habit = currentHabitIndex === 0 ? state.habit : state.secondHabit;
+            const text = `Day ${state.journey.currentDay} of 66: ${habit.name} ✓\n\nBuilding my habit with OneFocus ◉`;
+            if (navigator.share) navigator.share({ text });
+            else { navigator.clipboard.writeText(text); alert('Copied!'); }
+        });
+
+        // ============ ADD SECOND HABIT ============
+        document.getElementById('backFromAddHabit').addEventListener('click', render);
+
+        document.querySelectorAll('#secondHabitTypeSelector .habit-type-mini-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#secondHabitTypeSelector .habit-type-mini-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedSecondType = btn.dataset.type;
+
+                const metricSection = document.getElementById('secondMetricSection');
+                const metricLabel = document.getElementById('secondMetricLabel');
+                const metricUnit = document.getElementById('secondMetricUnit');
+
+                if (selectedSecondType === 'binary') {
+                    metricSection.classList.add('hidden');
+                } else if (selectedSecondType === 'repeating') {
+                    metricSection.classList.remove('hidden');
+                    metricLabel.textContent = 'Daily Target';
+                    metricUnit.textContent = ' times';
+                    secondMetricValue = 8;
+                    document.getElementById('secondMetricValueDisplay').textContent = '8';
+                } else {
+                    metricSection.classList.remove('hidden');
+                    metricLabel.textContent = 'Session Length';
+                    metricUnit.textContent = ' min';
+                    secondMetricValue = 5;
+                    document.getElementById('secondMetricValueDisplay').textContent = '5';
+                }
+            });
+        });
+
+        document.getElementById('secondDecreaseBtn').addEventListener('click', () => {
+            if (secondMetricValue > 1) document.getElementById('secondMetricValueDisplay').textContent = --secondMetricValue;
+        });
+        document.getElementById('secondIncreaseBtn').addEventListener('click', () => {
+            document.getElementById('secondMetricValueDisplay').textContent = ++secondMetricValue;
+        });
+
+        // Conflict detection
+        document.getElementById('secondTriggerInput').addEventListener('input', (e) => {
+            const trigger = e.target.value.toLowerCase();
+            const firstTrigger = state.habit.trigger.toLowerCase();
+            const warning = document.getElementById('conflictWarning');
+
+            // Simple conflict detection - check for similar words
+            const triggerWords = trigger.split(/\s+/).filter(w => w.length > 3);
+            const firstWords = firstTrigger.split(/\s+/).filter(w => w.length > 3);
+            const hasConflict = triggerWords.some(w => firstWords.includes(w)) ||
+                              (trigger.includes('morning') && firstTrigger.includes('morning')) ||
+                              (trigger.includes('wake') && firstTrigger.includes('wake')) ||
+                              (trigger.includes('coffee') && firstTrigger.includes('coffee')) ||
+                              (trigger.includes('breakfast') && firstTrigger.includes('breakfast'));
+
+            warning.classList.toggle('hidden', !hasConflict || trigger.length < 3);
+        });
+
+        document.getElementById('addSecondHabitBtn').addEventListener('click', () => {
+            const name = document.getElementById('secondHabitInput').value.trim();
+            const trigger = document.getElementById('secondTriggerInput').value.trim();
+            if (!name) return alert('Please name your second habit');
+            if (!trigger) return alert('Please set when you\'ll do this habit');
+
+            state.secondHabit = {
+                name,
+                type: selectedSecondType,
+                trigger,
+                startValue: selectedSecondType === 'timed' ? secondMetricValue : 5,
+                currentValue: selectedSecondType === 'timed' ? secondMetricValue : 5,
+                dailyTarget: selectedSecondType === 'repeating' ? secondMetricValue : 8
+            };
+            saveState();
+            render();
+        });
+
+        // ============ RESET ============
+        function resetApp() {
+            if (confirm('Reset all data?')) {
+                localStorage.removeItem('oneFocusIOSv4');
+                state = JSON.parse(JSON.stringify(defaultState));
+                metricValue = 5;
+                document.getElementById('metricValueDisplay').textContent = '5';
+                document.getElementById('habitNameInput').value = '';
+                document.getElementById('triggerInput').value = '';
+                document.getElementById('secondHabitInput').value = '';
+                document.getElementById('secondTriggerInput').value = '';
+                render();
+            }
+        }
+
+        const resetBtn = document.createElement('button');
+        resetBtn.textContent = '🔄';
+        resetBtn.style.cssText = 'position:fixed;bottom:50px;right:20px;width:44px;height:44px;border-radius:22px;background:var(--bg-secondary);border:1px solid var(--separator);color:var(--text-secondary);font-size:18px;cursor:pointer;z-index:1000;';
+        resetBtn.addEventListener('click', resetApp);
+        document.body.appendChild(resetBtn);
+
+        // ============ INIT ============
+        loadState();
+        render();
+    </script>
+</body>
+</html>

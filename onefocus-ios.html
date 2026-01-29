@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>OneFocus - iOS Prototype</title>
+    <style>
+        /* ============ iOS DESIGN SYSTEM ============ */
+        /* Based on Apple Human Interface Guidelines */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            /* iOS System Colors */
+            --ios-blue: #007AFF;
+            --ios-green: #34C759;
+            --ios-indigo: #5856D6;
+            --ios-orange: #FF9500;
+            --ios-pink: #FF2D55;
+            --ios-purple: #AF52DE;
+            --ios-red: #FF3B30;
+            --ios-teal: #5AC8FA;
+            --ios-yellow: #FFCC00;
+
+            /* Dark Mode Backgrounds */
+            --bg-primary: #000000;
+            --bg-secondary: #1C1C1E;
+            --bg-tertiary: #2C2C2E;
+            --bg-grouped: #000000;
+            --bg-grouped-secondary: #1C1C1E;
+
+            /* Text Colors */
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(235, 235, 245, 0.6);
+            --text-tertiary: rgba(235, 235, 245, 0.3);
+            --text-quaternary: rgba(235, 235, 245, 0.18);
+
+            /* Separators */
+            --separator: rgba(84, 84, 88, 0.65);
+            --separator-opaque: #38383A;
+
+            /* App Accent */
+            --accent: #AF52DE;
+            --accent-dim: rgba(175, 82, 222, 0.15);
+
+            /* Safe Areas */
+            --safe-top: env(safe-area-inset-top, 47px);
+            --safe-bottom: env(safe-area-inset-bottom, 34px);
+
+            /* iOS Typography Scale */
+            --large-title: 34px;
+            --title-1: 28px;
+            --title-2: 22px;
+            --title-3: 20px;
+            --headline: 17px;
+            --body: 17px;
+            --callout: 16px;
+            --subheadline: 15px;
+            --footnote: 13px;
+            --caption-1: 12px;
+            --caption-2: 11px;
+        }
+
+        body {
+            font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ============ iOS DEVICE FRAME ============ */
+        .ios-device {
+            max-width: 393px; /* iPhone 14 Pro width */
+            margin: 0 auto;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 54px;
+            padding: 14px 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--caption-1);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 100;
+        }
+
+        .status-bar .time {
+            font-weight: 600;
+        }
+
+        .status-bar .icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* Dynamic Island */
+        .dynamic-island {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background: #000;
+            border-radius: 20px;
+            z-index: 200;
+        }
+
+        /* ============ VIEWS ============ */
+        .view {
+            display: none;
+            flex-direction: column;
+            min-height: calc(100vh - 54px);
+            min-height: calc(100dvh - 54px);
+            padding-bottom: calc(var(--safe-bottom) + 20px);
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        /* ============ NAVIGATION BAR (iOS) ============ */
+        .nav-bar {
+            padding: 0 16px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-bar .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent);
+            font-size: var(--body);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 0;
+        }
+
+        .nav-bar .title {
+            font-size: var(--headline);
+            font-weight: 600;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Large Title (iOS style) */
+        .large-title-container {
+            padding: 8px 20px 12px;
+        }
+
+        .large-title {
+            font-size: var(--large-title);
+            font-weight: 700;
+            letter-spacing: 0.37px;
+        }
+
+        /* ============ ONBOARDING (iOS) ============ */
+        .onboarding-view {
+            padding: 20px;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent), var(--ios-indigo));
+            border-radius: 18px; /* iOS icon radius */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 24px;
+            box-shadow: 0 4px 12px rgba(175, 82, 222, 0.3);
+        }
+
+        .onboarding-title {
+            font-size: var(--large-title);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .onboarding-subtitle {
+            font-size: var(--body);
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* iOS Grouped List Style */
+        .ios-list {
+            background: var(--bg-grouped-secondary);
+            border-radius: 12px;
+            margin: 0 20px 20px;
+            overflow: hidden;
+        }
+
+        .ios-list-item {
+            padding: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            border-bottom: 0.5px solid var(--separator);
+        }
+
+        .ios-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .ios-list-item .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--accent-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .ios-list-item .content {
+            flex: 1;
+        }
+
+        .ios-list-item .title {
+            font-size: var(--callout);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .ios-list-item .description {
+            font-size: var(--footnote);
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .ios-list-item .source {
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+            margin-top: 6px;
+        }
+
+        /* iOS Buttons */
+        .ios-btn {
+            width: calc(100% - 40px);
+            margin: 0 20px;
+            padding: 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: var(--body);
+            font-weight: 600;
+            cursor: pointer;
+            -webkit-appearance: none;
+        }
+
+        .ios-btn:active {
+            opacity: 0.8;
+        }
+
+        .ios-btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--accent);
+        }
+
+        /* ============ SETUP SCREENS ============ */
+        .setup-header {
+            padding: 0 20px 24px;
+            text-align: center;
+        }
+
+        .setup-step {
+            font-size: var(--caption-1);
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .setup-title {
+            font-size: var(--title-2);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .setup-subtitle {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+        }
+
+        /* Habit Type Grid */
+        .habit-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 0 20px;
+            margin-bottom: 24px;
+        }
+
+        .habit-type-card {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .habit-type-card.selected {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        .habit-type-card .icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .habit-type-card .name {
+            font-size: var(--subheadline);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .habit-type-card .desc {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+        }
+
+        /* iOS Text Fields */
+        .ios-text-field {
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: var(--body);
+            color: var(--text-primary);
+            width: 100%;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .ios-text-field::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .ios-text-field:focus {
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .field-group {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .field-label {
+            font-size: var(--footnote);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+
+        /* iOS Segmented Control */
+        .ios-segmented {
+            display: flex;
+            background: var(--bg-tertiary);
+            border-radius: 9px;
+            padding: 2px;
+        }
+
+        .ios-segment {
+            flex: 1;
+            padding: 10px 12px;
+            background: transparent;
+            border: none;
+            border-radius: 7px;
+            font-size: var(--footnote);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .ios-segment.selected {
+            background: var(--bg-secondary);
+            font-weight: 500;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        /* ============ HOME VIEW ============ */
+        .home-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 16px;
+        }
+
+        .day-badge {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+        }
+
+        .day-badge span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .grace-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .grace-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--ios-yellow);
+        }
+
+        .grace-dot.used {
+            background: var(--text-quaternary);
+        }
+
+        /* Journey Card (iOS Card Style) */
+        .journey-card {
+            margin: 0 20px 16px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .journey-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .journey-label {
+            font-size: var(--caption-1);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .journey-phase {
+            font-size: var(--caption-1);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .journey-progress-bar {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .journey-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--ios-green));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .journey-milestones {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+        }
+
+        .milestone.reached {
+            color: var(--ios-green);
+        }
+
+        .milestone.current {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Habit Card */
+        .habit-card {
+            margin: 0 20px 16px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px 20px;
+            position: relative;
+        }
+
+        .habit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            right: 20px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 0 0 3px 3px;
+        }
+
+        .habit-card.completed::before {
+            background: var(--ios-green);
+        }
+
+        .habit-type-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: var(--caption-2);
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .habit-name {
+            font-size: var(--title-2);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .habit-trigger {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .habit-trigger span {
+            color: var(--text-primary);
+        }
+
+        /* Metric Display */
+        .habit-metric {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .metric-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .metric-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--accent-dim);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .metric-label {
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .metric-value {
+            font-size: var(--title-3);
+            font-weight: 600;
+        }
+
+        .metric-right {
+            text-align: right;
+        }
+
+        .metric-right .label {
+            font-size: var(--caption-2);
+            color: var(--text-tertiary);
+        }
+
+        .metric-right .value {
+            font-size: var(--subheadline);
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* iOS-style Action Button */
+        .habit-action-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: var(--body);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .habit-action-btn.completed {
+            background: rgba(52, 199, 89, 0.15);
+            color: var(--ios-green);
+        }
+
+        /* Unlock Card */
+        .unlock-card {
+            margin: 0 20px;
+            background: var(--bg-secondary);
+            border: 1px dashed var(--separator-opaque);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .unlock-card.locked {
+            opacity: 0.6;
+        }
+
+        .unlock-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .unlock-title {
+            font-size: var(--subheadline);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .unlock-desc {
+            font-size: var(--footnote);
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+        }
+
+        .unlock-progress-bar {
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .unlock-progress-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .unlock-status {
+            font-size: var(--caption-1);
+            color: var(--text-tertiary);
+        }
+
+        /* ============ FOCUS VIEW ============ */
+        .focus-view {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .focus-mode-label {
+            font-size: var(--caption-1);
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .focus-mode-label.resistance {
+            color: var(--ios-green);
+        }
+
+        .focus-habit-name {
+            font-size: var(--title-1);
+            font-weight: 600;
+            margin-bottom: 8px;
+            max-width: 280px;
+        }
+
+        .focus-trigger {
+            font-size: var(--subheadline);
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        /* Timer Display */
+        .timer-display {
+            font-size: 72px;
+            font-weight: 200;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -2px;
+            margin-bottom: 8px;
+        }
+
+        .timer-display.resistance {
+            color: var(--ios-green);
+        }
+
+        .timer-label {
+            font-size: var(--caption-1);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        /* Progress Ring (iOS style) */
+        .progress-ring-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 40px;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: var(--bg-tertiary);
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 565.48;
+            stroke-dashoffset: 565.48;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-ring-fill.resistance {
+            stroke: var(--ios-green);
+        }
+
+        .progress-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        /* Focus Actions */
+        .focus-actions {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .focus-btn {
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-size: var(--body);
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+
+        .focus-btn-cancel {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .focus-btn-done {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .focus-btn-success {
+            background: var(--ios-green);
+            color: #fff;
+        }
+
+        .focus-btn-danger {
+            background: transparent;
+            border: 1px solid var(--ios-red);
+            color: var(--ios-red);
+        }
+
+        /* ============ COMPLETE VIEW ============ */
+        .complete-view {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .complete-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .complete-title {
+            font-size: var(--title-1);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .complete-subtitle {
+            font-size: var(--body);
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 280px;
+        }
+
+        .complete-stats {
+            display: flex;
+            gap: 48px;
+            margin-bottom: 32px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: var(--caption-1);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* iOS Share Sheet Preview */
+        .share-preview {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .share-preview-content {
+            background: linear-gradient(135deg, var(--accent), var(--ios-indigo));
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .share-day {
+            font-size: var(--caption-1);
+            color: rgba(255,255,255,0.8);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .share-habit {
+            font-size: var(--title-3);
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .share-message {
+            font-size: var(--footnote);
+            color: rgba(255,255,255,0.7);
+        }
+
+        .share-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            color: var(--accent);
+            font-size: var(--subheadline);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* ============ iOS HAPTIC INDICATORS ============ */
+        @keyframes haptic-tap {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(0.98); }
+        }
+
+        .ios-btn:active,
+        .habit-action-btn:active,
+        .focus-btn:active {
+            animation: haptic-tap 0.1s ease;
+        }
+
+        /* ============ HOME INDICATOR ============ */
+        .home-indicator {
+            position: fixed;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 134px;
+            height: 5px;
+            background: var(--text-primary);
+            border-radius: 3px;
+            opacity: 0.3;
+        }
+
+        /* ============ UTILITIES ============ */
+        .hidden {
+            display: none !important;
+        }
+
+        .mt-auto {
+            margin-top: auto;
+        }
+
+        .spacer {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="ios-device">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="dynamic-island"></div>
+            <div class="icons">
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
+        <!-- ============ ONBOARDING ============ -->
+        <div id="onboardingView" class="view active onboarding-view">
+            <div class="spacer"></div>
+
+            <div class="app-icon">◉</div>
+            <h1 class="onboarding-title">OneFocus</h1>
+            <p class="onboarding-subtitle">Built on habit science. Not productivity myths.</p>
+
+            <div class="ios-list">
+                <div class="ios-list-item">
+                    <div class="icon">🧠</div>
+                    <div class="content">
+                        <div class="title">66 Days to Habit Formation</div>
+                        <div class="description">Research shows habits take 66 days on average to form, not 21. We guide you through the real journey.</div>
+                        <div class="source">— Phillippa Lally, UCL</div>
+                    </div>
+                </div>
+                <div class="ios-list-item">
+                    <div class="icon">💛</div>
+                    <div class="content">
+                        <div class="title">Grace Days, Not Guilt</div>
+                        <div class="description">Missing one day doesn't break habit formation. We give you grace days to stay on track.</div>
+                        <div class="source">— European Journal of Social Psychology</div>
+                    </div>
+                </div>
+                <div class="ios-list-item">
+                    <div class="icon">🎯</div>
+                    <div class="content">
+                        <div class="title">Implementation Intentions</div>
+                        <div class="description">"If-then" planning increases success by 65%. We help you set powerful triggers.</div>
+                        <div class="source">— Gollwitzer, 94 studies</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <button class="ios-btn" id="startBtn">Begin My 66-Day Journey</button>
+        </div>
+
+        <!-- ============ SETUP: TYPE ============ -->
+        <div id="setupTypeView" class="view">
+            <div class="nav-bar">
+                <button class="back-btn" id="backToOnboarding">‹ Back</button>
+            </div>
+
+            <div class="setup-header">
+                <div class="setup-step">Step 1 of 3</div>
+                <h2 class="setup-title">What kind of habit?</h2>
+                <p class="setup-subtitle">Different habits need different tracking</p>
+            </div>
+
+            <div class="habit-type-grid">
+                <div class="habit-type-card selected" data-type="binary">
+                    <div class="icon">✓</div>
+                    <div class="name">Do It</div>
+                    <div class="desc">Yes or no daily</div>
+                </div>
+                <div class="habit-type-card" data-type="timed">
+                    <div class="icon">⏱</div>
+                    <div class="name">Timed</div>
+                    <div class="desc">For X minutes</div>
+                </div>
+                <div class="habit-type-card" data-type="increment">
+                    <div class="icon">📈</div>
+                    <div class="name">Build Up</div>
+                    <div class="desc">Increase over time</div>
+                </div>
+                <div class="habit-type-card" data-type="reduction">
+                    <div class="icon">📉</div>
+                    <div class="name">Cut Down</div>
+                    <div class="desc">Reduce over time</div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <button class="ios-btn" id="toStep2">Continue</button>
+        </div>
+
+        <!-- ============ SETUP: DETAILS ============ -->
+        <div id="setupDetailsView" class="view">
+            <div class="nav-bar">
+                <button class="back-btn" id="backToStep1">‹ Back</button>
+            </div>
+
+            <div class="setup-header">
+                <div class="setup-step">Step 2 of 3</div>
+                <h2 class="setup-title">Define your habit</h2>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Your Habit</div>
+                <input type="text" class="ios-text-field" id="habitNameInput" placeholder="e.g., Meditate, Run, Read...">
+            </div>
+
+            <div class="field-group" id="metricSection">
+                <!-- Dynamic metric controls appear here -->
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Best Time of Day</div>
+                <div class="ios-segmented">
+                    <button class="ios-segment" data-time="morning">Morning</button>
+                    <button class="ios-segment selected" data-time="anytime">Anytime</button>
+                    <button class="ios-segment" data-time="evening">Evening</button>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <button class="ios-btn" id="toStep3">Continue</button>
+        </div>
+
+        <!-- ============ SETUP: INTENTION ============ -->
+        <div id="setupIntentionView" class="view">
+            <div class="nav-bar">
+                <button class="back-btn" id="backToStep2">‹ Back</button>
+            </div>
+
+            <div class="setup-header">
+                <div class="setup-step">Step 3 of 3</div>
+                <h2 class="setup-title">Set your trigger</h2>
+                <p class="setup-subtitle">This increases success by 65%</p>
+            </div>
+
+            <div class="ios-list" style="margin-bottom: 24px;">
+                <div class="ios-list-item" style="flex-direction: column; align-items: stretch; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="color: var(--text-secondary);">After I</span>
+                        <input type="text" class="ios-text-field" id="triggerInput" placeholder="wake up, eat lunch..." style="flex: 1;">
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="color: var(--text-secondary);">I will</span>
+                        <span id="intentionHabitDisplay" style="color: var(--accent); font-weight: 500;">meditate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ios-list">
+                <div class="ios-list-item">
+                    <div class="icon">💡</div>
+                    <div class="content">
+                        <div class="description">Link to something you already do daily. "After I pour my morning coffee" is better than "at 7am"</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <button class="ios-btn" id="commitBtn">Start My 66-Day Journey</button>
+        </div>
+
+        <!-- ============ HOME VIEW ============ -->
+        <div id="homeView" class="view">
+            <div class="large-title-container">
+                <h1 class="large-title">Today</h1>
+            </div>
+
+            <div class="home-header">
+                <div class="day-badge">Day <span id="currentDay">1</span> of 66</div>
+                <div class="grace-indicator">
+                    <span style="font-size: 11px; color: var(--text-secondary); margin-right: 4px;">Grace</span>
+                    <div class="grace-dot" id="grace1"></div>
+                    <div class="grace-dot" id="grace2"></div>
+                    <div class="grace-dot" id="grace3"></div>
+                </div>
+            </div>
+
+            <!-- Journey Progress -->
+            <div class="journey-card">
+                <div class="journey-header">
+                    <span class="journey-label">Your Journey</span>
+                    <span class="journey-phase" id="journeyPhase">Building Foundation</span>
+                </div>
+                <div class="journey-progress-bar">
+                    <div class="journey-progress-fill" id="journeyFill" style="width: 1.5%;"></div>
+                </div>
+                <div class="journey-milestones">
+                    <span class="milestone reached">Day 1</span>
+                    <span class="milestone">Day 21</span>
+                    <span class="milestone">Day 42</span>
+                    <span class="milestone">Day 66 ✓</span>
+                </div>
+            </div>
+
+            <!-- Habit Card -->
+            <div class="habit-card" id="habitCard">
+                <div class="habit-type-label" id="habitTypeBadge">
+                    <span>✓</span>
+                    <span>Daily Habit</span>
+                </div>
+                <div class="habit-name" id="habitNameDisplay">Meditate</div>
+                <div class="habit-trigger">After I <span id="triggerDisplay">wake up</span></div>
+
+                <div class="habit-metric" id="habitMetric">
+                    <div class="metric-left">
+                        <div class="metric-icon" id="metricIcon">⏱</div>
+                        <div>
+                            <div class="metric-label">Today's Target</div>
+                            <div class="metric-value" id="metricValue">5 min</div>
+                        </div>
+                    </div>
+                    <div class="metric-right" id="metricRight">
+                        <div class="label">Tomorrow</div>
+                        <div class="value" id="tomorrowTarget">6 min</div>
+                    </div>
+                </div>
+
+                <button class="habit-action-btn" id="habitActionBtn">Start Focus</button>
+            </div>
+
+            <!-- Unlock Card -->
+            <div class="unlock-card locked" id="unlockCard">
+                <div class="unlock-icon">🔗</div>
+                <div class="unlock-title">Habit Stacking</div>
+                <div class="unlock-desc">Complete 21 days to add a second habit</div>
+                <div class="unlock-progress-bar">
+                    <div class="unlock-progress-fill" id="unlockFill" style="width: 0%;"></div>
+                </div>
+                <div class="unlock-status" id="unlockStatus">0 / 21 days</div>
+            </div>
+        </div>
+
+        <!-- ============ FOCUS VIEW ============ -->
+        <div id="focusView" class="view focus-view">
+            <div class="focus-mode-label" id="focusModeLabel">Daily Habit</div>
+            <div class="focus-habit-name" id="focusHabitName">Meditate</div>
+            <div class="focus-trigger" id="focusTrigger">After I wake up</div>
+
+            <div class="progress-ring-container">
+                <svg class="progress-ring" width="200" height="200">
+                    <circle class="progress-ring-bg" cx="100" cy="100" r="90"/>
+                    <circle class="progress-ring-fill" id="progressRingFill" cx="100" cy="100" r="90"/>
+                </svg>
+                <div class="progress-center">
+                    <div class="timer-display" id="timerDisplay">00:00</div>
+                    <div class="timer-label" id="timerLabel">Focused Time</div>
+                </div>
+            </div>
+
+            <div class="focus-actions" id="focusActions">
+                <button class="focus-btn focus-btn-cancel" id="cancelBtn">Cancel</button>
+                <button class="focus-btn focus-btn-done" id="doneBtn">Done ✓</button>
+            </div>
+
+            <div class="focus-actions hidden" id="resistanceActions">
+                <button class="focus-btn focus-btn-danger" id="gaveInBtn">I gave in 😔</button>
+                <button class="focus-btn focus-btn-success" id="resistedBtn">Still resisting 💪</button>
+            </div>
+        </div>
+
+        <!-- ============ COMPLETE VIEW ============ -->
+        <div id="completeView" class="view complete-view">
+            <div class="complete-icon" id="completeIcon">✨</div>
+            <h2 class="complete-title" id="completeTitle">Day 1 Complete</h2>
+            <p class="complete-subtitle" id="completeSubtitle">You showed up. That's what builds habits.</p>
+
+            <div class="complete-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="statDays">1</div>
+                    <div class="stat-label">Days</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statTime">5m</div>
+                    <div class="stat-label">Focused</div>
+                </div>
+            </div>
+
+            <div class="share-preview">
+                <div class="share-preview-content">
+                    <div class="share-day">Day <span id="shareDay">1</span> of 66</div>
+                    <div class="share-habit" id="shareHabit">Meditate</div>
+                    <div class="share-message">Building my habit ◉</div>
+                </div>
+                <button class="share-btn" id="shareBtn">
+                    <span>􀈂</span>
+                    Share Progress
+                </button>
+            </div>
+
+            <button class="ios-btn" id="continueBtn">Continue</button>
+        </div>
+
+        <!-- Home Indicator -->
+        <div class="home-indicator"></div>
+    </div>
+
+    <script>
+        // ============ iOS PROTOTYPE - STATE ============
+        const defaultState = {
+            onboarded: false,
+            habit: {
+                name: '',
+                type: 'binary',
+                trigger: '',
+                time: 'anytime',
+                startValue: 5,
+                changeValue: 1,
+                currentValue: 5
+            },
+            journey: {
+                startDate: null,
+                currentDay: 0,
+                completedDays: [],
+                graceDaysUsed: 0,
+                totalFocusTime: 0
+            },
+            lastActiveDate: null
+        };
+
+        let state = JSON.parse(JSON.stringify(defaultState));
+        let focusTimer = null;
+        let focusSeconds = 0;
+
+        // ============ PERSISTENCE ============
+        function loadState() {
+            const saved = localStorage.getItem('oneFocusIOS');
+            if (saved) {
+                state = { ...defaultState, ...JSON.parse(saved) };
+                state.habit = { ...defaultState.habit, ...state.habit };
+                state.journey = { ...defaultState.journey, ...state.journey };
+            }
+            checkNewDay();
+        }
+
+        function saveState() {
+            localStorage.setItem('oneFocusIOS', JSON.stringify(state));
+        }
+
+        function checkNewDay() {
+            if (!state.journey.startDate) return;
+            const startDate = new Date(state.journey.startDate);
+            const today = new Date();
+            const diffTime = today - startDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            state.journey.currentDay = Math.min(diffDays, 66);
+
+            if (state.habit.type === 'increment') {
+                state.habit.currentValue = state.habit.startValue + (state.journey.currentDay - 1) * state.habit.changeValue;
+            } else if (state.habit.type === 'reduction') {
+                state.habit.currentValue = Math.max(0, state.habit.startValue - (state.journey.currentDay - 1) * state.habit.changeValue);
+            }
+            saveState();
+        }
+
+        // ============ VIEWS ============
+        const views = {
+            onboarding: document.getElementById('onboardingView'),
+            setupType: document.getElementById('setupTypeView'),
+            setupDetails: document.getElementById('setupDetailsView'),
+            setupIntention: document.getElementById('setupIntentionView'),
+            home: document.getElementById('homeView'),
+            focus: document.getElementById('focusView'),
+            complete: document.getElementById('completeView')
+        };
+
+        function showView(name) {
+            Object.values(views).forEach(v => v.classList.remove('active'));
+            views[name].classList.add('active');
+        }
+
+        // ============ RENDER ============
+        function render() {
+            if (!state.onboarded) {
+                showView('onboarding');
+                return;
+            }
+            if (!state.habit.name) {
+                showView('setupType');
+                return;
+            }
+            showView('home');
+            renderHome();
+        }
+
+        function renderHome() {
+            const day = state.journey.currentDay;
+            const today = new Date().toDateString();
+            const completedToday = state.journey.completedDays.includes(today);
+
+            document.getElementById('currentDay').textContent = day;
+
+            // Grace dots
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById(`grace${i}`).classList.toggle('used', i <= state.journey.graceDaysUsed);
+            }
+
+            // Journey progress
+            document.getElementById('journeyFill').style.width = `${(day / 66) * 100}%`;
+
+            let phase = 'Building Foundation';
+            if (day > 42) phase = 'Cementing Habit';
+            else if (day > 21) phase = 'Strengthening';
+            document.getElementById('journeyPhase').textContent = phase;
+
+            // Habit display
+            document.getElementById('habitNameDisplay').textContent = state.habit.name;
+            document.getElementById('triggerDisplay').textContent = state.habit.trigger;
+
+            const typeIcons = { binary: '✓', timed: '⏱', increment: '📈', reduction: '📉' };
+            const typeLabels = { binary: 'Daily', timed: 'Timed', increment: 'Building', reduction: 'Reducing' };
+            document.getElementById('habitTypeBadge').innerHTML = `
+                <span>${typeIcons[state.habit.type]}</span>
+                <span>${typeLabels[state.habit.type]} Habit</span>
+            `;
+
+            // Metric
+            const metricEl = document.getElementById('habitMetric');
+            const metricRight = document.getElementById('metricRight');
+
+            if (state.habit.type === 'binary') {
+                metricEl.classList.add('hidden');
+            } else {
+                metricEl.classList.remove('hidden');
+                document.getElementById('metricIcon').textContent = typeIcons[state.habit.type];
+
+                if (state.habit.type === 'timed') {
+                    document.getElementById('metricValue').textContent = `${state.habit.startValue} min`;
+                    metricRight.classList.add('hidden');
+                } else {
+                    document.getElementById('metricValue').textContent = `${state.habit.currentValue} min`;
+                    metricRight.classList.remove('hidden');
+                    const tomorrow = state.habit.type === 'reduction'
+                        ? Math.max(0, state.habit.currentValue - state.habit.changeValue)
+                        : state.habit.currentValue + state.habit.changeValue;
+                    document.getElementById('tomorrowTarget').textContent = `${tomorrow} min`;
+                }
+            }
+
+            // Action button
+            const actionBtn = document.getElementById('habitActionBtn');
+            const habitCard = document.getElementById('habitCard');
+
+            if (completedToday) {
+                actionBtn.textContent = '✓ Done Today';
+                actionBtn.classList.add('completed');
+                habitCard.classList.add('completed');
+            } else {
+                let btnText = state.habit.type === 'binary' ? 'Mark Complete' :
+                              state.habit.type === 'reduction' ? 'Start Resisting' : 'Start Focus';
+                actionBtn.textContent = btnText;
+                actionBtn.classList.remove('completed');
+                habitCard.classList.remove('completed');
+            }
+
+            // Unlock card
+            const completedCount = state.journey.completedDays.length;
+            document.getElementById('unlockFill').style.width = `${Math.min((completedCount / 21) * 100, 100)}%`;
+            document.getElementById('unlockStatus').textContent = completedCount >= 21 ? 'Ready!' : `${completedCount} / 21 days`;
+            document.getElementById('unlockCard').classList.toggle('locked', completedCount < 21);
+        }
+
+        // ============ SETUP FLOW ============
+        let selectedType = 'binary';
+        let selectedTime = 'anytime';
+
+        // Type selection
+        document.querySelectorAll('.habit-type-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.habit-type-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedType = card.dataset.type;
+            });
+        });
+
+        // Time selection
+        document.querySelectorAll('.ios-segment').forEach(seg => {
+            seg.addEventListener('click', () => {
+                document.querySelectorAll('.ios-segment').forEach(s => s.classList.remove('selected'));
+                seg.classList.add('selected');
+                selectedTime = seg.dataset.time;
+            });
+        });
+
+        // Navigation
+        document.getElementById('startBtn').addEventListener('click', () => {
+            state.onboarded = true;
+            saveState();
+            showView('setupType');
+        });
+
+        document.getElementById('backToOnboarding').addEventListener('click', () => showView('onboarding'));
+
+        document.getElementById('toStep2').addEventListener('click', () => {
+            state.habit.type = selectedType;
+            showView('setupDetails');
+        });
+
+        document.getElementById('backToStep1').addEventListener('click', () => showView('setupType'));
+
+        document.getElementById('toStep3').addEventListener('click', () => {
+            const name = document.getElementById('habitNameInput').value.trim();
+            if (!name) return alert('Please enter your habit');
+            state.habit.name = name;
+            state.habit.time = selectedTime;
+            document.getElementById('intentionHabitDisplay').textContent = name.toLowerCase();
+            showView('setupIntention');
+        });
+
+        document.getElementById('backToStep2').addEventListener('click', () => showView('setupDetails'));
+
+        document.getElementById('commitBtn').addEventListener('click', () => {
+            const trigger = document.getElementById('triggerInput').value.trim();
+            if (!trigger) return alert('Please set your trigger');
+            state.habit.trigger = trigger;
+            state.journey.startDate = new Date().toDateString();
+            state.journey.currentDay = 1;
+            state.lastActiveDate = new Date().toDateString();
+            saveState();
+            render();
+        });
+
+        // ============ HOME ACTIONS ============
+        document.getElementById('habitActionBtn').addEventListener('click', () => {
+            const today = new Date().toDateString();
+            if (state.journey.completedDays.includes(today)) return;
+
+            if (state.habit.type === 'binary') {
+                completeHabit(0);
+            } else {
+                startFocus();
+            }
+        });
+
+        // ============ FOCUS MODE ============
+        function startFocus() {
+            focusSeconds = 0;
+            const isReduction = state.habit.type === 'reduction';
+
+            document.getElementById('focusHabitName').textContent = state.habit.name;
+            document.getElementById('focusTrigger').textContent = `After I ${state.habit.trigger}`;
+
+            const modeLabel = document.getElementById('focusModeLabel');
+            const timerDisplay = document.getElementById('timerDisplay');
+            const timerLabel = document.getElementById('timerLabel');
+            const progressRing = document.getElementById('progressRingFill');
+            const focusActions = document.getElementById('focusActions');
+            const resistanceActions = document.getElementById('resistanceActions');
+
+            if (isReduction) {
+                modeLabel.textContent = 'Resisting';
+                modeLabel.classList.add('resistance');
+                timerDisplay.classList.add('resistance');
+                timerLabel.textContent = 'Time Resisted';
+                progressRing.classList.add('resistance');
+                focusActions.classList.add('hidden');
+                resistanceActions.classList.remove('hidden');
+            } else {
+                modeLabel.textContent = state.habit.type === 'timed' ? 'Timed Session' : 'Building Up';
+                modeLabel.classList.remove('resistance');
+                timerDisplay.classList.remove('resistance');
+                timerLabel.textContent = 'Focused Time';
+                progressRing.classList.remove('resistance');
+                focusActions.classList.remove('hidden');
+                resistanceActions.classList.add('hidden');
+            }
+
+            updateFocusDisplay();
+            showView('focus');
+
+            focusTimer = setInterval(() => {
+                focusSeconds++;
+                updateFocusDisplay();
+            }, 1000);
+        }
+
+        function updateFocusDisplay() {
+            const mins = Math.floor(focusSeconds / 60);
+            const secs = focusSeconds % 60;
+            document.getElementById('timerDisplay').textContent =
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+            // Update ring
+            let targetMins = state.habit.type === 'timed' ? state.habit.startValue : state.habit.currentValue;
+            const progress = Math.min(focusSeconds / 60 / targetMins, 1);
+            const circumference = 2 * Math.PI * 90;
+            const offset = circumference - (progress * circumference);
+            document.getElementById('progressRingFill').style.strokeDashoffset = offset;
+        }
+
+        function stopFocus() {
+            if (focusTimer) {
+                clearInterval(focusTimer);
+                focusTimer = null;
+            }
+        }
+
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            stopFocus();
+            showView('home');
+        });
+
+        document.getElementById('doneBtn').addEventListener('click', () => {
+            stopFocus();
+            completeHabit(focusSeconds);
+        });
+
+        document.getElementById('resistedBtn').addEventListener('click', () => {
+            stopFocus();
+            completeHabit(focusSeconds);
+        });
+
+        document.getElementById('gaveInBtn').addEventListener('click', () => {
+            stopFocus();
+            completeHabit(focusSeconds);
+        });
+
+        function completeHabit(seconds) {
+            const today = new Date().toDateString();
+            if (!state.journey.completedDays.includes(today)) {
+                state.journey.completedDays.push(today);
+            }
+            state.journey.totalFocusTime += seconds;
+            state.lastActiveDate = today;
+            saveState();
+            showComplete(seconds);
+        }
+
+        function showComplete(seconds) {
+            const day = state.journey.currentDay;
+            const mins = Math.floor(seconds / 60);
+
+            document.getElementById('completeTitle').textContent = `Day ${day} Complete`;
+            document.getElementById('statDays').textContent = state.journey.completedDays.length;
+            document.getElementById('statTime').textContent = mins > 0 ? `${mins}m` : '✓';
+            document.getElementById('shareDay').textContent = day;
+            document.getElementById('shareHabit').textContent = state.habit.name;
+
+            const messages = [
+                "You showed up. That's what builds habits.",
+                "One more day in the books.",
+                "Progress over perfection.",
+                "Your future self thanks you."
+            ];
+            document.getElementById('completeSubtitle').textContent = messages[Math.floor(Math.random() * messages.length)];
+
+            showView('complete');
+        }
+
+        document.getElementById('continueBtn').addEventListener('click', () => render());
+
+        document.getElementById('shareBtn').addEventListener('click', () => {
+            const text = `Day ${state.journey.currentDay} of 66: ${state.habit.name} ✓\n\nBuilding my habit with OneFocus ◉`;
+            if (navigator.share) {
+                navigator.share({ text });
+            } else {
+                navigator.clipboard.writeText(text);
+                alert('Copied to clipboard!');
+            }
+        });
+
+        // ============ RESET ============
+        function resetApp() {
+            if (confirm('Reset all data?')) {
+                localStorage.removeItem('oneFocusIOS');
+                state = JSON.parse(JSON.stringify(defaultState));
+                render();
+            }
+        }
+
+        // Reset button for testing
+        const resetBtn = document.createElement('button');
+        resetBtn.textContent = '🔄';
+        resetBtn.style.cssText = 'position:fixed;bottom:50px;right:20px;width:40px;height:40px;border-radius:20px;background:var(--bg-secondary);border:1px solid var(--separator);color:var(--text-secondary);font-size:16px;cursor:pointer;z-index:1000;';
+        resetBtn.addEventListener('click', resetApp);
+        document.body.appendChild(resetBtn);
+
+        // ============ INIT ============
+        loadState();
+        render();
+    </script>
+</body>
+</html>
