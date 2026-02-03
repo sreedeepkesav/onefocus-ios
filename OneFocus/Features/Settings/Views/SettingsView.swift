@@ -16,7 +16,7 @@ struct SettingsView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Notifications")
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(.textSecondary)
+                                .foregroundColor(.textSecondary)
                                 .textCase(.uppercase)
                                 .padding(.horizontal, 16)
                             
@@ -64,7 +64,7 @@ struct SettingsView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Habits")
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(.textSecondary)
+                                .foregroundColor(.textSecondary)
                                 .textCase(.uppercase)
                                 .padding(.horizontal, 16)
                             
@@ -86,7 +86,7 @@ struct SettingsView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Data & Privacy")
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(.textSecondary)
+                                .foregroundColor(.textSecondary)
                                 .textCase(.uppercase)
                                 .padding(.horizontal, 16)
                             
@@ -119,7 +119,7 @@ struct SettingsView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("About")
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(.textSecondary)
+                                .foregroundColor(.textSecondary)
                                 .textCase(.uppercase)
                                 .padding(.horizontal, 16)
                             
@@ -157,7 +157,7 @@ struct SettingsView: View {
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 28))
-                            .foregroundStyle(.textSecondary)
+                            .foregroundColor(.textSecondary)
                             .symbolRenderingMode(.hierarchical)
                     }
                 }
@@ -204,7 +204,7 @@ struct TimePickerSheet: View {
             VStack(spacing: 20) {
                 Text("Reminder Time")
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(.textPrimary)
+                    .foregroundColor(.textPrimary)
                     .padding(.top, 20)
                 
                 DatePicker(
@@ -222,7 +222,7 @@ struct TimePickerSheet: View {
                 } label: {
                     Text("Done")
                         .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 54)
                         .background(Color.accent)
@@ -248,7 +248,7 @@ struct ExportDataSheet: View {
                 HStack {
                     Text("Export Data")
                         .font(.system(size: 20, weight: .bold))
-                        .foregroundStyle(.textPrimary)
+                        .foregroundColor(.textPrimary)
                     
                     Spacer()
                     
@@ -258,7 +258,7 @@ struct ExportDataSheet: View {
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 28))
-                            .foregroundStyle(.textSecondary)
+                            .foregroundColor(.textSecondary)
                             .symbolRenderingMode(.hierarchical)
                     }
                 }
@@ -268,7 +268,7 @@ struct ExportDataSheet: View {
                 ScrollView {
                     Text(data)
                         .font(.system(size: 14, design: .monospaced))
-                        .foregroundStyle(.textPrimary)
+                        .foregroundColor(.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(16)
                         .background(Color.bgSecondary)
@@ -285,7 +285,7 @@ struct ExportDataSheet: View {
                         Text("Share")
                     }
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.white)
+                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 54)
                     .background(Color.accent)

@@ -31,18 +31,18 @@ struct SettingRow: View {
                     
                     Image(systemName: icon)
                         .font(.system(size: 16, weight: .medium))
-                        .foregroundStyle(iconColor)
+                        .foregroundColor(iconColor)
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(.system(size: 16, weight: .medium))
-                        .foregroundStyle(.textPrimary)
+                        .foregroundColor(.textPrimary)
                     
                     if let subtitle = subtitle {
                         Text(subtitle)
                             .font(.system(size: 13))
-                            .foregroundStyle(.textSecondary)
+                            .foregroundColor(.textSecondary)
                     }
                 }
                 
@@ -50,7 +50,7 @@ struct SettingRow: View {
                 
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(.textTertiary)
+                    .foregroundColor(.textTertiary)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -91,18 +91,18 @@ struct SettingToggleRow: View {
                 
                 Image(systemName: icon)
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundStyle(iconColor)
+                    .foregroundColor(iconColor)
             }
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundStyle(.textPrimary)
+                    .foregroundColor(.textPrimary)
                 
                 if let subtitle = subtitle {
                     Text(subtitle)
                         .font(.system(size: 13))
-                        .foregroundStyle(.textSecondary)
+                        .foregroundColor(.textSecondary)
                 }
             }
             

@@ -30,6 +30,29 @@
 		14D0E34FFB7649ADBAEF0CE7 /* OneFocusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D0A2B1A6FC47669C1E5699 /* OneFocusApp.swift */; };
 		82D386F0C79948BBB1686A47 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279AF6B9F5134EE1ABF9EECA /* DataService.swift */; };
 		8B2E3008D5DA4896AB5DEE7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BC35D72DDD44B6CB398A0D8 /* Assets.xcassets */; };
+		07D041883BE510BDDDF587E2 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7868A747472C4C725C0352 /* HomeViewModel.swift */; };
+		1F79C77297FFC1BA34EF21F3 /* JourneyCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232370BD79FDD1881CDB8A3A /* JourneyCard.swift */; };
+		A4CF2B3268980E553331829D /* HabitCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C939E6E211279993D0547AE0 /* HabitCard.swift */; };
+		E2E19CB7219914378E954A1F /* ProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6776B6E5BD85521FA1C0A39B /* ProgressRing.swift */; };
+		0A59C034B7EF2BB43EBF5D81 /* StatsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5F4056030B68B19711164F /* StatsRow.swift */; };
+		D03F0BF72A78700A89B56B7C /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02596216083641351BD7E3BF /* FocusView.swift */; };
+		7A6F3558E46E7A66FAD3809D /* FocusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F824AA1A396BFA022F0871 /* FocusViewModel.swift */; };
+		C5ABA49C221BD35940DED526 /* BreathingCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA89A7CEEB3BCADF5A84B /* BreathingCircle.swift */; };
+		0DE1A8BAC87CA839BFB45129 /* CelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6DB7F1A9C60D585932267 /* CelebrationView.swift */; };
+		3F189FE66A780AB7A8719BDA /* MoodBeforeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C45707D682E6ABFACAC93F /* MoodBeforeView.swift */; };
+		2D91BDBC79A859E7C877ABAA /* MoodAfterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B12774533C6B10C1A1CC68 /* MoodAfterView.swift */; };
+		DFE56626592B18045D6217B4 /* MoodViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4E469070A7C05E947442E2 /* MoodViewModel.swift */; };
+		33B6FC6474424B644DDB2765 /* AddSecondHabitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101D18436981504F57F5DB2B /* AddSecondHabitView.swift */; };
+		E508452BCFC9DBE7E8A9EA6A /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436DDE6854272E20CDC0EC5C /* NotificationService.swift */; };
+		FCB550AA94F112B86746C4AD /* DeepLinkHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E6782BDD60849DB444B827 /* DeepLinkHandler.swift */; };
+		7AE2DACEA8DF9E797EA241C7 /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D19AFB509CD7DB5C1334F5D /* InsightsViewModel.swift */; };
+		31E81D84A1ED05DCA6F7CF65 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDF17485770167A5705E5790 /* InsightsView.swift */; };
+		2DB9345192DBDDA0AC1F7937 /* CalendarHeatmap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92A5F3D1FEE737538DDE518A /* CalendarHeatmap.swift */; };
+		65575CF86E90D9244AD29E89 /* InsightStatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DC1AE602BE9248FBFC64FD0 /* InsightStatCard.swift */; };
+		4B0CA23702F30B0AD0A790C1 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6835B1FEFDD03373AC29FDF4 /* SettingsViewModel.swift */; };
+		547FD8DF3AAAE1DB5ED089BD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D57A08DD10974669E76FFD /* SettingsView.swift */; };
+		255912FE1A344970D12FFF9C /* SettingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDC54C2CB0CAA433376B433 /* SettingRow.swift */; };
+		42E58C163FCB76DEDE53C355 /* SecondHabitOnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E370B1C66767C376EA9EB232 /* SecondHabitOnboardingFlow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +82,29 @@
 		1B69F68EEB2E4CB88D019154 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OneFocus/Info.plist"; sourceTree = "<group>"; };
 		8BC35D72DDD44B6CB398A0D8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "OneFocus/Assets.xcassets"; sourceTree = "<group>"; };
 		9DD4F05560654151B1921DAC /* OneFocus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OneFocus/OneFocus.entitlements"; sourceTree = "<group>"; };
+		BF7868A747472C4C725C0352 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HomeViewModel.swift"; path = "OneFocus/Features/Home/ViewModels/HomeViewModel.swift"; sourceTree = "<group>"; };
+		232370BD79FDD1881CDB8A3A /* JourneyCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "JourneyCard.swift"; path = "OneFocus/Features/Home/Components/JourneyCard.swift"; sourceTree = "<group>"; };
+		C939E6E211279993D0547AE0 /* HabitCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HabitCard.swift"; path = "OneFocus/Features/Home/Components/HabitCard.swift"; sourceTree = "<group>"; };
+		6776B6E5BD85521FA1C0A39B /* ProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ProgressRing.swift"; path = "OneFocus/Features/Home/Components/ProgressRing.swift"; sourceTree = "<group>"; };
+		CF5F4056030B68B19711164F /* StatsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StatsRow.swift"; path = "OneFocus/Features/Home/Components/StatsRow.swift"; sourceTree = "<group>"; };
+		02596216083641351BD7E3BF /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FocusView.swift"; path = "OneFocus/Features/Focus/Views/FocusView.swift"; sourceTree = "<group>"; };
+		E4F824AA1A396BFA022F0871 /* FocusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FocusViewModel.swift"; path = "OneFocus/Features/Focus/ViewModels/FocusViewModel.swift"; sourceTree = "<group>"; };
+		F82FA89A7CEEB3BCADF5A84B /* BreathingCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "BreathingCircle.swift"; path = "OneFocus/Features/Focus/Components/BreathingCircle.swift"; sourceTree = "<group>"; };
+		FDA6DB7F1A9C60D585932267 /* CelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CelebrationView.swift"; path = "OneFocus/Features/Focus/Views/CelebrationView.swift"; sourceTree = "<group>"; };
+		47C45707D682E6ABFACAC93F /* MoodBeforeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MoodBeforeView.swift"; path = "OneFocus/Features/Mood/Views/MoodBeforeView.swift"; sourceTree = "<group>"; };
+		D6B12774533C6B10C1A1CC68 /* MoodAfterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MoodAfterView.swift"; path = "OneFocus/Features/Mood/Views/MoodAfterView.swift"; sourceTree = "<group>"; };
+		3F4E469070A7C05E947442E2 /* MoodViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MoodViewModel.swift"; path = "OneFocus/Features/Mood/ViewModels/MoodViewModel.swift"; sourceTree = "<group>"; };
+		101D18436981504F57F5DB2B /* AddSecondHabitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AddSecondHabitView.swift"; path = "OneFocus/Features/SecondHabit/Views/AddSecondHabitView.swift"; sourceTree = "<group>"; };
+		436DDE6854272E20CDC0EC5C /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NotificationService.swift"; path = "OneFocus/Services/NotificationService.swift"; sourceTree = "<group>"; };
+		D7E6782BDD60849DB444B827 /* DeepLinkHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DeepLinkHandler.swift"; path = "OneFocus/Core/DeepLinkHandler.swift"; sourceTree = "<group>"; };
+		9D19AFB509CD7DB5C1334F5D /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "InsightsViewModel.swift"; path = "OneFocus/Features/Insights/ViewModels/InsightsViewModel.swift"; sourceTree = "<group>"; };
+		BDF17485770167A5705E5790 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "InsightsView.swift"; path = "OneFocus/Features/Insights/Views/InsightsView.swift"; sourceTree = "<group>"; };
+		92A5F3D1FEE737538DDE518A /* CalendarHeatmap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CalendarHeatmap.swift"; path = "OneFocus/Features/Insights/Components/CalendarHeatmap.swift"; sourceTree = "<group>"; };
+		4DC1AE602BE9248FBFC64FD0 /* InsightStatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "InsightStatCard.swift"; path = "OneFocus/Features/Insights/Components/InsightStatCard.swift"; sourceTree = "<group>"; };
+		6835B1FEFDD03373AC29FDF4 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SettingsViewModel.swift"; path = "OneFocus/Features/Settings/ViewModels/SettingsViewModel.swift"; sourceTree = "<group>"; };
+		38D57A08DD10974669E76FFD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SettingsView.swift"; path = "OneFocus/Features/Settings/Views/SettingsView.swift"; sourceTree = "<group>"; };
+		BDDC54C2CB0CAA433376B433 /* SettingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SettingRow.swift"; path = "OneFocus/Features/Settings/Components/SettingRow.swift"; sourceTree = "<group>"; };
+		E370B1C66767C376EA9EB232 /* SecondHabitOnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SecondHabitOnboardingFlow.swift"; path = "OneFocus/Features/SecondHabit/Views/SecondHabitOnboardingFlow.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +151,29 @@
 				7DEF8197F0CA402F94FB6332 /* RepeatingLog.swift */,
 				22D0A2B1A6FC47669C1E5699 /* OneFocusApp.swift */,
 				279AF6B9F5134EE1ABF9EECA /* DataService.swift */,
+				BF7868A747472C4C725C0352 /* HomeViewModel.swift */,
+				232370BD79FDD1881CDB8A3A /* JourneyCard.swift */,
+				C939E6E211279993D0547AE0 /* HabitCard.swift */,
+				6776B6E5BD85521FA1C0A39B /* ProgressRing.swift */,
+				CF5F4056030B68B19711164F /* StatsRow.swift */,
+				02596216083641351BD7E3BF /* FocusView.swift */,
+				E4F824AA1A396BFA022F0871 /* FocusViewModel.swift */,
+				F82FA89A7CEEB3BCADF5A84B /* BreathingCircle.swift */,
+				FDA6DB7F1A9C60D585932267 /* CelebrationView.swift */,
+				47C45707D682E6ABFACAC93F /* MoodBeforeView.swift */,
+				D6B12774533C6B10C1A1CC68 /* MoodAfterView.swift */,
+				3F4E469070A7C05E947442E2 /* MoodViewModel.swift */,
+				101D18436981504F57F5DB2B /* AddSecondHabitView.swift */,
+				436DDE6854272E20CDC0EC5C /* NotificationService.swift */,
+				D7E6782BDD60849DB444B827 /* DeepLinkHandler.swift */,
+				9D19AFB509CD7DB5C1334F5D /* InsightsViewModel.swift */,
+				BDF17485770167A5705E5790 /* InsightsView.swift */,
+				92A5F3D1FEE737538DDE518A /* CalendarHeatmap.swift */,
+				4DC1AE602BE9248FBFC64FD0 /* InsightStatCard.swift */,
+				6835B1FEFDD03373AC29FDF4 /* SettingsViewModel.swift */,
+				38D57A08DD10974669E76FFD /* SettingsView.swift */,
+				BDDC54C2CB0CAA433376B433 /* SettingRow.swift */,
+				E370B1C66767C376EA9EB232 /* SecondHabitOnboardingFlow.swift */,
 				1B69F68EEB2E4CB88D019154 /* Info.plist */,
 				8BC35D72DDD44B6CB398A0D8 /* Assets.xcassets */,
 				9DD4F05560654151B1921DAC /* OneFocus.entitlements */,
@@ -211,6 +280,29 @@
 				1261E80F410048DF9BDC723F /* RepeatingLog.swift in Sources */,
 				14D0E34FFB7649ADBAEF0CE7 /* OneFocusApp.swift in Sources */,
 				82D386F0C79948BBB1686A47 /* DataService.swift in Sources */,
+				07D041883BE510BDDDF587E2 /* HomeViewModel.swift in Sources */,
+				1F79C77297FFC1BA34EF21F3 /* JourneyCard.swift in Sources */,
+				A4CF2B3268980E553331829D /* HabitCard.swift in Sources */,
+				E2E19CB7219914378E954A1F /* ProgressRing.swift in Sources */,
+				0A59C034B7EF2BB43EBF5D81 /* StatsRow.swift in Sources */,
+				D03F0BF72A78700A89B56B7C /* FocusView.swift in Sources */,
+				7A6F3558E46E7A66FAD3809D /* FocusViewModel.swift in Sources */,
+				C5ABA49C221BD35940DED526 /* BreathingCircle.swift in Sources */,
+				0DE1A8BAC87CA839BFB45129 /* CelebrationView.swift in Sources */,
+				3F189FE66A780AB7A8719BDA /* MoodBeforeView.swift in Sources */,
+				2D91BDBC79A859E7C877ABAA /* MoodAfterView.swift in Sources */,
+				DFE56626592B18045D6217B4 /* MoodViewModel.swift in Sources */,
+				33B6FC6474424B644DDB2765 /* AddSecondHabitView.swift in Sources */,
+				E508452BCFC9DBE7E8A9EA6A /* NotificationService.swift in Sources */,
+				FCB550AA94F112B86746C4AD /* DeepLinkHandler.swift in Sources */,
+				7AE2DACEA8DF9E797EA241C7 /* InsightsViewModel.swift in Sources */,
+				31E81D84A1ED05DCA6F7CF65 /* InsightsView.swift in Sources */,
+				2DB9345192DBDDA0AC1F7937 /* CalendarHeatmap.swift in Sources */,
+				65575CF86E90D9244AD29E89 /* InsightStatCard.swift in Sources */,
+				4B0CA23702F30B0AD0A790C1 /* SettingsViewModel.swift in Sources */,
+				547FD8DF3AAAE1DB5ED089BD /* SettingsView.swift in Sources */,
+				255912FE1A344970D12FFF9C /* SettingRow.swift in Sources */,
+				42E58C163FCB76DEDE53C355 /* SecondHabitOnboardingFlow.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

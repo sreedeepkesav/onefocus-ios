@@ -83,10 +83,10 @@ struct HabitCard: View {
                     }
                     .padding(16)
                     .background(
-                        isCompleted ?
-                        Color.success.opacity(0.15) :
                         LinearGradient(
-                            colors: [.accent, .accentSecondary],
+                            colors: isCompleted ?
+                                [.success.opacity(0.15), .success.opacity(0.15)] :
+                                [.accent, .accentSecondary],
                             startPoint: .leading,
                             endPoint: .trailing
                         )

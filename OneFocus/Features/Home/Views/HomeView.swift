@@ -91,7 +91,7 @@ struct HomeView: View {
                     } label: {
                         Image(systemName: "chart.bar.fill")
                             .font(.system(size: 20))
-                            .foregroundStyle(.accent)
+                            .foregroundColor(.accent)
                     }
                     .accessibilityLabel("View insights")
                 }
@@ -103,7 +103,7 @@ struct HomeView: View {
                     } label: {
                         Image(systemName: "gearshape.fill")
                             .font(.system(size: 20))
-                            .foregroundStyle(.accent)
+                            .foregroundColor(.accent)
                     }
                     .accessibilityLabel("Open settings")
                 }

@@ -61,8 +61,4 @@ final class FocusViewModel {
         stopBreathing()
         isComplete = true
     }
-
-    deinit {
-        timer?.invalidate()
-    }
 }

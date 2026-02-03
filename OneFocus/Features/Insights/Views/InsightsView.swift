@@ -76,7 +76,7 @@ struct InsightsView: View {
                     } label: {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 28))
-                            .foregroundStyle(.textSecondary)
+                            .foregroundColor(.textSecondary)
                             .symbolRenderingMode(.hierarchical)
                     }
                 }
@@ -96,11 +96,11 @@ struct JourneyProgressCard: View {
             HStack {
                 Image(systemName: "map.fill")
                     .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.accent)
+                    .foregroundColor(.accent)
                 
                 Text("Journey Progress")
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(.textPrimary)
+                    .foregroundColor(.textPrimary)
             }
             
             VStack(spacing: 12) {
@@ -142,13 +142,13 @@ struct ProgressRow: View {
         HStack {
             Text(label)
                 .font(.system(size: 15))
-                .foregroundStyle(.textSecondary)
+                .foregroundColor(.textSecondary)
             
             Spacer()
             
             Text(value)
                 .font(.system(size: 15, weight: .semibold))
-                .foregroundStyle(.textPrimary)
+                .foregroundColor(.textPrimary)
         }
     }
 }
@@ -162,11 +162,11 @@ struct HabitDetailsCard: View {
             HStack {
                 Image(systemName: habit.typeIcon)
                     .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(isPrimary ? .accent : .accentSecondary)
+                    .foregroundColor(isPrimary ? .accent : .accentSecondary)
                 
                 Text(isPrimary ? "Primary Habit" : "Secondary Habit")
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(.textPrimary)
+                    .foregroundColor(.textPrimary)
             }
             
             VStack(spacing: 12) {

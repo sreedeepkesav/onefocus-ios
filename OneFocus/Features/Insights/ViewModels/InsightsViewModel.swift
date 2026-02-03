@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 
 @Observable
+@MainActor
 final class InsightsViewModel {
     var journey: Journey?
     var primaryHabit: Habit?

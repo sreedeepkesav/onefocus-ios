@@ -30,22 +30,22 @@ struct InsightStatCard: View {
                 
                 Image(systemName: icon)
                     .font(.system(size: 24, weight: .semibold))
-                    .foregroundStyle(color)
+                    .foregroundColor(color)
             }
             
             VStack(spacing: 4) {
                 Text(value)
                     .font(.system(size: 32, weight: .bold, design: .rounded))
-                    .foregroundStyle(.textPrimary)
+                    .foregroundColor(.textPrimary)
                 
                 Text(title)
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(.textSecondary)
+                    .foregroundColor(.textSecondary)
                 
                 if let subtitle = subtitle {
                     Text(subtitle)
                         .font(.system(size: 11))
-                        .foregroundStyle(.textTertiary)
+                        .foregroundColor(.textTertiary)
                 }
             }
         }

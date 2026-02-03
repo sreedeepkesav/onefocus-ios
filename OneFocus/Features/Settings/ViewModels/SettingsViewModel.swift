@@ -3,6 +3,7 @@ import SwiftUI
 import SwiftData
 
 @Observable
+@MainActor
 final class SettingsViewModel {
     var notificationsEnabled: Bool {
         didSet {

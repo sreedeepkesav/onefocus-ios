@@ -106,7 +106,6 @@ final class DataService {
         context.insert(entry)
         try? context.save()
     }
-}
 
     // MARK: - Analytics
 

@@ -10,7 +10,7 @@ struct CalendarHeatmap: View {
             HStack {
                 Text("66-Day Journey")
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(.textPrimary)
+                    .foregroundColor(.textPrimary)
                 
                 Spacer()
                 
@@ -63,7 +63,7 @@ struct HeatmapCell: View {
             if day.isCompleted {
                 Image(systemName: "checkmark")
                     .font(.system(size: 8, weight: .bold))
-                    .foregroundStyle(.white)
+                    .foregroundColor(.white)
             }
         }
         .frame(height: 36)
@@ -84,7 +84,7 @@ struct HeatmapLegendItem: View {
             
             Text(label)
                 .font(.system(size: 11))
-                .foregroundStyle(.textSecondary)
+                .foregroundColor(.textSecondary)
         }
     }
 }
