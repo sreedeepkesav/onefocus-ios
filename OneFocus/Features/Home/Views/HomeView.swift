@@ -2,122 +2,191 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var viewModel = HomeViewModel()
+    @State private var secondHabitOnboardingComplete = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                // Header
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Today")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.textPrimary)
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 24) {
+                    // Header with stats
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Today")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(.textPrimary)
 
-                    Text(currentDateString)
-                        .font(.subheadline)
-                        .foregroundColor(.textSecondary)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 20)
-                .padding(.top, 8)
-
-                // Journey progress card
-                if let journey = viewModel.journey {
-                    JourneyCard(journey: journey)
-                        .padding(.horizontal, 20)
-                }
-
-                // Primary habit
-                if let habit = viewModel.primaryHabit {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Your Habit")
-                            .font(.footnote)
+                        Text(currentDateString)
+                            .font(.subheadline)
                             .foregroundColor(.textSecondary)
-                            .textCase(.uppercase)
-                            .tracking(1)
-                            .padding(.horizontal, 24)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 8)
 
-                        HabitCard(
-                            habit: habit,
-                            isCompleted: viewModel.isPrimaryCompleted(),
-                            onTap: {
-                                viewModel.handleQuickCompletion(for: habit)
-                            }
-                        )
+                    // Journey progress card
+                    if let journey = viewModel.journey {
+                        JourneyCard(journey: journey)
+                            .padding(.horizontal, 20)
+                    }
+
+                    // Primary habit
+                    if let habit = viewModel.primaryHabit {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Your Habit")
+                                .font(.footnote)
+                                .foregroundColor(.textSecondary)
+                                .textCase(.uppercase)
+                                .tracking(1)
+                                .padding(.horizontal, 24)
+
+                            HabitCard(
+                                habit: habit,
+                                isCompleted: viewModel.isPrimaryCompleted(),
+                                onTap: {
+                                    viewModel.handleQuickCompletion(for: habit)
+                                }
+                            )
+                            .padding(.horizontal, 20)
+                        }
+                    }
+
+                    // Second habit (if exists)
+                    if let secondHabit = viewModel.secondaryHabit {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Second Habit")
+                                .font(.footnote)
+                                .foregroundColor(.textSecondary)
+                                .textCase(.uppercase)
+                                .tracking(1)
+                                .padding(.horizontal, 24)
+                            
+                            HabitCard(
+                                habit: secondHabit,
+                                isCompleted: viewModel.isSecondaryCompleted(),
+                                onTap: {
+                                    viewModel.handleQuickCompletion(for: secondHabit)
+                                }
+                            )
+                            .padding(.horizontal, 20)
+                        }
+                    } else if viewModel.canAddSecondHabit {
+                        // Show unlock card at day 21
+                        AddSecondHabitCard(onTap: {
+                            viewModel.showingAddSecondHabitInfo = true
+                            HapticManager.shared.trigger(.light)
+                        })
                         .padding(.horizontal, 20)
                     }
-                }
 
-                // Second habit (if exists)
-                if let secondHabit = viewModel.secondaryHabit {
-                    HabitCard(
-                        habit: secondHabit,
-                        isCompleted: viewModel.isSecondaryCompleted(),
-                        onTap: {
-                            viewModel.handleQuickCompletion(for: secondHabit)
+                    Spacer(minLength: 100)
+                }
+                .padding(.bottom, 40)
+            }
+            .background(Color.bgPrimary)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        viewModel.showingInsights = true
+                        HapticManager.shared.trigger(.light)
+                    } label: {
+                        Image(systemName: "chart.bar.fill")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.accent)
+                    }
+                    .accessibilityLabel("View insights")
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        viewModel.showingSettings = true
+                        HapticManager.shared.trigger(.light)
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.accent)
+                    }
+                    .accessibilityLabel("Open settings")
+                }
+            }
+            .onAppear {
+                viewModel.loadData()
+            }
+            .sheet(isPresented: $viewModel.showingMoodBefore) {
+                if let habit = viewModel.selectedHabit {
+                    MoodBeforeView(
+                        habitName: habit.name,
+                        onComplete: { mood, notes in
+                            viewModel.completeMoodBefore(mood: mood, notes: notes)
+                        },
+                        onDismiss: {
+                            viewModel.showingMoodBefore = false
                         }
                     )
-                    .padding(.horizontal, 20)
-                } else if viewModel.canAddSecondHabit {
-                    // Show unlock card at day 21
-                    AddSecondHabitCard()
-                        .padding(.horizontal, 20)
                 }
-
-                Spacer(minLength: 100)
             }
-            .padding(.bottom, 40)
-        }
-        .background(Color.bgPrimary)
-        .onAppear {
-            viewModel.loadData()
-        }
-        .sheet(isPresented: $viewModel.showingMoodBefore) {
-            if let habit = viewModel.selectedHabit {
-                MoodBeforeView(
-                    habitName: habit.name,
-                    onComplete: { mood, notes in
-                        viewModel.completeMoodBefore(mood: mood, notes: notes)
-                    },
-                    onDismiss: {
-                        viewModel.showingMoodBefore = false
-                    }
-                )
+            .sheet(isPresented: $viewModel.showingMoodAfter) {
+                if let habit = viewModel.selectedHabit {
+                    MoodAfterView(
+                        habitName: habit.name,
+                        onComplete: { mood, notes in
+                            viewModel.completeMoodAfter(mood: mood, notes: notes)
+                        }
+                    )
+                }
             }
-        }
-        .sheet(isPresented: $viewModel.showingMoodAfter) {
-            if let habit = viewModel.selectedHabit {
-                MoodAfterView(
-                    habitName: habit.name,
-                    onComplete: { mood, notes in
-                        viewModel.completeMoodAfter(mood: mood, notes: notes)
-                    }
-                )
+            .fullScreenCover(isPresented: $viewModel.showingFocusMode) {
+                if let habit = viewModel.selectedHabit {
+                    FocusView(
+                        habit: habit,
+                        onComplete: {
+                            viewModel.completeHabit()
+                        },
+                        onDismiss: {
+                            viewModel.showingFocusMode = false
+                        }
+                    )
+                }
             }
-        }
-        .fullScreenCover(isPresented: $viewModel.showingFocusMode) {
-            if let habit = viewModel.selectedHabit {
-                FocusView(
-                    habit: habit,
-                    onComplete: {
-                        viewModel.completeHabit()
-                    },
-                    onDismiss: {
-                        viewModel.showingFocusMode = false
-                    }
-                )
+            .fullScreenCover(isPresented: $viewModel.showingCelebration) {
+                if let journey = viewModel.journey {
+                    CelebrationView(
+                        day: journey.currentDay,
+                        streak: journey.currentStreak,
+                        phase: journey.currentPhase,
+                        onDismiss: {
+                            viewModel.dismissCelebration()
+                        }
+                    )
+                }
             }
-        }
-        .fullScreenCover(isPresented: $viewModel.showingCelebration) {
-            if let journey = viewModel.journey {
-                CelebrationView(
-                    day: journey.currentDay,
-                    streak: journey.currentStreak,
-                    phase: journey.currentPhase,
-                    onDismiss: {
-                        viewModel.dismissCelebration()
+            .sheet(isPresented: $viewModel.showingAddSecondHabitInfo) {
+                if let journey = viewModel.journey, let habit = viewModel.primaryHabit {
+                    AddSecondHabitView(
+                        currentDay: journey.currentDay,
+                        primaryHabitName: habit.name,
+                        onStartOnboarding: {
+                            viewModel.startSecondHabitOnboarding()
+                        },
+                        onDismiss: {
+                            viewModel.showingAddSecondHabitInfo = false
+                        }
+                    )
+                }
+            }
+            .fullScreenCover(isPresented: $viewModel.showingSecondHabitOnboarding) {
+                SecondHabitOnboardingFlow(isComplete: $secondHabitOnboardingComplete)
+                    .onChange(of: secondHabitOnboardingComplete) { _, newValue in
+                        if newValue {
+                            viewModel.completeSecondHabitOnboarding()
+                            secondHabitOnboardingComplete = false
+                        }
                     }
-                )
+            }
+            .sheet(isPresented: $viewModel.showingInsights) {
+                InsightsView()
+            }
+            .sheet(isPresented: $viewModel.showingSettings) {
+                SettingsView()
             }
         }
     }
@@ -129,8 +198,9 @@ struct HomeView: View {
     }
 }
 
-// Placeholder for second habit unlock card
 struct AddSecondHabitCard: View {
+    let onTap: () -> Void
+    
     var body: some View {
         VStack(spacing: 12) {
             Text("🎉")
@@ -145,9 +215,7 @@ struct AddSecondHabitCard: View {
                 .font(.footnote)
                 .foregroundColor(.textSecondary)
 
-            Button(action: {
-                // TODO: Navigate to add second habit flow
-            }) {
+            Button(action: onTap) {
                 Text("Add Habit")
                     .font(.body)
                     .fontWeight(.semibold)

@@ -12,6 +12,11 @@ final class OnboardingViewModel {
     var targetValue: Int?
     var dailyTarget: Int = 8
     var timedMinutes: Int = 10
+    let isSecondary: Bool
+
+    init(isSecondary: Bool = false) {
+        self.isSecondary = isSecondary
+    }
 
     var isValid: Bool {
         switch currentStep {
@@ -75,7 +80,7 @@ final class OnboardingViewModel {
             type: type,
             trigger: trigger,
             triggerType: triggerType,
-            isSecondary: false,
+            isSecondary: isSecondary,
             startValue: startValue,
             targetValue: targetValue,
             dailyTarget: type == .repeating ? dailyTarget : nil,
@@ -83,9 +88,18 @@ final class OnboardingViewModel {
         )
 
         DataService.shared.createHabit(habit)
-        _ = DataService.shared.getOrCreateJourney()
-
-        // Mark onboarding complete
-        UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+        
+        // Only create journey and mark onboarding complete for primary habit
+        if !isSecondary {
+            _ = DataService.shared.getOrCreateJourney()
+            UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
+        }
+        
+        // Schedule notifications
+        if !isSecondary {
+            let journey = DataService.shared.getOrCreateJourney()
+            NotificationService.shared.scheduleMilestoneNotifications(startDate: journey.startDate)
+        }
+        NotificationService.shared.scheduleSmartReminders(for: habit)
     }
 }

@@ -1,91 +1,111 @@
 import SwiftUI
 
 struct OnboardingContainerView: View {
-    @State private var viewModel = OnboardingViewModel()
+    @State private var defaultViewModel = OnboardingViewModel()
     @Binding var isOnboardingComplete: Bool
+    var viewModel: OnboardingViewModel?
+
+    private var activeViewModel: OnboardingViewModel {
+        viewModel ?? defaultViewModel
+    }
 
     var body: some View {
         Group {
-            switch viewModel.currentStep {
+            switch activeViewModel.currentStep {
             case 0:
                 WelcomeView(onContinue: {
-                    viewModel.next()
+                    activeViewModel.next()
                 })
 
             case 1:
                 HabitTypeView(
-                    selectedType: $viewModel.selectedType,
+                    selectedType: Binding(
+                        get: { activeViewModel.selectedType },
+                        set: { activeViewModel.selectedType = $0 }
+                    ),
                     onContinue: {
-                        viewModel.next()
+                        activeViewModel.next()
                     },
                     onBack: {
-                        viewModel.back()
+                        activeViewModel.back()
                     }
                 )
 
             case 2:
                 HabitNameView(
-                    habitType: viewModel.selectedType ?? .binary,
-                    habitName: $viewModel.habitName,
-                    placeholder: viewModel.placeholder(for: viewModel.selectedType ?? .binary),
+                    habitType: activeViewModel.selectedType ?? .binary,
+                    habitName: Binding(
+                        get: { activeViewModel.habitName },
+                        set: { activeViewModel.habitName = $0 }
+                    ),
+                    placeholder: activeViewModel.placeholder(for: activeViewModel.selectedType ?? .binary),
                     onContinue: {
-                        viewModel.next()
+                        activeViewModel.next()
                     },
                     onBack: {
-                        viewModel.back()
+                        activeViewModel.back()
                     }
                 )
 
             case 3:
-                if viewModel.selectedType == .repeating {
+                if activeViewModel.selectedType == .repeating {
                     // Optional trigger for repeating
                     TriggerRepeatingView(
-                        triggerType: $viewModel.triggerType,
-                        trigger: $viewModel.trigger,
+                        triggerType: Binding(
+                            get: { activeViewModel.triggerType },
+                            set: { activeViewModel.triggerType = $0 }
+                        ),
+                        trigger: Binding(
+                            get: { activeViewModel.trigger },
+                            set: { activeViewModel.trigger = $0 }
+                        ),
                         onContinue: {
-                            viewModel.next()
+                            activeViewModel.next()
                         },
                         onBack: {
-                            viewModel.back()
+                            activeViewModel.back()
                         }
                     )
                 } else {
                     // Required trigger for others
                     TriggerSetupView(
-                        habitName: viewModel.habitName,
-                        trigger: $viewModel.trigger,
+                        habitName: activeViewModel.habitName,
+                        trigger: Binding(
+                            get: { activeViewModel.trigger },
+                            set: { activeViewModel.trigger = $0 }
+                        ),
                         onContinue: {
-                            viewModel.next()
+                            activeViewModel.next()
                         },
                         onBack: {
-                            viewModel.back()
+                            activeViewModel.back()
                         }
                     )
                 }
 
             case 4:
                 ReadyView(
-                    habitName: viewModel.habitName,
-                    habitType: viewModel.selectedType ?? .binary,
-                    trigger: viewModel.trigger,
-                    triggerType: viewModel.triggerType,
+                    habitName: activeViewModel.habitName,
+                    habitType: activeViewModel.selectedType ?? .binary,
+                    trigger: activeViewModel.trigger,
+                    triggerType: activeViewModel.triggerType,
                     onStart: {
                         Task {
-                            await viewModel.complete()
+                            await activeViewModel.complete()
                             isOnboardingComplete = true
                         }
                     },
                     onBack: {
-                        viewModel.back()
+                        activeViewModel.back()
                     }
                 )
 
             default:
                 WelcomeView(onContinue: {
-                    viewModel.next()
+                    activeViewModel.next()
                 })
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: viewModel.currentStep)
+        .animation(.easeInOut(duration: 0.3), value: activeViewModel.currentStep)
     }
 }

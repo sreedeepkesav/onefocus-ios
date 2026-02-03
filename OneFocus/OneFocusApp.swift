@@ -4,11 +4,18 @@ import SwiftData
 @main
 struct OneFocusApp: App {
     @State private var hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+    @State private var deepLinkHandler = DeepLinkHandler()
 
     var body: some Scene {
         WindowGroup {
-            ContentView(isOnboardingComplete: $hasCompletedOnboarding)
-                .preferredColorScheme(.dark)
+            ContentView(
+                isOnboardingComplete: $hasCompletedOnboarding,
+                deepLinkHandler: deepLinkHandler
+            )
+            .preferredColorScheme(.dark)
+            .onOpenURL { url in
+                deepLinkHandler.handle(url)
+            }
         }
         .modelContainer(DataService.shared.container)
     }
@@ -16,6 +23,7 @@ struct OneFocusApp: App {
 
 struct ContentView: View {
     @Binding var isOnboardingComplete: Bool
+    @Bindable var deepLinkHandler: DeepLinkHandler
 
     var body: some View {
         ZStack {
@@ -29,6 +37,9 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(isOnboardingComplete: .constant(false))
-        .modelContainer(DataService.shared.container)
+    ContentView(
+        isOnboardingComplete: .constant(false),
+        deepLinkHandler: DeepLinkHandler()
+    )
+    .modelContainer(DataService.shared.container)
 }

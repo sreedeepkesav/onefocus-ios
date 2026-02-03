@@ -107,3 +107,52 @@ final class DataService {
         try? context.save()
     }
 }
+
+    // MARK: - Analytics
+
+    func getCompletionStats() -> (rate: Double, bestStreak: Int, currentStreak: Int) {
+        let journey = getOrCreateJourney()
+        
+        let daysPassed = journey.currentDay
+        let daysCompleted = journey.completedDays.count
+        let rate = daysPassed > 0 ? Double(daysCompleted) / Double(daysPassed) : 0
+        
+        // Calculate best streak
+        let sortedDates = journey.completedDays
+            .compactMap { dateString -> Date? in
+                let formatter = ISO8601DateFormatter()
+                formatter.formatOptions = [.withFullDate]
+                return formatter.date(from: dateString)
+            }
+            .sorted()
+        
+        var maxStreak = 0
+        var currentStreakCount = 0
+        
+        if !sortedDates.isEmpty {
+            maxStreak = 1
+            currentStreakCount = 1
+            
+            for i in 1..<sortedDates.count {
+                let prevDate = sortedDates[i - 1]
+                let currentDate = sortedDates[i]
+                
+                let calendar = Calendar.current
+                if let daysBetween = calendar.dateComponents([.day], from: prevDate, to: currentDate).day,
+                   daysBetween == 1 {
+                    currentStreakCount += 1
+                    maxStreak = max(maxStreak, currentStreakCount)
+                } else {
+                    currentStreakCount = 1
+                }
+            }
+        }
+        
+        return (rate: rate, bestStreak: maxStreak, currentStreak: journey.currentStreak)
+    }
+    
+    func getTotalFocusTime() -> Int {
+        let journey = getOrCreateJourney()
+        return journey.totalFocusTimeSeconds
+    }
+}

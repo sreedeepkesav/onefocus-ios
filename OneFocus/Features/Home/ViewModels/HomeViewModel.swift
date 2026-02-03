@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 @Observable
 @MainActor
@@ -15,6 +16,10 @@ final class HomeViewModel {
     var showingMoodBefore = false
     var showingMoodAfter = false
     var showingCelebration = false
+    var showingSecondHabitOnboarding = false
+    var showingAddSecondHabitInfo = false
+    var showingInsights = false
+    var showingSettings = false
 
     init() {
         loadData()
@@ -72,6 +77,12 @@ final class HomeViewModel {
 
         let habitIndex = habit.isSecondary ? 1 : 0
         journey.markComplete(habitIndex: habitIndex)
+        
+        // Update widget
+        WidgetCenter.shared.reloadAllTimelines()
+        
+        // Clear badge
+        NotificationService.shared.clearBadge()
 
         showingFocusMode = false
         showingMoodAfter = true
@@ -97,5 +108,18 @@ final class HomeViewModel {
     var canAddSecondHabit: Bool {
         guard let journey = journey else { return false }
         return journey.currentDay >= 21 && secondaryHabit == nil
+    }
+    
+    func startSecondHabitOnboarding() {
+        showingAddSecondHabitInfo = false
+        showingSecondHabitOnboarding = true
+    }
+    
+    func completeSecondHabitOnboarding() {
+        showingSecondHabitOnboarding = false
+        loadData()
+        
+        // Reload widgets after adding second habit
+        WidgetCenter.shared.reloadAllTimelines()
     }
 }
