@@ -29,6 +29,18 @@ struct HomeView: View {
                             .padding(.horizontal, 20)
                     }
 
+                    // Weekly Reflection prompt (if due)
+                    if viewModel.isReflectionDue {
+                        ReflectionPromptCard(
+                            weekNumber: viewModel.reflectionWeekNumber,
+                            onTap: {
+                                viewModel.startReflection()
+                                HapticManager.shared.trigger(.light)
+                            }
+                        )
+                        .padding(.horizontal, 20)
+                    }
+
                     // Primary habit
                     if let habit = viewModel.primaryHabit {
                         VStack(alignment: .leading, spacing: 12) {
@@ -134,31 +146,32 @@ struct HomeView: View {
                     )
                 }
             }
-            .fullScreenCover(isPresented: $viewModel.showingFocusMode) {
-                if let habit = viewModel.selectedHabit {
-                    FocusView(
-                        habit: habit,
-                        onComplete: {
-                            viewModel.completeHabit()
-                        },
-                        onDismiss: {
-                            viewModel.showingFocusMode = false
-                        }
-                    )
-                }
-            }
-            .fullScreenCover(isPresented: $viewModel.showingCelebration) {
-                if let journey = viewModel.journey {
-                    CelebrationView(
-                        day: journey.currentDay,
-                        streak: journey.currentStreak,
-                        phase: journey.currentPhase,
-                        onDismiss: {
-                            viewModel.dismissCelebration()
-                        }
-                    )
-                }
-            }
+            // TODO: Uncomment when merging to main onefocus-ios repository
+            // .fullScreenCover(isPresented: $viewModel.showingFocusMode) {
+            //     if let habit = viewModel.selectedHabit {
+            //         FocusView(
+            //             habit: habit,
+            //             onComplete: {
+            //                 viewModel.completeHabit()
+            //             },
+            //             onDismiss: {
+            //                 viewModel.showingFocusMode = false
+            //             }
+            //         )
+            //     }
+            // }
+            // .fullScreenCover(isPresented: $viewModel.showingCelebration) {
+            //     if let journey = viewModel.journey {
+            //         CelebrationView(
+            //             day: journey.currentDay,
+            //             streak: journey.currentStreak,
+            //             phase: journey.currentPhase,
+            //             onDismiss: {
+            //                 viewModel.dismissCelebration()
+            //             }
+            //         )
+            //     }
+            // }
             .sheet(isPresented: $viewModel.showingAddSecondHabitInfo) {
                 if let journey = viewModel.journey, let habit = viewModel.primaryHabit {
                     AddSecondHabitView(
@@ -188,6 +201,18 @@ struct HomeView: View {
             .sheet(isPresented: $viewModel.showingSettings) {
                 SettingsView()
             }
+            .sheet(isPresented: $viewModel.showingReflection) {
+                ReflectionView(weekNumber: viewModel.reflectionWeekNumber) {
+                    viewModel.completeReflection()
+                }
+            }
+            .fullScreenCover(isPresented: $viewModel.showingFailureAnalysis) {
+                if let journey = viewModel.journey {
+                    FailureAnalysisView(journey: journey) {
+                        viewModel.completeFailureAnalysis()
+                    }
+                }
+            }
         }
     }
 
@@ -198,9 +223,67 @@ struct HomeView: View {
     }
 }
 
+struct ReflectionPromptCard: View {
+    let weekNumber: Int
+    let onTap: () -> Void
+
+    var body: some View {
+        VStack(spacing: 12) {
+            Text("🔍")
+                .font(.system(size: 32))
+                .accessibilityHidden(true)
+
+            Text("Time for Your Weekly Reflection")
+                .font(.headline)
+                .fontWeight(.semibold)
+                .foregroundColor(.textPrimary)
+
+            Text("Week \(weekNumber) • 2 minutes")
+                .font(.footnote)
+                .foregroundColor(.textSecondary)
+
+            Text("Reflect on your journey to strengthen your habit")
+                .font(.footnote)
+                .foregroundColor(.textSecondary)
+                .multilineTextAlignment(.center)
+
+            Button(action: onTap) {
+                Text("Start Reflection")
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(16)
+                    .background(
+                        LinearGradient(
+                            colors: [.accent, .accentSecondary],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .cornerRadius(14)
+            }
+            .accessibilityLabel("Start weekly reflection for week \(weekNumber)")
+        }
+        .padding(24)
+        .background(
+            LinearGradient(
+                colors: [Color.accent.opacity(0.15), Color.accentSecondary.opacity(0.1)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.accent.opacity(0.3), lineWidth: 2)
+        )
+        .cornerRadius(20)
+    }
+}
+
 struct AddSecondHabitCard: View {
     let onTap: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 12) {
             Text("🎉")

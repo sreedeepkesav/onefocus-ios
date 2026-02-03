@@ -12,7 +12,8 @@ final class DataService {
             Habit.self,
             Journey.self,
             MoodEntry.self,
-            RepeatingLog.self
+            RepeatingLog.self,
+            Reflection.self
         ])
 
         let config = ModelConfiguration(
@@ -153,5 +154,101 @@ final class DataService {
     func getTotalFocusTime() -> Int {
         let journey = getOrCreateJourney()
         return journey.totalFocusTimeSeconds
+    }
+
+    // MARK: - Reflection Operations
+
+    func createReflection(_ reflection: Reflection) {
+        context.insert(reflection)
+        try? context.save()
+    }
+
+    func getReflection(forWeek weekNumber: Int) -> Reflection? {
+        let descriptor = FetchDescriptor<Reflection>(
+            predicate: #Predicate { $0.weekNumber == weekNumber },
+            sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
+        return try? context.fetch(descriptor).first
+    }
+
+    func getAllReflections() -> [Reflection] {
+        let descriptor = FetchDescriptor<Reflection>(
+            sortBy: [SortDescriptor(\.weekNumber, order: .reverse)]
+        )
+        return (try? context.fetch(descriptor)) ?? []
+    }
+
+    func isReflectionDue() -> (isDue: Bool, weekNumber: Int) {
+        let journey = getOrCreateJourney()
+        let currentDay = journey.currentDay
+
+        // Reflection triggers on Day 7, 14, 21, 28, 35, 42, 49, 56, 63
+        guard currentDay % 7 == 0 && currentDay <= 66 else {
+            return (false, 0)
+        }
+
+        let weekNumber = currentDay / 7
+
+        // Check if reflection for this week already exists
+        if let _ = getReflection(forWeek: weekNumber) {
+            return (false, 0)
+        }
+
+        return (true, weekNumber)
+    }
+
+    // MARK: - Failure Analysis Operations
+
+    func checkJourneyFailure() -> Bool {
+        let journey = getOrCreateJourney()
+        return journey.hasFailed && journey.journeyStatus == .active
+    }
+
+    func saveFailureAnalysis(whatWorked: String, whatDidnt: String, nextTimeChanges: String) {
+        let journey = getOrCreateJourney()
+        let weeklyData = journey.getWeeklyCompletionData()
+
+        // Find best and worst weeks
+        let bestWeek = weeklyData.max(by: { $0.completionRate < $1.completionRate })?.weekNumber ?? 1
+        let worstWeek = weeklyData.min(by: { $0.completionRate < $1.completionRate })?.weekNumber ?? 1
+
+        let analysis = FailureAnalysisData(
+            whatWorked: whatWorked,
+            whatDidnt: whatDidnt,
+            nextTimeChanges: nextTimeChanges,
+            bestWeek: bestWeek,
+            worstWeek: worstWeek,
+            analyzedAt: Date()
+        )
+
+        // Save as JSON string
+        if let jsonData = try? JSONEncoder().encode(analysis),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            journey.failureAnalysisNotes = jsonString
+            journey.failureAnalysisCompleted = true
+            journey.journeyStatus = .failed
+            journey.endDate = Date()
+            try? context.save()
+        }
+    }
+
+    func archiveFailedJourney() -> Journey? {
+        let journey = getOrCreateJourney()
+        guard journey.journeyStatus == .failed else { return nil }
+
+        // Create new journey
+        let newJourney = Journey()
+        context.insert(newJourney)
+        try? context.save()
+
+        return journey
+    }
+
+    func getArchivedJourneys() -> [Journey] {
+        let descriptor = FetchDescriptor<Journey>(
+            predicate: #Predicate { $0.status != JourneyStatus.active.rawValue },
+            sortBy: [SortDescriptor(\.endDate, order: .reverse)]
+        )
+        return (try? context.fetch(descriptor)) ?? []
     }
 }

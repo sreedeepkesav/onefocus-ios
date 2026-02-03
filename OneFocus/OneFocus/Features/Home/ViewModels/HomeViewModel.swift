@@ -20,6 +20,9 @@ final class HomeViewModel {
     var showingAddSecondHabitInfo = false
     var showingInsights = false
     var showingSettings = false
+    var showingReflection = false
+    var reflectionWeekNumber: Int = 0
+    var showingFailureAnalysis = false
 
     init() {
         loadData()
@@ -29,6 +32,37 @@ final class HomeViewModel {
         journey = dataService.getOrCreateJourney()
         primaryHabit = dataService.getPrimaryHabit()
         secondaryHabit = dataService.getSecondaryHabit()
+        checkReflectionStatus()
+        checkJourneyFailure()
+    }
+
+    func checkJourneyFailure() {
+        if dataService.checkJourneyFailure() {
+            showingFailureAnalysis = true
+        }
+    }
+
+    func checkReflectionStatus() {
+        let (isDue, weekNumber) = dataService.isReflectionDue()
+        if isDue {
+            reflectionWeekNumber = weekNumber
+        }
+    }
+
+    var isReflectionDue: Bool {
+        let (isDue, _) = dataService.isReflectionDue()
+        return isDue
+    }
+
+    func startReflection() {
+        let (_, weekNumber) = dataService.isReflectionDue()
+        reflectionWeekNumber = weekNumber
+        showingReflection = true
+    }
+
+    func completeReflection() {
+        showingReflection = false
+        loadData()
     }
 
     func isPrimaryCompleted() -> Bool {
@@ -118,8 +152,16 @@ final class HomeViewModel {
     func completeSecondHabitOnboarding() {
         showingSecondHabitOnboarding = false
         loadData()
-        
+
         // Reload widgets after adding second habit
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    func completeFailureAnalysis() {
+        showingFailureAnalysis = false
+        loadData()
+
+        // Reload widgets after resetting journey
         WidgetCenter.shared.reloadAllTimelines()
     }
 }

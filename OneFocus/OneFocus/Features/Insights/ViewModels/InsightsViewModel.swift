@@ -7,7 +7,9 @@ final class InsightsViewModel {
     var journey: Journey?
     var primaryHabit: Habit?
     var secondaryHabit: Habit?
-    
+    var reflections: [Reflection] = []
+    var archivedJourneys: [Journey] = []
+
     private let dataService = DataService.shared
     
     var completionRate: Double {
@@ -104,6 +106,20 @@ final class InsightsViewModel {
         journey = dataService.getOrCreateJourney()
         primaryHabit = dataService.getPrimaryHabit()
         secondaryHabit = dataService.getSecondaryHabit()
+        reflections = dataService.getAllReflections()
+        archivedJourneys = dataService.getArchivedJourneys()
+    }
+
+    var hasReflections: Bool {
+        !reflections.isEmpty
+    }
+
+    var completedReflections: [Reflection] {
+        reflections.filter { !$0.skipped && !$0.isEmpty }
+    }
+
+    var hasArchivedJourneys: Bool {
+        !archivedJourneys.isEmpty
     }
 }
 
