@@ -35,10 +35,6 @@
 		A4CF2B3268980E553331829D /* HabitCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C939E6E211279993D0547AE0 /* HabitCard.swift */; };
 		E2E19CB7219914378E954A1F /* ProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6776B6E5BD85521FA1C0A39B /* ProgressRing.swift */; };
 		0A59C034B7EF2BB43EBF5D81 /* StatsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF5F4056030B68B19711164F /* StatsRow.swift */; };
-		D03F0BF72A78700A89B56B7C /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02596216083641351BD7E3BF /* FocusView.swift */; };
-		7A6F3558E46E7A66FAD3809D /* FocusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F824AA1A396BFA022F0871 /* FocusViewModel.swift */; };
-		C5ABA49C221BD35940DED526 /* BreathingCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA89A7CEEB3BCADF5A84B /* BreathingCircle.swift */; };
-		0DE1A8BAC87CA839BFB45129 /* CelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA6DB7F1A9C60D585932267 /* CelebrationView.swift */; };
 		3F189FE66A780AB7A8719BDA /* MoodBeforeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C45707D682E6ABFACAC93F /* MoodBeforeView.swift */; };
 		2D91BDBC79A859E7C877ABAA /* MoodAfterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B12774533C6B10C1A1CC68 /* MoodAfterView.swift */; };
 		DFE56626592B18045D6217B4 /* MoodViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4E469070A7C05E947442E2 /* MoodViewModel.swift */; };
@@ -87,10 +83,6 @@
 		C939E6E211279993D0547AE0 /* HabitCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "HabitCard.swift"; path = "OneFocus/Features/Home/Components/HabitCard.swift"; sourceTree = "<group>"; };
 		6776B6E5BD85521FA1C0A39B /* ProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ProgressRing.swift"; path = "OneFocus/Features/Home/Components/ProgressRing.swift"; sourceTree = "<group>"; };
 		CF5F4056030B68B19711164F /* StatsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StatsRow.swift"; path = "OneFocus/Features/Home/Components/StatsRow.swift"; sourceTree = "<group>"; };
-		02596216083641351BD7E3BF /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FocusView.swift"; path = "OneFocus/Features/Focus/Views/FocusView.swift"; sourceTree = "<group>"; };
-		E4F824AA1A396BFA022F0871 /* FocusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FocusViewModel.swift"; path = "OneFocus/Features/Focus/ViewModels/FocusViewModel.swift"; sourceTree = "<group>"; };
-		F82FA89A7CEEB3BCADF5A84B /* BreathingCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "BreathingCircle.swift"; path = "OneFocus/Features/Focus/Components/BreathingCircle.swift"; sourceTree = "<group>"; };
-		FDA6DB7F1A9C60D585932267 /* CelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CelebrationView.swift"; path = "OneFocus/Features/Focus/Views/CelebrationView.swift"; sourceTree = "<group>"; };
 		47C45707D682E6ABFACAC93F /* MoodBeforeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MoodBeforeView.swift"; path = "OneFocus/Features/Mood/Views/MoodBeforeView.swift"; sourceTree = "<group>"; };
 		D6B12774533C6B10C1A1CC68 /* MoodAfterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MoodAfterView.swift"; path = "OneFocus/Features/Mood/Views/MoodAfterView.swift"; sourceTree = "<group>"; };
 		3F4E469070A7C05E947442E2 /* MoodViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MoodViewModel.swift"; path = "OneFocus/Features/Mood/ViewModels/MoodViewModel.swift"; sourceTree = "<group>"; };
@@ -156,10 +148,6 @@
 				C939E6E211279993D0547AE0 /* HabitCard.swift */,
 				6776B6E5BD85521FA1C0A39B /* ProgressRing.swift */,
 				CF5F4056030B68B19711164F /* StatsRow.swift */,
-				02596216083641351BD7E3BF /* FocusView.swift */,
-				E4F824AA1A396BFA022F0871 /* FocusViewModel.swift */,
-				F82FA89A7CEEB3BCADF5A84B /* BreathingCircle.swift */,
-				FDA6DB7F1A9C60D585932267 /* CelebrationView.swift */,
 				47C45707D682E6ABFACAC93F /* MoodBeforeView.swift */,
 				D6B12774533C6B10C1A1CC68 /* MoodAfterView.swift */,
 				3F4E469070A7C05E947442E2 /* MoodViewModel.swift */,
@@ -285,10 +273,6 @@
 				A4CF2B3268980E553331829D /* HabitCard.swift in Sources */,
 				E2E19CB7219914378E954A1F /* ProgressRing.swift in Sources */,
 				0A59C034B7EF2BB43EBF5D81 /* StatsRow.swift in Sources */,
-				D03F0BF72A78700A89B56B7C /* FocusView.swift in Sources */,
-				7A6F3558E46E7A66FAD3809D /* FocusViewModel.swift in Sources */,
-				C5ABA49C221BD35940DED526 /* BreathingCircle.swift in Sources */,
-				0DE1A8BAC87CA839BFB45129 /* CelebrationView.swift in Sources */,
 				3F189FE66A780AB7A8719BDA /* MoodBeforeView.swift in Sources */,
 				2D91BDBC79A859E7C877ABAA /* MoodAfterView.swift in Sources */,
 				DFE56626592B18045D6217B4 /* MoodViewModel.swift in Sources */,
